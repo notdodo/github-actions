@@ -24,8 +24,7 @@ runs:
       shell: bash
       working-directory: ${{ inputs.working-directory }}
 
-    - id: scan-files
-      env:
+    - env:
         FILES: ${{ steps.find-files.outputs.FILES }}
       run: |
         go install github.com/mrtazz/checkmake/cmd/checkmake@latest
