@@ -74,4 +74,3 @@ jobs:
           echo $FILES
           checkmake $FILES --debug
         shell: bash
-        if: ${{ steps.find-files.outputs.FILES != '' }}
