@@ -59,7 +59,16 @@ jobs:
         # v5.0.0
         with:
           go-version: ${{ inputs.go-version }}
-    #   - name: checkmake
-    #     run: |
-    #       go install github.com/mrtazz/checkmake/cmd/checkmake@latest
-    #       checkmake Makefile --debug
+
+      - id: find-files
+        run: |
+          FILES=$(find . \( -iname "Makefile" -o -iname "GNUmakefile" -o -iname "*.mk" -o -iname "*.make" \))
+          echo "$FILES" >> "$GITHUB_OUTPUT"
+        shell: bash
+
+      - env:
+          FILES: ${{ steps.find-files.outputs.FILES }}
+        run: |
+          go install github.com/mrtazz/checkmake/cmd/checkmake@latest
+          checkmake $FILES --debug
+        shell: bash

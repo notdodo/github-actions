@@ -19,7 +19,7 @@ runs:
 
     - id: find-files
       run: |
-        FILES=$(find . \( -name "Makefile" -o -name "makefile" -o -name "GNUmakefile" -o -name "*.mk" -o -name "*.make" \))
+        FILES=$(find . \( -iname "Makefile" -o -iname "GNUmakefile" -o -iname "*.mk" -o -iname "*.make" \))
         echo "$FILES" >> "$GITHUB_OUTPUT"
       shell: bash
       working-directory: ${{ inputs.working-directory }}
