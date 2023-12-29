@@ -19,6 +19,7 @@ on:
 
 jobs:
   infra-security-scan:
+    name: Scan with Kics
     runs-on: ${{ inputs.runs-on }}
     defaults:
       run:

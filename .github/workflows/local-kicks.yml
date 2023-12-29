@@ -4,9 +4,9 @@ on:
   pull_request:
 
 concurrency:
-  group: gha-kics-${{ github.ref }}
+  group: ghas-kics-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  infra-sca:
+  infra-scan:
     uses: notdodo/github-actions/.github/workflows/infra-security-scan.yml@main
