@@ -70,5 +70,7 @@ jobs:
           FILES: ${{ steps.find-files.outputs.FILES }}
         run: |
           go install github.com/mrtazz/checkmake/cmd/checkmake@latest
+          echo $FILES
           checkmake $FILES --debug
         shell: bash
+        if: ${{ steps.find-files.outputs.FILES != '' }}
