@@ -65,18 +65,16 @@ jobs:
           FILES=$(find . \( -iname "Makefile" -o -iname "GNUmakefile" -o -iname "*.mk" -o -iname "*.make" \))
           echo "$FILES" > "$GITHUB_WORKSPACE/files.txt"
           echo "::set-output name=FILES::$FILES"
+          echo "FILES=$FILES" >> $GITHUB_OUTPUT
         shell: bash
 
-      - env:
-          FILES: ${{ steps.find-files.outputs.FILES }}
-        if: steps.find-files.outputs.FILES != ''
+      - if: steps.find-files.outputs.FILES != ''
         id: scan-files
         continue-on-error: true
         run: |
-          FILES=$(cat "$GITHUB_WORKSPACE/files.txt")
           go install github.com/mrtazz/checkmake/cmd/checkmake@latest
-          CHECKMAKE_OUTPUT=$(checkmake $FILES --debug)
-          echo "::set-output name=CHECKMAKE_OUTPUT::$CHECKMAKE_OUTPUT"
+          CHECKMAKE_OUTPUT=$(checkmake ${{ steps.find-files.outputs.FILES }} --debug)
+          echo "CHECKMAKE_OUTPUT=$CHECKMAKE_OUTPUT" >> $GITHUB_OUTPUT
         shell: bash
 
       - name: PR comment with file
