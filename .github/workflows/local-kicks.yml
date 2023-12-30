@@ -1,7 +1,11 @@
 name: Infrastructure Security Scan (local repository)
 on:
   push:
+    branches:
+      - main
   pull_request:
+    branches:
+      - main
 
 concurrency:
   group: ghas-kics-${{ github.ref }}
