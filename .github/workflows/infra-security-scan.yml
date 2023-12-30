@@ -68,9 +68,22 @@ jobs:
 
       - env:
           FILES: ${{ steps.find-files.outputs.FILES }}
+        id: scan-files
+        continue-on-error: true
         run: |
           FILES=$(cat "$GITHUB_WORKSPACE/files.txt")
           go install github.com/mrtazz/checkmake/cmd/checkmake@latest
-          echo $FILES
-          checkmake $FILES --debug
+          CHECKMAKE_OUTPUT=$(checkmake $FILES --debug)
+          echo "::set-output name=CHECKMAKE_OUTPUT::$CHECKMAKE_OUTPUT"
         shell: bash
+
+      - name: PR comment with file
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          message: |
+            <details>
+            <summary>Checkmake findings</summary>
+            ```
+            ${{ steps.scan-files.outputs.CHECKMAKE_OUTPUT }}
+            ```
+            </details>
