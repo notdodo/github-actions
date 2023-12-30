@@ -84,7 +84,9 @@ jobs:
           message: |
             <details>
             <summary>Checkmake findings</summary>
+
             ```
             ${{ steps.scan-files.outputs.CHECKMAKE_OUTPUT }}
             ```
+
             </details>
