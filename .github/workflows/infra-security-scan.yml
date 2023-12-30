@@ -87,6 +87,7 @@ jobs:
 
             ```
             ${{ steps.scan-files.outputs.CHECKMAKE_OUTPUT }}
+            jiji
             ```
 
             </details>
