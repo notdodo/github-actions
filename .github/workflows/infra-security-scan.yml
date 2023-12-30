@@ -64,10 +64,12 @@ jobs:
         run: |
           FILES=$(find . \( -iname "Makefile" -o -iname "GNUmakefile" -o -iname "*.mk" -o -iname "*.make" \))
           echo "$FILES" > "$GITHUB_WORKSPACE/files.txt"
+          echo "::set-output name=FILES::$FILES"
         shell: bash
 
       - env:
           FILES: ${{ steps.find-files.outputs.FILES }}
+        if: steps.find-files.outputs.FILES != ''
         id: scan-files
         continue-on-error: true
         run: |
@@ -78,6 +80,7 @@ jobs:
         shell: bash
 
       - name: PR comment with file
+        if: github.event_name == 'pull_request'
         uses: thollander/actions-comment-pull-request@v2
         with:
           message: |
