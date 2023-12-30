@@ -1,0 +1,41 @@
+on:
+  workflow_call:
+    inputs:
+      runs-on:
+        type: string
+        default: "ubuntu-latest"
+      upload-sarif:
+        type: boolean
+        default: true
+      working-directory:
+        type: string
+        default: "."
+
+jobs:
+  gosec:
+    runs-on: ${{ inputs.runs-on }}
+    defaults:
+      run:
+        working-directory: ${{ inputs.working-directory }}
+    env:
+      GO111MODULE: on
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
+        # v4.1.1
+        with:
+          fetch-depth: 0
+
+      - name: Run Gosec Security Scanner
+        # master to fetch latest checks
+        # kics-scan ignore-line
+        uses: securego/gosec@master
+        with:
+          args: "-no-fail -fmt sarif -out ${{ inputs.working-directory }}/results.sarif ${{ inputs.working-directory }}/..."
+
+      - name: Upload SARIF file
+        uses: github/codeql-action/upload-sarif@4b6aa0b07da05d6e43d0e5f9c8596a6532ce1c85
+        # v2.15.3
+        with:
+          sarif_file: "${{ inputs.working-directory }}/results.sarif"
+        if: ${{ inputs.upload-sarif }}

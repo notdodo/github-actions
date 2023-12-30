@@ -1,0 +1,92 @@
+on:
+  workflow_call:
+    inputs:
+      enable-comments:
+        type: boolean
+        default: true
+      go-version:
+        type: string
+        default: "1.20"
+      runs-on:
+        type: string
+        default: "ubuntu-latest"
+      upload-sarif:
+        type: boolean
+        default: true
+      working-directory:
+        type: string
+        default: "."
+
+jobs:
+  infra-security-scan:
+    name: Scan with Kics
+    runs-on: ${{ inputs.runs-on }}
+    defaults:
+      run:
+        working-directory: ${{ inputs.working-directory }}
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
+        # v4.1.1
+        with:
+          fetch-depth: 0
+      - name: Kics Scan
+        uses: Checkmarx/kics-github-action@8a44970e3d2eca668be41abe9d4e06709c3b3609
+        with:
+          path: .
+          output_path: ${{ inputs.working-directory }}/results.sarif
+          fail_on: high,medium
+          output_formats: "sarif"
+          enable_comments: ${{ inputs.enable-comments }}
+      - name: Upload SARIF file
+        uses: github/codeql-action/upload-sarif@4b6aa0b07da05d6e43d0e5f9c8596a6532ce1c85
+        # v2.15.3
+        with:
+          sarif_file: ${{ inputs.working-directory }}/results.sarif
+
+  checkmake:
+    name: Check Makefile
+    runs-on: ${{ inputs.runs-on }}
+    defaults:
+      run:
+        working-directory: ${{ inputs.working-directory }}
+    steps:
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
+        # v4.1.1
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-go@0c52d547c9bc32b1aa3301fd7a9cb496313a4491
+        # v5.0.0
+        with:
+          go-version: ${{ inputs.go-version }}
+
+      - id: find-files
+        run: |
+          FILES=$(find . \( -iname "Makefile" -o -iname "GNUmakefile" -o -iname "*.mk" -o -iname "*.make" \))
+          echo "$FILES" > "$GITHUB_WORKSPACE/files.txt"
+          echo "FILES=$FILES" >> $GITHUB_OUTPUT
+        shell: bash
+
+      - if: steps.find-files.outputs.FILES != ''
+        id: scan-files
+        continue-on-error: true
+        run: |
+          go install github.com/mrtazz/checkmake/cmd/checkmake@latest
+          CHECKMAKE_OUTPUT=$(checkmake ${{ steps.find-files.outputs.FILES }} --debug)
+          echo "CHECKMAKE_OUTPUT=$CHECKMAKE_OUTPUT" >> $GITHUB_OUTPUT
+        shell: bash
+
+      - name: PR comment with file
+        if: github.event_name == 'pull_request'
+        uses: thollander/actions-comment-pull-request@1d3973dc4b8e1399c0620d3f2b1aa5e795465308
+        # v2.4.3
+        with:
+          message: |
+            <details>
+            <summary>Checkmake findings</summary>
+
+            ```
+            ${{ steps.scan-files.outputs.CHECKMAKE_OUTPUT }}
+            ```
+
+            </details>
