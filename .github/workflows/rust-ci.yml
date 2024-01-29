@@ -64,7 +64,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Cargo cache
-        uses: swatinem/rust-cache@23bce251a8cd2ffc3c1075eaa2367cf899916d84
+        uses: swatinem/rust-cache@master
         with:
           cache-on-failure: true
           cache-all-crates: true
