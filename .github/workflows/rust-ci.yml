@@ -1,0 +1,84 @@
+on:
+  workflow_call:
+    inputs:
+      rust-version:
+        type: string
+        default: "stable"
+      runs-on:
+        type: string
+        default: "ubuntu-latest"
+      working-directory:
+        type: string
+        default: "."
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+    runs-on: ${{ inputs.runs-on }}
+    defaults:
+      run:
+        working-directory: ${{ inputs.working-directory }}
+    steps:
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
+        # v4.1.1
+        with:
+          fetch-depth: 0
+      - name: Cargo cache
+        uses: swatinem/rust-cache@23bce251a8cd2ffc3c1075eaa2367cf899916d84
+        with:
+          cache-on-failure: true
+      - name: Build
+        run: cargo build --verbose --release
+
+  tests:
+    runs-on: ${{ inputs.runs-on }}
+    defaults:
+      run:
+        working-directory: ${{ inputs.working-directory }}
+    steps:
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
+        # v4.1.1
+        with:
+          fetch-depth: 0
+      - name: Cargo cache
+        uses: swatinem/rust-cache@23bce251a8cd2ffc3c1075eaa2367cf899916d84
+        with:
+          cache-on-failure: true
+      - name: Run tests
+        run: cargo test --verbose
+
+  clippy:
+    runs-on: ${{ inputs.runs-on }}
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+    defaults:
+      run:
+        working-directory: ${{ inputs.working-directory }}
+    steps:
+      - uses: actions/checkout@master
+        # v4.1.1
+        with:
+          fetch-depth: 0
+      - name: Cargo cache
+        uses: swatinem/rust-cache@23bce251a8cd2ffc3c1075eaa2367cf899916d84
+        with:
+          cache-on-failure: true
+          cache-all-crates: true
+      - name: Install tools
+        run: cargo install cargo-make clippy-sarif sarif-fmt
+      - name: Run clippy
+        run: >
+          cargo make --profile gha clippy
+          | clippy-sarif
+          | tee clippy-results.sarif
+          | sarif-fmt
+        continue-on-error: true
+      - name: Upload analysis results to GitHub
+        uses: github/codeql-action/upload-sarif@b7bf0a3ed3ecfa44160715d7c442788f65f0f923
+        with:
+          sarif_file: clippy-results.sarif
+          wait-for-processing: true
