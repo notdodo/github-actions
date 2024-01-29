@@ -40,7 +40,7 @@ jobs:
           output_path: ${{ inputs.working-directory }}/results.sarif
           fail_on: high,medium
           output_formats: "sarif"
-          token: ${{ inputs.github-token }}
+          token: ${{ secrets.github-token }}
           enable_comments: ${{ inputs.enable-comments }}
       - name: Upload SARIF file
         uses: github/codeql-action/upload-sarif@4b6aa0b07da05d6e43d0e5f9c8596a6532ce1c85
