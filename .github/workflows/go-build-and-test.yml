@@ -19,8 +19,9 @@ jobs:
       run:
         working-directory: ${{ inputs.working-directory }}
     permissions:
-      id-token: write
       contents: read
+      pull-requests: read
+      checks: write
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
         # v4.1.1
