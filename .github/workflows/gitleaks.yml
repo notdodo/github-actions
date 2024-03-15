@@ -4,6 +4,7 @@ on:
       runs-on:
         type: string
         default: "ubuntu-latest"
+
 jobs:
   gitleaks:
     name: gitleaks
