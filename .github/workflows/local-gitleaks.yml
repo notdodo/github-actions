@@ -1,0 +1,8 @@
+name: Gitleaks
+on:
+  push:
+
+jobs:
+  gitleaks:
+    uses: notdodo/github-actions/.github/workflows/gitleaks.yml@140ee038bc8d88d63e8df8f29ebfe0c5e98112e6
+    # v0.1.0
