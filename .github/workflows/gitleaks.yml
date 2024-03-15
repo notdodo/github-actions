@@ -1,0 +1,21 @@
+on:
+  workflow_call:
+    inputs:
+      runs-on:
+        type: string
+        default: "ubuntu-latest"
+jobs:
+  gitleaks:
+    name: gitleaks
+    runs-on: ${{ inputs.runs-on }}
+    steps:
+      - uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633
+        # v4.1.2
+        with:
+          fetch-depth: 0
+      - name: gitleaks
+        # bind to major to use latests checks
+        # kics-scan ignore-line
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
