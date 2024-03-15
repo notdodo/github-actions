@@ -9,11 +9,11 @@ on:
 jobs:
   build:
     if: github.event.pull_request.merged == true
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633
         with:
           ref: ${{ github.event.pull_request.merge_commit_sha }}
           fetch-depth: "0"
