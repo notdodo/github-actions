@@ -4,5 +4,5 @@ on:
 
 jobs:
   gitleaks:
-    uses: notdodo/github-actions/.github/workflows/gitleaks.yml@140ee038bc8d88d63e8df8f29ebfe0c5e98112e6
-    # v0.1.0
+    uses: notdodo/github-actions/.github/workflows/gitleaks.yml@ec54c76d4a9713ca6150253f38e14f4e4031e4a2
+    # v0.1.1
