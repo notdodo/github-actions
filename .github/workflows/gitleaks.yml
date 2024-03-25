@@ -5,6 +5,7 @@ on:
         type: string
         default: "ubuntu-latest"
 
+# Comments works only when the workflow is called on `pull_request:`
 jobs:
   gitleaks:
     name: gitleaks
@@ -15,8 +16,8 @@ jobs:
         with:
           fetch-depth: 0
       - name: gitleaks
-        # bind to major to use latests checks
-        # kics-scan ignore-line
-        uses: gitleaks/gitleaks-action@v2
+        uses: gitleaks/gitleaks-action@e6dab246340401bf53eec993b8f05aebe80ac636
+        # v2.3.4
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_VERSION: latest
