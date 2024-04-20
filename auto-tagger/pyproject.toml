@@ -11,13 +11,13 @@ pygithub = "^2.3.0"
 semver = "^3.0.2"
 
 [tool.poetry.group.dev.dependencies]
-black = "^24.3.0"
+black = "^24.4.0"
 flake8 = "^7.0.0"
 mypy = "^1.9.0"
 isort = "^5.13.2"
-pydantic = "^2.6.4"
+pydantic = "^2.7.0"
 pylint = "^3.1.0"
-types-requests = "^2.31.0.20240311"
+types-requests = "^2.31.0.20240406"
 
 [tool.isort]
 profile = "black"
