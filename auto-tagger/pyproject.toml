@@ -1,15 +1,14 @@
 [tool.poetry]
-name = "auto-tag"
+name = "auto-tagger"
 version = "0.1.0"
 description = ""
-authors = ["Your Name <you@example.com>"]
+authors = ["notdodo"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.11"
 pygithub = "^2.2.0"
 semver = "^3.0.2"
-
 
 [tool.poetry.group.dev.dependencies]
 black = "^24.3.0"

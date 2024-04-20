@@ -6,3 +6,14 @@ updates:
       interval: monthly
       time: "12:00"
       day: wednesday
+  - package-ecosystem: pip
+    directory: /auto-tagger
+    schedule:
+      interval: monthly
+      time: "12:00"
+      day: sunday
+    groups:
+      auto-tagger:
+        dependency-type: "production"
+      auto-tagger-dev:
+        dependency-type: "development"
