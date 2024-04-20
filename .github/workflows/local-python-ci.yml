@@ -3,9 +3,12 @@ on:
   push:
     branches:
       - main
+    paths:
+      - auto-tagger/**
   pull_request:
     paths:
-      - auto-tag/**
+      - auto-tagger/**
+      - .github/workflows/local-python-ci.yml
 
 concurrency:
   group: ghas-python-${{ github.ref }}
@@ -13,8 +16,8 @@ concurrency:
 
 jobs:
   python-ci:
-    uses: notdodo/github-actions/.github/workflows/python-ci.yml@auto_tag
+    uses: notdodo/github-actions/.github/workflows/python-ci.yml@main
     with:
       poetry-version: 1.8.2
       python-version: 3.11
-      working-directory: auto-tag
+      working-directory: auto-tagger
