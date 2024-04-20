@@ -1,0 +1,70 @@
+name: auto-tag
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/*.yml
+
+jobs:
+  auto-tag:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - name: gitleaks
+            file: gitleaks.yml
+            tag-prefix: gitleaks-v
+          - name: go-ci
+            file: go-ci.yml
+            tag-prefix: go-ci-v
+          - name: gosec
+            file: go-security-scan.yml
+            tag-prefix: go-sec-v
+          - name: infra
+            file: infra-security-scan.yml
+            tag-prefix: infra-scan-v
+          - name: pythonci
+            file: python-ci.yml
+            tag-prefix: python-ci-v
+          - name: rustci
+            file: rust-ci.yml
+            tag-prefix: rust-ci-v
+
+    steps:
+      - uses: actions/checkout@1d96c772d19495a3b5c517cd2bc0cb401ea0529f
+        # v4.1.3
+        with:
+          fetch-depth: 0
+          sparse-checkout: |
+            .github
+      - name: Get changed files in the workflows folder
+        id: changed-files
+        uses: tj-actions/changed-files@0874344d6ebbaa00a27da73276ae7162fadcaf69
+        # v44.3.0
+        with:
+          path: ".github/workflows/"
+          files_yaml: |
+            ${{ matrix.name }}:
+                - ${{ matrix.file }}
+
+      - name: Run auto-tag if ${{ matrix.file }} changes
+        if: steps.changed-files.outputs.${{ matrix.name }}_any_changed == 'true'
+        uses: notdodo/github-actions/auto-tagger@main
+        with:
+          bind_to_major: true
+          default_bump_strategy: skip
+          default_branch: main
+          prefix: ${{ matrix.tag-prefix }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          dry_run: false
+
+      - name: Run auto-tag if any workflow changes
+        uses: notdodo/github-actions/auto-tagger@main
+        with:
+          bind_to_major: true
+          default_bump_strategy: skip
+          default_branch: main
+          prefix: v
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          dry_run: false
