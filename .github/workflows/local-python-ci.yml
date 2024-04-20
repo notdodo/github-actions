@@ -12,7 +12,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  infra-scan:
+  python-ci:
     uses: notdodo/github-actions/.github/workflows/python-ci.yml@auto_tag
     with:
       poetry-version: 1.8.2
