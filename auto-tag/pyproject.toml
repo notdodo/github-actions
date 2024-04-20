@@ -1,0 +1,28 @@
+[tool.poetry]
+name = "auto-tag"
+version = "0.1.0"
+description = ""
+authors = ["Your Name <you@example.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+pygithub = "^2.2.0"
+semver = "^3.0.2"
+
+
+[tool.poetry.group.dev.dependencies]
+black = "^24.3.0"
+flake8 = "^7.0.0"
+mypy = "^1.9.0"
+isort = "^5.13.2"
+pydantic = "^2.6.4"
+pylint = "^3.1.0"
+types-requests = "^2.31.0.20240311"
+
+[tool.isort]
+profile = "black"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
