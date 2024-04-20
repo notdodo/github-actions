@@ -42,11 +42,11 @@ jobs:
           virtualenvs-in-project: true
           installer-parallel: true
       - id: cache-deps
-      - uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9
+        uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9
         # v4.0.2
         with:
           path: ${{ inputs.working-directory }}/.venv
-          key: python-${{ input.python-version }}-poetry-${{ hashFiles('**/poetry.lock') }}
+          key: python-${{ inputs.python-version }}-poetry-${{ hashFiles('**/poetry.lock') }}
       - run: poetry install --no-root
         if: steps.cache-deps.outputs.cache-hit != 'true'
       - name: Linting
