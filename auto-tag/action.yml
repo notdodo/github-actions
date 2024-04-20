@@ -1,0 +1,29 @@
+name: "Auto Tagger Action"
+description: "Action to generate tags automatically using semver versioning."
+author: "notdodo"
+inputs:
+  bind_to_major:
+    description: "If 'true' creates a new tag with only the major number and binds it to the latest full tag."
+    default: "false"
+  default_bump_strategy:
+    description: "Bump strategy to use by default if no instruction is provided."
+    default: "skip"
+  default_branch:
+    description: "Default branch to bind the tag to (e.g., 'master')."
+    default: "main"
+  prefix:
+    description: "Prefix to use for tag generation (e.g., 'v')."
+    default: ""
+  suffix:
+    description: "Suffix to use for tag generation (e.g., '-test')."
+    default: ""
+  github_token:
+    description: "The GITHUB_TOKEN required to create the tag from the action."
+    default: ""
+    required: true
+  dry_run:
+    description: "Run the Action in dry-run mode: do not create tags."
+    default: "false"
+runs:
+  using: "docker"
+  image: "Dockerfile"
