@@ -13,7 +13,7 @@ concurrency:
 
 jobs:
   infra-scan:
-    uses: notdodo/github-actions/.github/workflows/reusable-workflows/python-ci.yml@auto_tag
+    uses: notdodo/github-actions/.github/workflows/python-ci.yml@auto_tag
     with:
       poetry-version: 1.8.2
       python-version: 3.11
