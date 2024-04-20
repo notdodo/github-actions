@@ -1,0 +1,58 @@
+on:
+  workflow_call:
+    inputs:
+      poetry-version:
+        type: string
+        default: "1.8.2"
+      python-version:
+        type: string
+        default: "3.11"
+      runs-on:
+        type: string
+        default: "ubuntu-latest"
+      working-directory:
+        type: string
+        default: "."
+
+jobs:
+  build:
+    runs-on: ${{ inputs.runs-on }}
+    defaults:
+      run:
+        working-directory: ${{ inputs.working-directory }}
+    steps:
+      - uses: actions/checkout@9bb56186c3b09b4f86b1c65136769dd318469633
+        # v4.1.2
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@82c7e631bb3cdc910f68e0081d67478d79c6982d
+        # v5.1.0
+        with:
+          python-version: ${{ inputs.python-version }}
+      - uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9
+        # v4.0.2
+        with:
+          path: ~/.local
+          key: poetry-${{ inputs.poetry-version }}
+      - uses: snok/install-poetry@93ada01c735cc8a383ce0ce2ae205a21c415379b
+        # v1.3.4
+        with:
+          version: ${{ inputs.poetry-version }}
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+          installer-parallel: true
+      - id: cache-deps
+      - uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9
+        # v4.0.2
+        with:
+          path: ${{ inputs.working-directory }}/.venv
+          key: python-${{ input.python-version }}-poetry-${{ hashFiles('**/poetry.lock') }}
+      - run: poetry install --no-root
+        if: steps.cache-deps.outputs.cache-hit != 'true'
+      - name: Linting
+        run: |
+          make format-check
+          make lint
+      - name: Type checking
+        run: |
+          make type-check
