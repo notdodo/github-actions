@@ -4,8 +4,8 @@ on:
     branches:
       - main
   pull_request:
-    branches:
-      - main
+    paths:
+      - auto-tag/**
 
 concurrency:
   group: ghas-python-${{ github.ref }}
