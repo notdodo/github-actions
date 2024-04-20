@@ -1,5 +1,5 @@
 FROM python:3-slim AS builder
-# HEALTHCHECK NONE
+HEALTHCHECK NONE
 
 ENV POETRY_VERSION=1.8.2
 ENV PATH="${PATH}:/app/.local/bin"
