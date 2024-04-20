@@ -13,44 +13,45 @@ jobs:
       matrix:
         include:
           - name: gitleaks
-            file: gitleaks.yml
+            file: .github/workflows/gitleaks.yml
             tag-prefix: gitleaks-v
           - name: go-ci
-            file: go-ci.yml
+            file: .github/workflows/go-ci.yml
             tag-prefix: go-ci-v
-          - name: gosec
-            file: go-security-scan.yml
+          - name: go-security-scan
+            file: .github/workflows/go-security-scan.yml
             tag-prefix: go-sec-v
-          - name: infra
-            file: infra-security-scan.yml
+          - name: infra-security-scan
+            file: .github/workflows/infra-security-scan.yml
             tag-prefix: infra-scan-v
-          - name: pythonci
-            file: python-ci.yml
+          - name: python-ci
+            file: .github/workflows/python-ci.yml
             tag-prefix: python-ci-v
-          - name: rustci
-            file: rust-ci.yml
+          - name: rust-ci
+            file: .github/workflows/rust-ci.yml
             tag-prefix: rust-ci-v
+          - name: auto-tagger
+            file: ./auto-tagger/**
+            tag-prefix: auto-tagger-v
 
     steps:
       - uses: actions/checkout@1d96c772d19495a3b5c517cd2bc0cb401ea0529f
         # v4.1.3
         with:
           fetch-depth: 0
-          sparse-checkout: |
-            .github
       - name: Get changed files in the workflows folder
         id: changed-files
         uses: tj-actions/changed-files@0874344d6ebbaa00a27da73276ae7162fadcaf69
         # v44.3.0
         with:
-          path: ".github/workflows/"
           files_yaml: |
             ${{ matrix.name }}:
                 - ${{ matrix.file }}
 
       - name: Run auto-tag if ${{ matrix.file }} changes
         if: steps.changed-files.outputs.${{ matrix.name }}_any_changed == 'true'
-        uses: notdodo/github-actions/auto-tagger@main
+        uses: notdodo/github-actions/auto-tagger@bd21ee21c5f49bb43f51327ce4a15983451c6a60
+        # auto-tagger-v0.0.0
         with:
           bind_to_major: true
           default_bump_strategy: skip
@@ -60,7 +61,8 @@ jobs:
           dry_run: false
 
       - name: Run auto-tag if any workflow changes
-        uses: notdodo/github-actions/auto-tagger@main
+        uses: notdodo/github-actions/auto-tagger@bd21ee21c5f49bb43f51327ce4a15983451c6a60
+        # auto-tagger-v0.0.0
         with:
           bind_to_major: true
           default_bump_strategy: skip

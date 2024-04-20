@@ -10,6 +10,7 @@ jobs:
   gitleaks:
     name: gitleaks
     runs-on: ${{ inputs.runs-on }}
+    if: (github.actor != 'dependabot[bot]')
     steps:
       - uses: actions/checkout@1d96c772d19495a3b5c517cd2bc0cb401ea0529f
         # v4.1.3
