@@ -3,6 +3,11 @@ format: ## Format repository code
 	poetry run black .
 	poetry run isort .
 
+.PHONY: format-check
+format-check: ## Check the formattation of the code
+	poetry run black --check .
+	poetry run isort --check .
+
 .PHONY: lint
 lint: ## Launch the linting tools
 	poetry run flake8 .
@@ -13,10 +18,10 @@ type-check: ## Launch the type checking tool
 	poetry run mypy .
 
 .PHONY: check
-check: format-check lint type-check ## Launch all the checks in RO (formatting, linting, type checking)
+check: format-check type-check lint ## Launch all the checks in RO (formatting, linting, type checking)
 
 .PHONY: all
-all: format lint type-check ## Launch all the checks and formatting
+all: format type-check lint ## Launch all the checks and formatting
 
 .PHONY: help
 help: ## Show the available commands

@@ -1,0 +1,20 @@
+name: Python CI (local repository)
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+concurrency:
+  group: ghas-python-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  infra-scan:
+    uses: notdodo/github-actions/reusable-workflows/python-ci.yml@auto_tag
+    with:
+      poetry-version: 1.8.2
+      python-version: 3.11
+      working-directory: auto-tag
