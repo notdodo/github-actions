@@ -5,68 +5,115 @@ on:
       - main
     paths:
       - .github/workflows/*.yml
+      - auto-tagger/**
 
 jobs:
   auto-tag:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        include:
-          - name: gitleaks
-            file: .github/workflows/gitleaks.yml
-            tag-prefix: gitleaks-v
-          - name: go-ci
-            file: .github/workflows/go-ci.yml
-            tag-prefix: go-ci-v
-          - name: go-security-scan
-            file: .github/workflows/go-security-scan.yml
-            tag-prefix: go-sec-v
-          - name: infra-security-scan
-            file: .github/workflows/infra-security-scan.yml
-            tag-prefix: infra-scan-v
-          - name: python-ci
-            file: .github/workflows/python-ci.yml
-            tag-prefix: python-ci-v
-          - name: rust-ci
-            file: .github/workflows/rust-ci.yml
-            tag-prefix: rust-ci-v
-          - name: auto-tagger
-            file: ./auto-tagger/**
-            tag-prefix: auto-tagger-v
-
     steps:
       - uses: actions/checkout@1d96c772d19495a3b5c517cd2bc0cb401ea0529f
         # v4.1.3
-        with:
-          fetch-depth: 0
-      - name: Get changed files in the workflows folder
+      - name: Get changed files for each workflow and action
         id: changed-files
         uses: tj-actions/changed-files@0874344d6ebbaa00a27da73276ae7162fadcaf69
         # v44.3.0
         with:
           files_yaml: |
-            ${{ matrix.name }}:
-                - ${{ matrix.file }}
+            gitleaks:
+            - .github/workflows/gitleaks.yml
+            go-ci:
+            - .github/workflows/go-ci.yml
+            go-security-scan:
+            - .github/workflows/go-security-scan.yml
+            infra-security-scan:
+            - .github/workflows/infra-security-scan.yml
+            python-ci:
+            - .github/workflows/python-ci.yml
+            rust-ci:
+            - .github/workflows/rust-ci.yml
+            auto-tagger:
+            - auto-tagger/**
 
-      - name: Run auto-tag if ${{ matrix.file }} changes
-        if: steps.changed-files.outputs.${{ matrix.name }}_any_changed == 'true'
+      - name: Run auto-tag if gitleaks workflow changes
+        if: steps.changed-files.outputs.gitleaks_any_changed == 'true'
         uses: notdodo/github-actions/auto-tagger@bd21ee21c5f49bb43f51327ce4a15983451c6a60
         # auto-tagger-v0.0.0
         with:
           bind_to_major: true
           default_bump_strategy: skip
           default_branch: main
-          prefix: ${{ matrix.tag-prefix }}
+          prefix: gitleaks-v
           github_token: ${{ secrets.GITHUB_TOKEN }}
           dry_run: false
 
-      - name: Run auto-tag if any workflow changes
+      - name: Run auto-tag if go-ci workflow changes
+        if: steps.changed-files.outputs.go-ci_any_changed == 'true'
         uses: notdodo/github-actions/auto-tagger@bd21ee21c5f49bb43f51327ce4a15983451c6a60
         # auto-tagger-v0.0.0
         with:
           bind_to_major: true
           default_bump_strategy: skip
           default_branch: main
-          prefix: v
+          prefix: go-ci-v
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          dry_run: false
+
+      - name: Run auto-tag if go-security-scan workflow changes
+        if: steps.changed-files.outputs.go-security-scan_any_changed == 'true'
+        uses: notdodo/github-actions/auto-tagger@bd21ee21c5f49bb43f51327ce4a15983451c6a60
+        # auto-tagger-v0.0.0
+        with:
+          bind_to_major: true
+          default_bump_strategy: skip
+          default_branch: main
+          prefix: go-sec-v
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          dry_run: false
+
+      - name: Run auto-tag if infra-security-scan workflow changes
+        if: steps.changed-files.outputs.infra-security-scan_any_changed == 'true'
+        uses: notdodo/github-actions/auto-tagger@bd21ee21c5f49bb43f51327ce4a15983451c6a60
+        # auto-tagger-v0.0.0
+        with:
+          bind_to_major: true
+          default_bump_strategy: skip
+          default_branch: main
+          prefix: infra-scan-v
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          dry_run: false
+
+      - name: Run auto-tag if python-ci workflow changes
+        if: steps.changed-files.outputs.python-ci_any_changed == 'true'
+        uses: notdodo/github-actions/auto-tagger@bd21ee21c5f49bb43f51327ce4a15983451c6a60
+        # auto-tagger-v0.0.0
+        with:
+          bind_to_major: true
+          default_bump_strategy: skip
+          default_branch: main
+          prefix: python-ci-v
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          dry_run: false
+
+      - name: Run auto-tag if rust-ci workflow changes
+        if: steps.changed-files.outputs.rust-ci_any_changed == 'true'
+        uses: notdodo/github-actions/auto-tagger@bd21ee21c5f49bb43f51327ce4a15983451c6a60
+        # auto-tagger-v0.0.0
+        with:
+          bind_to_major: true
+          default_bump_strategy: skip
+          default_branch: main
+          prefix: rust-ci-v
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          dry_run: false
+
+      - name: Run auto-tag if auto-tagger action changes
+        if: steps.changed-files.outputs.auto-tagger_any_changed == 'true'
+        uses: notdodo/github-actions/auto-tagger@bd21ee21c5f49bb43f51327ce4a15983451c6a60
+        # auto-tagger-v0.0.0
+        with:
+          bind_to_major: true
+          default_bump_strategy: skip
+          default_branch: main
+          prefix: auto-tagger-v
           github_token: ${{ secrets.GITHUB_TOKEN }}
           dry_run: false
