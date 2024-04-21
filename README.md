@@ -1,6 +1,6 @@
 # Reusable GitHub Actions
 
-Collection of reusable workflows designed to streamline automation.
+Collection of reusable workflows and custom actions designed to streamline automation.
 
 ## Available Workflows
 
@@ -13,7 +13,7 @@ Collection of reusable workflows designed to streamline automation.
 
 ## Tagging
 
-The repository is automatically tagged (no tag for each workflow) using [anothrNick/github-tag-action](https://github.com/anothrNick/github-tag-action).
+The repository is automatically tagged (tag for each workflow) using [notdodo/auto-tagger](https://github.com/notdodo/github-actions/tree/main/auto-tagger).
 To increase a specific semver include in any of the commit messages:
 
 - `[#major]`
@@ -21,7 +21,7 @@ To increase a specific semver include in any of the commit messages:
 - `[#patch]`
 - `[#skip]`
 
-If no special string is used the default is `[#patch]`.
+If no special string is used the default is `[#skip]`.
 
 ## Usage examples
 
@@ -34,8 +34,8 @@ on:
 
 jobs:
   gitleaks:
-    uses: notdodo/github-actions/.github/workflows/gitleaks.yml@ec54c76d4a9713ca6150253f38e14f4e4031e4a2
-    # v0.1.1
+    uses: notdodo/github-actions/.github/workflows/gitleaks.yml@2e84638563b65587b42ba8ab87ccdf1922c412dd
+    # gitleaks-v0.0.0
 ```
 
 ### Infrastructure Security Scan
@@ -56,8 +56,8 @@ concurrency:
 
 jobs:
   infra-security-scan:
-    uses: notdodo/github-actions/.github/workflows/infra-security-scan.yml@ec54c76d4a9713ca6150253f38e14f4e4031e4a2
-    # v0.1.1
+    uses: notdodo/github-actions/.github/workflows/infra-security-scan.yml@2e84638563b65587b42ba8ab87ccdf1922c412dd
+    # infra-scan-v0.0.0
 ```
 
 ### Python CI
@@ -69,10 +69,10 @@ on:
     branches:
       - main
     paths:
-      - auto-taggergerger/**
+      - auto-tagger/**
   pull_request:
     paths:
-      - auto-taggergerger/**
+      - auto-tagger/**
       - .github/workflows/my-python-ci.yml
 
 concurrency:
@@ -91,19 +91,19 @@ jobs:
 ### Auto tagger
 
 ```yaml
-name: auto-taggergerger
+name: auto-tagger
 on:
   push:
     branches:
       - main
 
 jobs:
-  auto-taggergerger:
+  auto-tagger:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@1d96c772d19495a3b5c517cd2bc0cb401ea0529f
       - name: Run action
-        uses: notdodo/github-actions/auto-taggergerger@main
+        uses: notdodo/github-actions/auto-tagger@auto-tagger-v0
         with:
           bind_to_major: true
           default_bump_strategy: skip
