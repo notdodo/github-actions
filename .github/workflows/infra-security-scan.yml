@@ -4,9 +4,6 @@ on:
       enable-comments:
         type: boolean
         default: true
-      go-version:
-        type: string
-        default: "1.20"
       runs-on:
         type: string
         default: "ubuntu-latest"
@@ -63,7 +60,7 @@ jobs:
       - uses: actions/setup-go@0c52d547c9bc32b1aa3301fd7a9cb496313a4491
         # v5.0.0
         with:
-          go-version: ${{ inputs.go-version }}
+          go-version: "oldstable"
           cache: false
       - id: find-files
         run: |
