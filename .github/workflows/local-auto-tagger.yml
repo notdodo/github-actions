@@ -12,8 +12,8 @@ jobs:
   auto-tag:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@1d96c772d19495a3b5c517cd2bc0cb401ea0529f
-        # v4.1.3
+      - uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b
+        # v4.1.4
       - name: Get changed files for each workflow and action
         id: changed-files
         uses: tj-actions/changed-files@0874344d6ebbaa00a27da73276ae7162fadcaf69
