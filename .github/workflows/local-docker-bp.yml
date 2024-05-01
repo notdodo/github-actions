@@ -10,7 +10,7 @@ jobs:
     uses: notdodo/github-actions/.github/workflows/docker-build-and-push.yml@docker-build-and-push-v0
     with:
       image: notdodo/auto-tagger
-      platforms: linux/amd64,linux/arm64
+      platforms: linux/amd64
       push: true
       registry: ghcr.io
       working-directory: ./auto-tagger/
