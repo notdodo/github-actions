@@ -12,10 +12,8 @@ ENV POETRY_VERSION=1.8.2 \
 RUN addgroup -g 1000 app && adduser -G app -u 999 -s /sbin/nologin -h /app app -D
 USER app
 WORKDIR /app
-RUN pip install --user --no-cache-dir poetry==${POETRY_VERSION}
-
 COPY pyproject.toml poetry.lock /app/
-RUN poetry install --only main --no-root
+RUN pip install --user --no-cache-dir poetry==${POETRY_VERSION} && poetry install --only main --no-root
 
 FROM --platform=${BUILDPLATFORM} python:3-alpine as runtime
 HEALTHCHECK NONE
