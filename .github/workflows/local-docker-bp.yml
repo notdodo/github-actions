@@ -7,7 +7,7 @@ on:
 
 jobs:
   build-push-docker-image:
-    uses: notdodo/github-actions/.github/workflows/docker-build-and-push.yml@reduce_image_size
+    uses: notdodo/github-actions/.github/workflows/docker-build-and-push.yml@docker-build-and-push-v0
     with:
       image: notdodo/auto-tagger
       platforms: linux/amd64,linux/arm64
