@@ -11,6 +11,9 @@ inputs:
   default_branch:
     description: "Default branch to bind the tag to (e.g., 'master')."
     default: "main"
+  path:
+    description: "Path of the directory containing the objects to tag. Mostly used for example to filter commits only related to a specific directory/subproject."
+    default: "."
   prefix:
     description: "Prefix to use for tag generation (e.g., 'v')."
     default: ""
