@@ -37,84 +37,91 @@ jobs:
 
       - name: Run auto-tag if gitleaks workflow changes
         if: steps.changed-files.outputs.gitleaks_any_changed == 'true'
-        uses: notdodo/github-actions/auto-tagger@2e84638563b65587b42ba8ab87ccdf1922c412dd
+        uses: notdodo/github-actions/auto-tagger@auto-tagger-v0
         # auto-tagger-v0.0.0
         with:
           bind_to_major: true
           default_bump_strategy: skip
           default_branch: main
+          path: .github/workflows/gitleaks.yml
           prefix: gitleaks-v
           github_token: ${{ secrets.GITHUB_TOKEN }}
           dry_run: false
 
       - name: Run auto-tag if go-ci workflow changes
         if: steps.changed-files.outputs.go-ci_any_changed == 'true'
-        uses: notdodo/github-actions/auto-tagger@2e84638563b65587b42ba8ab87ccdf1922c412dd
+        uses: notdodo/github-actions/auto-tagger@auto-tagger-v0
         # auto-tagger-v0.0.0
         with:
           bind_to_major: true
           default_bump_strategy: skip
           default_branch: main
+          path: .github/workflows/go-ci.yml
           prefix: go-ci-v
           github_token: ${{ secrets.GITHUB_TOKEN }}
           dry_run: false
 
       - name: Run auto-tag if go-security-scan workflow changes
         if: steps.changed-files.outputs.go-security-scan_any_changed == 'true'
-        uses: notdodo/github-actions/auto-tagger@2e84638563b65587b42ba8ab87ccdf1922c412dd
+        uses: notdodo/github-actions/auto-tagger@auto-tagger-v0
         # auto-tagger-v0.0.0
         with:
           bind_to_major: true
           default_bump_strategy: skip
           default_branch: main
+          path: .github/workflows/go-security-scan.yml
           prefix: go-sec-v
           github_token: ${{ secrets.GITHUB_TOKEN }}
           dry_run: false
 
       - name: Run auto-tag if infra-security-scan workflow changes
         if: steps.changed-files.outputs.infra-security-scan_any_changed == 'true'
-        uses: notdodo/github-actions/auto-tagger@2e84638563b65587b42ba8ab87ccdf1922c412dd
+        uses: notdodo/github-actions/auto-tagger@auto-tagger-v0
         # auto-tagger-v0.0.0
         with:
           bind_to_major: true
           default_bump_strategy: skip
           default_branch: main
+          path: .github/workflows/infra-security-scan.yml
           prefix: infra-scan-v
           github_token: ${{ secrets.GITHUB_TOKEN }}
           dry_run: false
 
       - name: Run auto-tag if python-ci workflow changes
         if: steps.changed-files.outputs.python-ci_any_changed == 'true'
-        uses: notdodo/github-actions/auto-tagger@2e84638563b65587b42ba8ab87ccdf1922c412dd
+        uses: notdodo/github-actions/auto-tagger@auto-tagger-v0
         # auto-tagger-v0.0.0
         with:
           bind_to_major: true
           default_bump_strategy: skip
           default_branch: main
+          path: .github/workflows/python-ci.yml
           prefix: python-ci-v
           github_token: ${{ secrets.GITHUB_TOKEN }}
           dry_run: false
 
       - name: Run auto-tag if rust-ci workflow changes
         if: steps.changed-files.outputs.rust-ci_any_changed == 'true'
-        uses: notdodo/github-actions/auto-tagger@2e84638563b65587b42ba8ab87ccdf1922c412dd
+        uses: notdodo/github-actions/auto-tagger@auto-tagger-v0
         # auto-tagger-v0.0.0
         with:
           bind_to_major: true
           default_bump_strategy: skip
           default_branch: main
+          path: .github/workflows/rust-ci.yml
           prefix: rust-ci-v
           github_token: ${{ secrets.GITHUB_TOKEN }}
           dry_run: false
 
       - name: Run auto-tag if auto-tagger action changes
         if: steps.changed-files.outputs.auto-tagger_any_changed == 'true'
-        uses: notdodo/github-actions/auto-tagger@2e84638563b65587b42ba8ab87ccdf1922c412dd
+        uses: notdodo/github-actions/auto-tagger@auto-tagger-v0
         # auto-tagger-v0.0.0
         with:
           bind_to_major: true
           default_bump_strategy: skip
           default_branch: main
+          path: ./auto-tagger/
           prefix: auto-tagger-v
           github_token: ${{ secrets.GITHUB_TOKEN }}
           dry_run: false
