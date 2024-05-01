@@ -1,0 +1,21 @@
+name: "Auto Tagger docker image builder and publisher"
+
+on:
+  push:
+    tags:
+      - auto-tagger-v*
+
+jobs:
+  build-push-docker-image:
+    uses: notdodo/github-actions/.github/workflows/docker-build-and-push.yml@docker-build-and-push-v0
+    with:
+      image: notdodo/auto-tagger
+      platforms: linux/amd64,linux/arm64
+      push: true
+      registry: ghcr.io
+      working-directory: ./auto-tagger/
+      tags: |
+        type=match,pattern=auto-tagger-v(.*),group=1
+    secrets:
+      registry-username: notdodo
+      registry-password: ${{ secrets.GITHUB_TOKEN }}
