@@ -25,6 +25,6 @@ RUN addgroup -g 1000 app && adduser -G app -u 999 -s /sbin/nologin -h /app app -
 USER app
 WORKDIR /app
 COPY --from=builder ${VIRTUAL_ENV} ${VIRTUAL_ENV}
-COPY *.py /app
+COPY *.py /app/
 
-CMD ["python", "main.py"]
+CMD ["python", "/app/main.py"]
