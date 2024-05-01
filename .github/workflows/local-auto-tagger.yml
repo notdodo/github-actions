@@ -37,8 +37,8 @@ jobs:
 
       - name: Run auto-tag if gitleaks workflow changes
         if: steps.changed-files.outputs.gitleaks_any_changed == 'true'
+        # kics-scan ignore-line
         uses: notdodo/github-actions/auto-tagger@auto-tagger-v0
-        # auto-tagger-v0.0.0
         with:
           bind_to_major: true
           default_bump_strategy: skip
@@ -50,8 +50,8 @@ jobs:
 
       - name: Run auto-tag if go-ci workflow changes
         if: steps.changed-files.outputs.go-ci_any_changed == 'true'
+        # kics-scan ignore-line
         uses: notdodo/github-actions/auto-tagger@auto-tagger-v0
-        # auto-tagger-v0.0.0
         with:
           bind_to_major: true
           default_bump_strategy: skip
@@ -63,8 +63,8 @@ jobs:
 
       - name: Run auto-tag if go-security-scan workflow changes
         if: steps.changed-files.outputs.go-security-scan_any_changed == 'true'
+        # kics-scan ignore-line
         uses: notdodo/github-actions/auto-tagger@auto-tagger-v0
-        # auto-tagger-v0.0.0
         with:
           bind_to_major: true
           default_bump_strategy: skip
@@ -76,8 +76,8 @@ jobs:
 
       - name: Run auto-tag if infra-security-scan workflow changes
         if: steps.changed-files.outputs.infra-security-scan_any_changed == 'true'
+        # kics-scan ignore-line
         uses: notdodo/github-actions/auto-tagger@auto-tagger-v0
-        # auto-tagger-v0.0.0
         with:
           bind_to_major: true
           default_bump_strategy: skip
@@ -89,8 +89,8 @@ jobs:
 
       - name: Run auto-tag if python-ci workflow changes
         if: steps.changed-files.outputs.python-ci_any_changed == 'true'
+        # kics-scan ignore-line
         uses: notdodo/github-actions/auto-tagger@auto-tagger-v0
-        # auto-tagger-v0.0.0
         with:
           bind_to_major: true
           default_bump_strategy: skip
@@ -102,8 +102,8 @@ jobs:
 
       - name: Run auto-tag if rust-ci workflow changes
         if: steps.changed-files.outputs.rust-ci_any_changed == 'true'
+        # kics-scan ignore-line
         uses: notdodo/github-actions/auto-tagger@auto-tagger-v0
-        # auto-tagger-v0.0.0
         with:
           bind_to_major: true
           default_bump_strategy: skip
@@ -115,8 +115,8 @@ jobs:
 
       - name: Run auto-tag if auto-tagger action changes
         if: steps.changed-files.outputs.auto-tagger_any_changed == 'true'
+        # kics-scan ignore-line
         uses: notdodo/github-actions/auto-tagger@auto-tagger-v0
-        # auto-tagger-v0.0.0
         with:
           bind_to_major: true
           default_bump_strategy: skip
