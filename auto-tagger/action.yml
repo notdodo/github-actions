@@ -29,4 +29,4 @@ inputs:
     default: "false"
 runs:
   using: "docker"
-  image: "Dockerfile"
+  image: "docker://ghcr.io/notdodo/auto-tagger:0.0.1"
