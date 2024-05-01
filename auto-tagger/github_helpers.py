@@ -48,7 +48,7 @@ class GitHubHelper:
         """Get a PaginatedList[Commit] since a predefined datetime"""
         commits = []
         for commit in self.repo.get_commits(
-            since=since - timedelta(days=10),
+            since=since + timedelta(seconds=1),
             path=self.config.PATH,
         ):
             commits.append(
