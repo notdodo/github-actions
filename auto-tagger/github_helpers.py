@@ -47,14 +47,17 @@ class GitHubHelper:
     def get_commits_since(self, since: datetime) -> List[Commit]:
         """Get a PaginatedList[Commit] since a predefined datetime"""
         commits = []
-        for commit in self.repo.get_commits(since=since + timedelta(seconds=1)):
+        for commit in self.repo.get_commits(
+            since=since + timedelta(seconds=1),
+            path=self.config.PATH,
+        ):
             commits.append(
                 Commit(
                     commit.sha,
                     commit.commit.author.name,
                     commit.commit.author.email,
                     commit.commit.message,
-                    commit.commit.last_modified_datetime or datetime.now(),
+                    commit.commit.author.date,
                 )
             )
         return commits
@@ -69,7 +72,7 @@ class GitHubHelper:
             commit.commit.author.name,
             commit.commit.author.email,
             commit.commit.message,
-            commit.commit.last_modified_datetime or datetime.now(),
+            commit.commit.author.date,
         )
 
     def get_latest_tag(self) -> Tag:
@@ -89,13 +92,16 @@ class GitHubHelper:
                     name=tag.name,
                     commit=tag.commit.sha,
                     message=tag.commit.commit.message,
-                    date=tag.commit.last_modified_datetime or datetime.now(),
+                    date=tag.commit.commit.author.date,
                 )
                 break
         if last_available_tag is None:
+            last_commit = self.get_last_commit()
             last_available_tag = Tag(
                 name=self.config.PREFIX + "0.0.0" + self.config.SUFFIX,
-                commit=self.get_last_commit().sha,
+                commit=last_commit.sha,
+                message=last_commit.message,
+                date=last_commit.date,
             )
             self.create_git_tag(last_available_tag)
         return last_available_tag
@@ -116,13 +122,16 @@ class GitHubHelper:
                 last_available_major_tag = Tag(
                     name=tag.name,
                     commit=tag.commit.sha,
-                    date=tag.commit.last_modified_datetime or datetime.now(),
                     message=tag.commit.commit.message,
+                    date=tag.commit.commit.author.date,
                 )
         if last_available_major_tag is None:
+            last_commit = self.get_last_commit()
             last_available_major_tag = Tag(
                 name=self.config.PREFIX + "0" + self.config.SUFFIX,
-                commit=self.get_last_commit().sha,
+                commit=last_commit.sha,
+                message=last_commit.message,
+                date=last_commit.date,
             )
             self.create_git_tag(last_available_major_tag)
         return last_available_major_tag

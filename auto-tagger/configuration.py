@@ -23,9 +23,11 @@ class Configuration:
     """Configuration resource"""
 
     # pylint: disable=invalid-name
+    # pylint: disable=too-many-instance-attributes
     BIND_TO_MAJOR = False
     DEFAULT_BUMP_STRATEGY: BumpStrategy = BumpStrategy.SKIP
     DEFAULT_BRANCH: str = "main"
+    PATH: str = "."
     PREFIX: str = "v"
     REPOSITORY: str = os.environ.get("GITHUB_REPOSITORY", "")
     SUFFIX: str = ""
@@ -41,6 +43,7 @@ class Configuration:
                 "INPUT_DEFAULT_BUMP_STRATEGY", cls.DEFAULT_BUMP_STRATEGY
             ),
             DEFAULT_BRANCH=os.environ.get("INPUT_MAIN_BRANCH", cls.DEFAULT_BRANCH),
+            PATH=os.environ.get("INPUT_PATH", cls.PATH),
             PREFIX=os.environ.get("INPUT_PREFIX", cls.PREFIX),
             REPOSITORY=os.environ.get("GITHUB_REPOSITORY", ""),
             SUFFIX=os.environ.get("INPUT_SUFFIX", cls.SUFFIX),
@@ -53,6 +56,7 @@ class Configuration:
         BIND_TO_MAJOR,
         DEFAULT_BUMP_STRATEGY,
         DEFAULT_BRANCH,
+        PATH,
         PREFIX,
         REPOSITORY,
         SUFFIX,
@@ -61,6 +65,7 @@ class Configuration:
         self.BIND_TO_MAJOR = BIND_TO_MAJOR
         self.DEFAULT_BUMP_STRATEGY = DEFAULT_BUMP_STRATEGY
         self.DEFAULT_BRANCH = DEFAULT_BRANCH
+        self.PATH = PATH
         self.PREFIX = PREFIX
         self.REPOSITORY = REPOSITORY
         self.SUFFIX = SUFFIX
