@@ -3,7 +3,7 @@ name: "Auto Tagger docker image builder and publisher"
 on:
   push:
     tags:
-      - auto-tagger-v*
+      - "auto-tagger-v[0-9]+.[0-9]+.[0-9]+"
 
 jobs:
   build-push-docker-image:
