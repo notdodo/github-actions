@@ -66,7 +66,7 @@ class Configuration:
         self.SUFFIX = SUFFIX
         self.DRY_RUN = DRY_RUN
 
-    def get_bump_strategy_from_commits(self, commits: List[Commit]):
+    def get_bump_strategy_from_commits(self, commits: List[Commit]) -> BumpStrategy:
         """Get the bump strategy from a list of commits parsing the keywords [#<strategy>]"""
         strategies = [strategy.value for strategy in BumpStrategy]
         for commit in commits:

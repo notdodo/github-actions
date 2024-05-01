@@ -130,18 +130,18 @@ class GitHubHelper:
     def create_git_tag(self, tag: Tag) -> None:
         """Create a new tag on the repository bound to a specific commit"""
         commit = self.repo.get_commit(tag.commit)
-        self.repo.create_git_tag(
-            tag=tag.name,
-            message=tag.message,
-            object=tag.commit,
-            type="commit",
-            tagger=InputGitAuthor(
-                name=str(commit.author.name),
-                email=str(commit.author.email),
-                date=str(datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ")),
-            ),
-        )
         if not self.config.DRY_RUN:
+            self.repo.create_git_tag(
+                tag=tag.name,
+                message=tag.message,
+                object=tag.commit,
+                type="commit",
+                tagger=InputGitAuthor(
+                    name=str(commit.author.name),
+                    email=str(commit.author.email),
+                    date=str(datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ")),
+                ),
+            )
             self.__create_git_ref(f"refs/tags/{tag.name}", tag.commit)
 
     def __create_git_ref(self, ref_name: str, sha: str) -> None:
