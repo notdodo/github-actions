@@ -16,7 +16,7 @@ flake8 = "^7.0.0"
 mypy = "^1.10.0"
 isort = "^5.13.2"
 pydantic = "^2.7.1"
-pylint = "^3.1.0"
+pylint = "^3.2.1"
 types-requests = "^2.31.0.20240406"
 
 [tool.isort]
