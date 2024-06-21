@@ -15,7 +15,7 @@ WORKDIR /app
 COPY pyproject.toml poetry.lock /app/
 RUN pip install --user --no-cache-dir poetry==${POETRY_VERSION} && poetry install --only main --no-root
 
-FROM python:3-alpine as runtime
+FROM python:3-alpine AS runtime
 HEALTHCHECK NONE
 
 ENV VIRTUAL_ENV=/app/.venv \
