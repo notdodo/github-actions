@@ -1,4 +1,4 @@
-FROM --platform=${BUILDPLATFORM} python:3-alpine AS builder
+FROM python:3-alpine AS builder
 HEALTHCHECK NONE
 
 ENV POETRY_VERSION=1.8.2 \
@@ -15,7 +15,7 @@ WORKDIR /app
 COPY pyproject.toml poetry.lock /app/
 RUN pip install --user --no-cache-dir poetry==${POETRY_VERSION} && poetry install --only main --no-root
 
-FROM --platform=${BUILDPLATFORM} python:3-alpine as runtime
+FROM python:3-alpine AS runtime
 HEALTHCHECK NONE
 
 ENV VIRTUAL_ENV=/app/.venv \
