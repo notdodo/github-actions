@@ -28,8 +28,8 @@ jobs:
         with:
           fetch-depth: 0
       - name: Kics Scan
-        uses: Checkmarx/kics-github-action@d1b692d84c536f4e8696954ce7aab6818f95f5bc
-        # v2.0.0
+        uses: Checkmarx/kics-github-action@aacf8e81cd48e227259c937c215b352e02ad447a
+        # v2.1.0
         with:
           path: .
           output_path: ${{ inputs.working-directory }}/results.sarif
