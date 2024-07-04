@@ -12,12 +12,12 @@ semver = "^3.0.2"
 
 [tool.poetry.group.dev.dependencies]
 black = "^24.4.2"
-flake8 = "^7.0.0"
-mypy = "^1.10.0"
+flake8 = "^7.1.0"
+mypy = "^1.10.1"
 isort = "^5.13.2"
-pydantic = "^2.7.2"
-pylint = "^3.2.2"
-types-requests = "^2.32.0.20240523"
+pydantic = "^2.7.4"
+pylint = "^3.2.5"
+types-requests = "^2.32.0.20240622"
 
 [tool.isort]
 profile = "black"
