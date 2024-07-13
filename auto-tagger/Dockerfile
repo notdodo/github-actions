@@ -21,6 +21,7 @@ HEALTHCHECK NONE
 ENV VIRTUAL_ENV=/app/.venv \
     PATH="/app/.venv/bin:${PATH}"
 
+RUN test
 RUN addgroup -g 1000 app && adduser -G app -u 999 -s /sbin/nologin -h /app app -D
 USER app
 WORKDIR /app
