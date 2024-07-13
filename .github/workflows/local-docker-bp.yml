@@ -5,15 +5,16 @@ on:
     tags:
       - "auto-tagger-v[0-9]+.[0-9]+.[0-9]+"
 
+permissions:
+  security-events: write
+  attestations: write
+  contents: read
+  packages: write
+  id-token: write
+  actions: read
+
 jobs:
   build-push-docker-image:
-    permissions:
-      security-events: write
-      attestations: write
-      contents: read
-      packages: write
-      id-token: write
-      actions: read
     uses: notdodo/github-actions/.github/workflows/docker-build-and-push.yml@docker-build-and-push-v1
     with:
       image: notdodo/auto-tagger
