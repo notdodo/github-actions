@@ -101,7 +101,7 @@ jobs:
         uses: quay/clair-action@9b5f21b89968925c0ab26064b4e2006efa079e0a
         # v0.0.8
         with:
-          image-path: ${{ inputs/registry }}/${{ inputs.image }}
+          image-path: ${{ inputs.registry }}/${{ inputs.image }}
           format: sarif
           output: clair_results.sarif
   
