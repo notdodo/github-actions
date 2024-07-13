@@ -6,6 +6,10 @@ updates:
       interval: monthly
       time: "12:00"
       day: wednesday
+    groups:
+      actions-deps:
+        patterns:
+          - "*"
   - package-ecosystem: pip
     directory: /auto-tagger
     schedule:
