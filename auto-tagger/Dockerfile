@@ -1,7 +1,7 @@
 FROM python:3-alpine AS builder
 HEALTHCHECK NONE
 
-ENV POETRY_VERSION=1.8.2 \
+ENV POETRY_VERSION=1.8.3 \
     PATH="${PATH}:/app/.local/bin" \
     PYTHONDONTWRITEBYTECODE=1 \
     POETRY_CACHE_DIR=/app/.cache \
@@ -14,7 +14,6 @@ USER app
 WORKDIR /app
 COPY pyproject.toml poetry.lock /app/
 RUN pip install --user --no-cache-dir poetry==${POETRY_VERSION} && poetry install --only main --no-root
-RUN ls -la
 
 FROM python:3-alpine AS runtime
 HEALTHCHECK NONE
