@@ -97,11 +97,19 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
+      - name: Grab cache DB
+        uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9
+        # v4.0.2
+        with:
+          path: matcher.db
+          key: matcher.db
+
       - name: Run Clair V4
         uses: quay/clair-action@9b5f21b89968925c0ab26064b4e2006efa079e0a
         # v0.0.8
         with:
           image-ref: ${{ inputs.registry }}/${{ inputs.image }}
+          db-file: matcher.db
           format: sarif
           output: clair_results.sarif
   

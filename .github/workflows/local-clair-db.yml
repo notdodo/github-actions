@@ -1,0 +1,30 @@
+name: Update Clair Vulnerability Database
+
+on:
+  workflow_dispatch: {}
+  schedule:
+    - cron: '0 5 * * *' # Everyday at 5AM UTC
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@5927c834f5b4fdf503fca6f4c7eccda82949e1ee
+        # v3.1.0
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@4fd812986e6c8c2a69e18311145f9371337f27d4
+        # v3.4.0
+
+      - name: Run Clair V4 update
+        uses: quay/clair-action@9b5f21b89968925c0ab26064b4e2006efa079e0a
+        with:
+          db-file: matcher.db
+          mode: update
+
+      - name: Cache DB
+        uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9
+        # v4.0.2
+        with:
+          path: matcher.db
+          key: matcher.db
