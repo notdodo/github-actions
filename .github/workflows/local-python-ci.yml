@@ -16,6 +16,8 @@ concurrency:
 
 jobs:
   python-ci:
+    permissions:
+      security-events: write
     uses: notdodo/github-actions/.github/workflows/python-ci.yml@python-ci-v0.0.1
     with:
       poetry-version: 1.8.2
