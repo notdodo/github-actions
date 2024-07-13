@@ -98,14 +98,15 @@ jobs:
           cache-to: type=gha,mode=max
 
       - name: Run Clair V4
-        uses: quay/clair-action@main
+        uses: quay/clair-action@9b5f21b89968925c0ab26064b4e2006efa079e0a
+        # v0.0.8
         with:
           image-path: ${{ inputs/registry }}/${{ inputs.image }}
           format: sarif
           output: clair_results.sarif
   
       - name: Upload sarif
-        uses: github/codeql-action/upload-sarif@v2
+        uses: github/codeql-action/upload-sarif@4b6aa0b07da05d6e43d0e5f9c8596a6532ce1c85
         with:
           sarif_file: clair_results.sarif
 
