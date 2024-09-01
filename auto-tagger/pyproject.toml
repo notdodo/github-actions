@@ -7,7 +7,7 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.11"
-pygithub = "^2.3.0"
+pygithub = "^2.4.0"
 semver = "^3.0.2"
 
 [tool.poetry.group.dev.dependencies]
