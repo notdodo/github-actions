@@ -24,6 +24,7 @@ class Configuration:
 
     # pylint: disable=invalid-name
     # pylint: disable=too-many-instance-attributes
+    # pylint: disable=too-many-positional-arguments
     BIND_TO_MAJOR = False
     DEFAULT_BUMP_STRATEGY: BumpStrategy = BumpStrategy.SKIP
     DEFAULT_BRANCH: str = "main"
