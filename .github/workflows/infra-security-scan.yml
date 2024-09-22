@@ -28,8 +28,8 @@ jobs:
         with:
           fetch-depth: 0
       - name: Kics Scan
-        uses: Checkmarx/kics-github-action@252e73959bd4809a14863cbfbb42d7a90d5a4860
-        # v2.1.1
+        uses: Checkmarx/kics-github-action@530ac1f8efe6202b0f12c9a6e952597ae707b755
+        # v2.1.2
         with:
           path: .
           output_path: ${{ inputs.working-directory }}/results.sarif
@@ -41,8 +41,8 @@ jobs:
           enable_jobs_summary: true
           comments_with_queries: true
       - name: Upload SARIF file
-        uses: github/codeql-action/upload-sarif@4b6aa0b07da05d6e43d0e5f9c8596a6532ce1c85
-        # v2.15.3
+        uses: github/codeql-action/upload-sarif@5618c9fc1e675841ca52c1c6b1304f5255a905a0
+        # v2.19.0
         with:
           sarif_file: ${{ inputs.working-directory }}/results.sarif
 
