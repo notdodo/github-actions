@@ -25,8 +25,8 @@ jobs:
         # v4.1.7
         with:
           fetch-depth: 0
-      - uses: actions/setup-python@39cd14951b08e74b54015e9e001cdefcf80e669f
-        # v5.1.1
+      - uses: actions/setup-python@f677139bbe7f9c59b41e40162b753c062f5d49a3
+        # v5.2.1
         with:
           python-version: ${{ inputs.python-version }}
       - uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9
@@ -34,8 +34,8 @@ jobs:
         with:
           path: ~/.local
           key: poetry-${{ inputs.poetry-version }}
-      - uses: snok/install-poetry@93ada01c735cc8a383ce0ce2ae205a21c415379b
-        # v1.3.4
+      - uses: snok/install-poetry@76e04a911780d5b312d89783f7b1cd627778900a
+        # v1.4.1
         with:
           version: ${{ inputs.poetry-version }}
           virtualenvs-create: true

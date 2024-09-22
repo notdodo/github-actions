@@ -13,7 +13,7 @@ jobs:
       platforms: linux/amd64
       push: true
       registry: ghcr.io
-      working-directory: ./auto-tagger/
+      working-directory: ./auto-tagger
       tags: |
         type=match,pattern=auto-tagger-v(.*),group=1
     secrets:
