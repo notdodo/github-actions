@@ -30,6 +30,7 @@ jobs:
         # v2.7.3
         with:
           cache-on-failure: true
+          workspaces: ${{ inputs.working-directory }}
       - name: Build
         run: cargo build --verbose --release
 
@@ -48,6 +49,7 @@ jobs:
         # v2.7.3
         with:
           cache-on-failure: true
+          workspaces: ${{ inputs.working-directory }}
       - name: Run tests
         run: cargo test --verbose
 
@@ -71,6 +73,7 @@ jobs:
         with:
           cache-on-failure: true
           cache-all-crates: true
+          workspaces: ${{ inputs.working-directory }}
       - name: Install tools
         run: cargo install cargo-make clippy-sarif sarif-fmt
       - name: Run clippy
@@ -84,5 +87,5 @@ jobs:
         uses: github/codeql-action/upload-sarif@5618c9fc1e675841ca52c1c6b1304f5255a905a0
         # v2.19.0
         with:
-          sarif_file: clippy-results.sarif
+          sarif_file: ${{ inputs.working-directory }}/clippy-results.sarif
           wait-for-processing: true
