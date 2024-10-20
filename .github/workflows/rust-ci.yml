@@ -1,6 +1,12 @@
 on:
   workflow_call:
     inputs:
+      aws-region:
+        type: string
+        default: "eu-west-1"
+      aws-role:
+        type: string
+        default: "invalid"
       build-lambda:
         type: boolean
         default: false
@@ -107,11 +113,28 @@ jobs:
         # v4.2.0
         with:
           fetch-depth: 0
+      - uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502
+        # v4.0.2
+        with:
+          role-to-assume: ${{ inputs.aws-role }}
+          aws-region: ${{ inputs.aws-region }}
+          retry-max-attempts: 2
+      - name: Install Zig toolchain
+        uses: korandoru/setup-zig@v1
+        with:
+          zig-version: master
+      - name: Install Cargo Lambda
+        uses: jaxxstorm/action-install-gh-release@v1.12.0
+        with:
+          repo: cargo-lambda/cargo-lambda
+          platform: linux
+          arch: x86_64
       - name: Cargo cache
         uses: swatinem/rust-cache@23bce251a8cd2ffc3c1075eaa2367cf899916d84
         # v2.7.3
         with:
           cache-on-failure: true
+          cache-all-crates: true
           workspaces: ${{ inputs.working-directory }}
       - name: Build Lambda
         if: ${{ inputs.build-lambda || inputs.deploy-lambda }}
