@@ -1,6 +1,12 @@
 on:
   workflow_call:
     inputs:
+      build-lambda:
+        type: boolean
+        default: false
+      deploy-lambda:
+        type: boolean
+        default: false
       rust-version:
         type: string
         default: "stable"
@@ -89,3 +95,27 @@ jobs:
         with:
           sarif_file: ${{ inputs.working-directory }}/clippy-results.sarif
           wait-for-processing: true
+
+  build-and-deploy:
+    if: ${{ inputs.build-lambda || inputs.deploy-lambda }}
+    runs-on: ${{ inputs.runs-on }}
+    defaults:
+      run:
+        working-directory: ${{ inputs.working-directory }}
+    steps:
+      - uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938
+        # v4.2.0
+        with:
+          fetch-depth: 0
+      - name: Cargo cache
+        uses: swatinem/rust-cache@23bce251a8cd2ffc3c1075eaa2367cf899916d84
+        # v2.7.3
+        with:
+          cache-on-failure: true
+          workspaces: ${{ inputs.working-directory }}
+      - name: Build Lambda
+        if: ${{ inputs.build-lambda || inputs.deploy-lambda }}
+        run: cargo lambda build --verbose --release
+      - name: Deploy Lambda
+        if: ${{ inputs.deploy-lambda }}
+        run: cargo lambda deploy
