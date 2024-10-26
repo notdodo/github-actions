@@ -121,7 +121,7 @@ jobs:
           retry-max-attempts: 2
       - name: Install Zig toolchain
         uses: mlugg/setup-zig@a67e68dc5c8281d9608136d3d7ca1b282213e4ac
-        # vß1.2.1
+        # v1.2.1
         with:
           version: latest
       - name: Install Cargo Lambda
