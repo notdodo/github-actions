@@ -13,19 +13,19 @@ jobs:
         uses: docker/setup-qemu-action@49b3bc8e6bdd4a60e6116a5414239cba5943d3cf
         # v3.2.0
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@988b5a0280414f521da01fcc63a27aeeb4b104db
-        # v3.6.1
+        uses: docker/setup-buildx-action@c47758b77c9736f4b2ef4073d4d51994fabfe349
+        # v3.7.1
 
       - name: Run Clair V4 update
-        uses: quay/clair-action@b310efd66966de57ad3ce38419f9dde3d63b4dc2
-        # v0.0.9
+        uses: quay/clair-action@171b9f2b3391e4bf9e26cabac0e12b7f0705b988
+        # v0.0.10
         with:
           db-file: matcher.db
           mode: update
 
       - name: Cache DB
-        uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9
-        # v4.0.2
+        uses: actions/cache@6849a6489940f00c2f30c0fb92c6274307ccb58a
+        # v4.1.2
         with:
           path: matcher.db
           key: matcher.db
