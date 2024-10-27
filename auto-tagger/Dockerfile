@@ -2,6 +2,7 @@ FROM python:3.12-alpine AS builder
 HEALTHCHECK NONE
 
 ENV PATH="${PATH}:/app/.local/bin" \
+    POETRY_VERSION=1.8.4 \
     PYTHONDONTWRITEBYTECODE=1 \
     POETRY_CACHE_DIR=/app/.cache \
     POETRY_NO_INTERACTION=1 \
@@ -15,8 +16,8 @@ WORKDIR /app
 COPY pyproject.toml poetry.lock /app/
 RUN chmod -R a+r /app
 USER app
-RUN pip install poetry
-RUN poetry install --only main
+RUN pip install poetry --no-cache-dir
+RUN poetry install==${POETRY_VERSION} --only main
 
 FROM python:3.12-alpine AS runtime
 HEALTHCHECK NONE
@@ -29,7 +30,6 @@ WORKDIR /app
 COPY --from=builder ${VIRTUAL_ENV} ${VIRTUAL_ENV}
 COPY *.py /app/
 RUN chmod -R a+r /app
-RUN ls -la
 USER app
 
 CMD ["python", "/app/main.py"]
