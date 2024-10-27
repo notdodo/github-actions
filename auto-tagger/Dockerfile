@@ -16,8 +16,8 @@ WORKDIR /app
 COPY pyproject.toml poetry.lock /app/
 RUN chmod -R a+r /app
 USER app
-RUN pip install poetry --no-cache-dir
-RUN poetry install==${POETRY_VERSION} --only main
+RUN pip install poetry==${POETRY_VERSION} --no-cache-dir
+RUN poetry install --only main
 
 FROM python:3.12-alpine AS runtime
 HEALTHCHECK NONE
