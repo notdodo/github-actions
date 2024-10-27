@@ -3,7 +3,7 @@ name: Update Clair Vulnerability Database
 on:
   workflow_dispatch: {}
   schedule:
-    - cron: "0 5 * * *" # Everyday at 5AM UTC
+    - cron: "0 0 * * 4" # At 00:00 on Thursday
 
 jobs:
   docker:
