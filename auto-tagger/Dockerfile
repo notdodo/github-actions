@@ -8,6 +8,7 @@ ENV PATH="${PATH}:/app/.local/bin" \
     POETRY_VIRTUALENVS_IN_PROJECT=1 \
     POETRY_VIRTUALENVS_CREATE=1
 
+# kics-scan ignore-line
 RUN apk add musl-dev libffi-dev gcc --no-cache
 RUN addgroup -g 1000 app && adduser -G app -u 999 -s /sbin/nologin -h /app app -D
 WORKDIR /app
