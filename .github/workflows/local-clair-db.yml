@@ -17,8 +17,8 @@ jobs:
         # v3.7.1
 
       - name: Run Clair V4 update
-        uses: quay/clair-action@171b9f2b3391e4bf9e26cabac0e12b7f0705b988
-        # v0.0.10
+        uses: quay/clair-action@3c05ed02efcfdd9a2aecbd1411754fb1d5927194
+        # v0.0.11
         with:
           db-file: matcher.db
           mode: update
