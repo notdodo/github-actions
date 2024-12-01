@@ -76,8 +76,8 @@ jobs:
 
       - name: Extract metadata (tags, labels) for Docker
         id: metadata
-        uses: docker/metadata-action@8e5442c4ef9f78752691e2d8f8d19755c6f78e81
-        # v5.5.1
+        uses: docker/metadata-action@369eb591f429131d6889c46b94e711f089e6ca96
+        # v5.6.1
         with:
           images: ${{ inputs.registry }}/${{ inputs.image }}
           tags: ${{ inputs.tags }}
@@ -92,8 +92,8 @@ jobs:
           key: matcher.db
 
       - name: Run Clair V4
-        uses: quay/clair-action@171b9f2b3391e4bf9e26cabac0e12b7f0705b988
-        # v0.0.10
+        uses: quay/clair-action@3c05ed02efcfdd9a2aecbd1411754fb1d5927194
+        # v0.0.11
         with:
           image-ref: ${{ inputs.registry }}/${{ inputs.image }}
           db-file: matcher.db
@@ -108,8 +108,8 @@ jobs:
 
       - name: Build and push
         id: push
-        uses: docker/build-push-action@4f58ea79222b3b9dc2c8bbdd6debcef730109a75
-        # v6.9.0
+        uses: docker/build-push-action@48aba3b46d1b1fec4febb7c5d0c644b249a11355
+        # v6.10.0
         with:
           context: ${{ inputs.working-directory }}
           file: ${{ inputs.working-directory }}/${{ inputs.dockerfile }}
@@ -122,8 +122,8 @@ jobs:
 
       - name: Generate artifact attestation
         if: inputs.push
-        uses: actions/attest-build-provenance@1c608d11d69870c2092266b3f9a6f3abbf17002c
-        # v1.4.3
+        uses: actions/attest-build-provenance@ef244123eb79f2f7a7e75d99086184180e6d0018
+        # v1.4.4
         with:
           subject-name: ${{ inputs.registry }}/${{ inputs.image }}
           subject-digest: ${{ steps.push.outputs.digest }}
