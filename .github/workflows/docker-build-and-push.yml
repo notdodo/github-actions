@@ -85,8 +85,8 @@ jobs:
           labels: ${{ inputs.labels }}
 
       - name: Grab cache DB
-        uses: actions/cache@6849a6489940f00c2f30c0fb92c6274307ccb58a
-        # v4.1.2
+        uses: actions/cache@1bd1e32a3bdc45362d1e726936510720a7c30a57
+        # v4.2.0
         with:
           path: matcher.db
           key: matcher.db
@@ -122,8 +122,8 @@ jobs:
 
       - name: Generate artifact attestation
         if: inputs.push
-        uses: actions/attest-build-provenance@ef244123eb79f2f7a7e75d99086184180e6d0018
-        # v1.4.4
+        uses: actions/attest-build-provenance@c4fbc648846ca6f503a13a2281a5e7b98aa57202
+        # v2.0.1
         with:
           subject-name: ${{ inputs.registry }}/${{ inputs.image }}
           subject-digest: ${{ steps.push.outputs.digest }}
