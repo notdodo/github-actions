@@ -126,7 +126,7 @@ jobs:
           aws-region: ${{ inputs.aws-region }}
           retry-max-attempts: 2
       - name: Install Zig toolchain
-        uses: mlugg/setup-zig@a67e68dc5c8281d9608136d3d7ca1b282213e4ac
+        uses: step-security/setup-zig@90c09b881091fd60164bbaa108febaa7ff25f962
         # v1.2.1
         with:
           version: latest
