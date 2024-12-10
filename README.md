@@ -4,6 +4,7 @@ Collection of reusable workflows and custom actions designed to streamline autom
 
 ## Available Workflows
 
+- `notdodo/github-actions/.github/workflows/docker-build-and-push.yml`: Builds a Dockerfile and upload the image to a registry and also performs a scan using [Trivy](https://trivy.dev/latest/)
 - `notdodo/github-actions/.github/workflows/gitleaks.yml`: Uses [Gitleaks](https://gitleaks.io/index.html) to scan the code for secrets
 - `notdodo/github-actions/.github/workflows/go-ci.yml`: Used for Golang CI linting and testing
 - `notdodo/github-actions/.github/workflows/go-security-scan.yml`: Used for Golang CI security scanning with Sarif support
@@ -86,6 +87,34 @@ jobs:
       poetry-version: 1.8.2
       python-version: 3.11
       working-directory: my-workdir
+```
+
+### Rust CI
+
+### Docker build and push
+
+```
+name: "Docker image builder and publisher"
+
+on:
+  push:
+    tags:
+      - "new-version-v[0-9]+.[0-9]+.[0-9]+"
+
+jobs:
+  build-push-docker-image:
+    uses: notdodo/github-actions/.github/workflows/docker-build-and-push.yml@docker-build-and-push-v1
+    with:
+      image: notdodo/my-app
+      platforms: linux/amd64
+      push: true
+      registry: ghcr.io
+      working-directory: .
+      tags: |
+        type=match,pattern=new-version-v(.*),group=1
+    secrets:
+      registry-username: notdodo
+      registry-password: ${{ secrets.GITHUB_TOKEN }}
 ```
 
 ### Auto tagger
