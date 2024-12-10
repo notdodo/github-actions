@@ -91,7 +91,7 @@ jobs:
           path: matcher.db
           key: matcher.db
 
-      - name: Run Trivy
+      - name: Run Trivy Scan
         uses: aquasecurity/trivy-action@18f2510ee396bbf400402947b394f2dd8c87dbb0
         # v0.29.0
         with:
@@ -123,8 +123,8 @@ jobs:
 
       - name: Generate artifact attestation
         if: inputs.push
-        uses: actions/attest-build-provenance@c4fbc648846ca6f503a13a2281a5e7b98aa57202
-        # v2.0.1
+        uses: actions/attest-build-provenance@7668571508540a607bdfd90a87a560489fe372eb
+        # v2.1.0
         with:
           subject-name: ${{ inputs.registry }}/${{ inputs.image }}
           subject-digest: ${{ steps.push.outputs.digest }}
