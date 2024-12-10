@@ -91,20 +91,21 @@ jobs:
           path: matcher.db
           key: matcher.db
 
-      - name: Run Clair V4
-        uses: quay/clair-action@3c05ed02efcfdd9a2aecbd1411754fb1d5927194
-        # v0.0.11
+      - name: Run Trivy
+        uses: aquasecurity/trivy-action@18f2510ee396bbf400402947b394f2dd8c87dbb0
+        # v0.29.0
         with:
           image-ref: ${{ inputs.registry }}/${{ inputs.image }}
-          db-file: matcher.db
           format: sarif
-          output: ${{ inputs.working-directory }}/clair_results.sarif
+          ignore-unfixed: 1
+          output: ${{ inputs.working-directory }}/trivy_results.sarif
+          github-pat: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload sarif
         uses: github/codeql-action/upload-sarif@5618c9fc1e675841ca52c1c6b1304f5255a905a0
         # v2.19.0
         with:
-          sarif_file: ${{ inputs.working-directory }}/clair_results.sarif
+          sarif_file: ${{ inputs.working-directory }}/trivy_results.sarif
 
       - name: Build and push
         id: push
