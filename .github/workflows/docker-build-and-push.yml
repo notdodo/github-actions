@@ -113,6 +113,7 @@ jobs:
           labels: ${{ steps.metadata.outputs.labels }}
           platforms: ${{ inputs.platforms }}
           push: ${{ inputs.push }}
+          load: true
           tags: ${{ steps.metadata.outputs.tags }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
