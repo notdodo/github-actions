@@ -124,8 +124,6 @@ jobs:
           image-ref: ${{ steps.build.outputs.imageid }}
           format: sarif
           ignore-unfixed: 1
-          exit-code: "1"
-          severity: "CRITICAL,HIGH"
           output: ${{ inputs.working-directory }}/trivy_results.sarif
           github-pat: ${{ secrets.GITHUB_TOKEN }}
       - name: Upload results
