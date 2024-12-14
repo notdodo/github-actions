@@ -123,11 +123,14 @@ jobs:
         with:
           subject-name: ${{ inputs.registry }}/${{ inputs.image }}
           subject-digest: ${{ steps.push.outputs.digest }}
+      - name: test:
+        run: |
+          docker images
       - name: Run Trivy Scan
         uses: aquasecurity/trivy-action@18f2510ee396bbf400402947b394f2dd8c87dbb0
         # v0.29.0
         with:
-          image-ref: ${{ inputs.registry }}/${{ inputs.image }}
+          image-ref: ${{ steps.metadata.outputs.tags }}
           format: sarif
           ignore-unfixed: 1
           output: ${{ inputs.working-directory }}/trivy_results.sarif

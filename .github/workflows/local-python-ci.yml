@@ -22,13 +22,13 @@ jobs:
 
   build-docker-image:
     if: ${{ github.event_name == 'pull_request' }}
-    uses: notdodo/github-actions/.github/workflows/docker-build-and-push.yml@fix_dbp
+    uses: notdodo/github-actions/.github/workflows/docker-build-and-push.yml@test
     with:
       image: notdodo/auto-tagger
       platforms: linux/amd64
       push: false
       registry: ghcr.io
-      working-directory: ./auto-tagger/
+      working-directory: ./auto-tagger
     secrets:
       registry-username: notdodo
       registry-password: ${{ secrets.GITHUB_TOKEN }}
