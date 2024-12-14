@@ -9,10 +9,10 @@ on:
         default: ""
       poetry-version:
         type: string
-        default: "1.8.2"
+        default: "1.8.4"
       python-version:
         type: string
-        default: "3.11"
+        default: "3.12"
       runs-on:
         type: string
         default: "ubuntu-latest"
@@ -34,6 +34,7 @@ jobs:
           egress-policy: block
           allowed-endpoints: >
             api.github.com:443
+            files.pythonhosted.org
             github.com:443
             install.python-poetry.org:443
             pypi.org:443
