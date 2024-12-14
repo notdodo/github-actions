@@ -123,7 +123,7 @@ jobs:
         with:
           subject-name: ${{ inputs.registry }}/${{ inputs.image }}
           subject-digest: ${{ steps.push.outputs.digest }}
-      - name: test:
+      - name: test
         run: |
           docker images
       - name: Run Trivy Scan
