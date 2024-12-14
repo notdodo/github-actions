@@ -28,7 +28,7 @@ jobs:
       platforms: linux/amd64
       push: false
       registry: ghcr.io
-      working-directory: ./auto-tagger/
+      working-directory: ./auto-tagger
     secrets:
       registry-username: notdodo
       registry-password: ${{ secrets.GITHUB_TOKEN }}
