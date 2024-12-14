@@ -9,6 +9,10 @@ jobs:
   build-push-docker-image:
     uses: notdodo/github-actions/.github/workflows/docker-build-and-push.yml@docker-build-and-push-v0
     with:
+      egress-policy-allowlist: >
+        dl-cdn.alpinelinux.org:443
+        pypi.org:443
+        files.pythonhosted.org:443
       image: notdodo/auto-tagger
       platforms: linux/amd64
       push: true
