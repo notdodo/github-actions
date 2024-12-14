@@ -104,7 +104,7 @@ jobs:
           flavor: ${{ inputs.flavor }}
           labels: ${{ inputs.labels }}
       - name: Build and push
-        id: push
+        id: build
         uses: docker/build-push-action@48aba3b46d1b1fec4febb7c5d0c644b249a11355
         # v6.10.0
         with:
@@ -116,23 +116,15 @@ jobs:
           tags: ${{ steps.metadata.outputs.tags }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
-      - name: Generate artifact attestation
-        if: inputs.push
-        uses: actions/attest-build-provenance@7668571508540a607bdfd90a87a560489fe372eb
-        # v2.1.0
-        with:
-          subject-name: ${{ inputs.registry }}/${{ inputs.image }}
-          subject-digest: ${{ steps.push.outputs.digest }}
-      - name: test
-        run: |
-          docker images
       - name: Run Trivy Scan
         uses: aquasecurity/trivy-action@18f2510ee396bbf400402947b394f2dd8c87dbb0
         # v0.29.0
         with:
-          image-ref: ${{ steps.metadata.outputs.tags }}
+          image-ref: ${{ steps.build.outputs.imageid }}
           format: sarif
           ignore-unfixed: 1
+          exit-code: "1"
+          severity: "CRITICAL,HIGH"
           output: ${{ inputs.working-directory }}/trivy_results.sarif
           github-pat: ${{ secrets.GITHUB_TOKEN }}
       - name: Upload results
@@ -140,3 +132,10 @@ jobs:
         # v2.19.0
         with:
           sarif_file: ${{ inputs.working-directory }}/trivy_results.sarif
+      - name: Generate artifact attestation
+        if: inputs.push
+        uses: actions/attest-build-provenance@7668571508540a607bdfd90a87a560489fe372eb
+        # v2.1.0
+        with:
+          subject-name: ${{ inputs.registry }}/${{ inputs.image }}
+          subject-digest: ${{ steps.build.outputs.digest }}
