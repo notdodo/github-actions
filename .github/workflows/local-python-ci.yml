@@ -18,8 +18,6 @@ jobs:
   python-ci:
     uses: notdodo/github-actions/.github/workflows/python-ci.yml@python-ci-v0
     with:
-      poetry-version: 1.8.2
-      python-version: 3.11
       working-directory: auto-tagger
 
   build-docker-image:

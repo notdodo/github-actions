@@ -12,6 +12,7 @@ from github_helpers import GitHubHelper
 
 
 def main():
+    """main"""
     config = Configuration.from_env()
 
     if config.DRY_RUN:
