@@ -108,7 +108,13 @@ class GitHubHelper:
 
     def get_latest_major_tag(self) -> Tag:
         """Get the latest major tag matching prefix and suffix on the repository (e.g. test-v1)"""
-        last_available_major_tag = None
+        last_commit = self.get_last_commit()
+        last_available_major_tag = Tag(
+            name=self.config.PREFIX + "0" + self.config.SUFFIX,
+            commit=last_commit.sha,
+            message=last_commit.message,
+            date=last_commit.date,
+        )
         for tag in self.repo.get_tags():
             if (
                 tag.name.startswith(self.config.PREFIX)
@@ -119,21 +125,14 @@ class GitHubHelper:
                     )
                 )
             ):
-                last_available_major_tag = Tag(
-                    name=tag.name,
-                    commit=tag.commit.sha,
-                    message=tag.commit.commit.message,
-                    date=tag.commit.commit.author.date,
-                )
-        if last_available_major_tag is None:
-            last_commit = self.get_last_commit()
-            last_available_major_tag = Tag(
-                name=self.config.PREFIX + "0" + self.config.SUFFIX,
-                commit=last_commit.sha,
-                message=last_commit.message,
-                date=last_commit.date,
-            )
-            self.create_git_tag(last_available_major_tag)
+                if tag.name > last_available_major_tag.name:
+                    last_available_major_tag = Tag(
+                        name=tag.name,
+                        commit=tag.commit.sha,
+                        message=tag.commit.commit.message,
+                        date=tag.commit.commit.author.date,
+                    )
+        self.create_git_tag(last_available_major_tag)
         return last_available_major_tag
 
     def create_git_tag(self, tag: Tag) -> None:
