@@ -6,15 +6,7 @@ on:
         default: true
       egress-policy-allowlist:
         type: string
-        default: |
-          api.github.com:443
-          github.com:443
-          kics.io:443
-          packages.wolfi.dev:443
-          registry.npmjs.org:443
-          objects.githubusercontent.com:443
-          proxy.golang.org:443
-          sum.golang.org:443
+        default: ""
       enable-comments:
         type: boolean
         default: true
@@ -42,6 +34,11 @@ jobs:
           disable-sudo: ${{ inputs.disable-sudo }}
           egress-policy: block
           allowed-endpoints: >
+            api.github.com:443
+            github.com:443
+            kics.io:443
+            packages.wolfi.dev:443
+            registry.npmjs.org:443
             ${{ inputs.egress-policy-allowlist }}
 
       - name: Checkout Source
@@ -81,6 +78,11 @@ jobs:
           disable-sudo: ${{ inputs.disable-sudo }}
           egress-policy: block
           allowed-endpoints: >
+            api.github.com:443
+            github.com:443
+            objects.githubusercontent.com:443
+            proxy.golang.org:443
+            sum.golang.org:443
             ${{ inputs.egress-policy-allowlist }}
 
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683

@@ -6,9 +6,7 @@ on:
         default: true
       egress-policy-allowlist:
         type: string
-        default: |
-          api.github.com:443
-          github.com:443
+        default: ""
       runs-on:
         type: string
         default: "ubuntu-latest"
@@ -34,6 +32,8 @@ jobs:
           disable-sudo: ${{ inputs.disable-sudo }}
           egress-policy: block
           allowed-endpoints: >
+            api.github.com:443
+            github.com:443
             ${{ inputs.egress-policy-allowlist }}
 
       - name: Checkout Source

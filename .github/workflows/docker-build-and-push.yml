@@ -9,9 +9,7 @@ on:
         default: "Dockerfile"
       egress-policy-allowlist:
         type: string
-        default: |
-          api.github.com:443
-          github.com:443
+        default: ""
       flavor:
         type: string
         description: "Defines a global behavior for tags"
@@ -71,6 +69,8 @@ jobs:
           disable-sudo: ${{ inputs.disable-sudo }}
           egress-policy: block
           allowed-endpoints: >
+            api.github.com:443
+            github.com:443
             ${{ inputs.egress-policy-allowlist }}
 
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
