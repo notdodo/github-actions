@@ -67,7 +67,7 @@ jobs:
         # v2.10.2
         with:
           disable-sudo: ${{ inputs.disable-sudo }}
-          egress-policy: block
+          egress-policy: audit
           allowed-endpoints: >
             api.github.com:443
             auth.docker.io:443
