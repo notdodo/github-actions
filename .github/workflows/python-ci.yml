@@ -6,7 +6,7 @@ on:
         default: true
       egress-policy-allowlist:
         type: string
-        default: |
+        default: >
           api.github.com:443
           github.com:443
       poetry-version:
