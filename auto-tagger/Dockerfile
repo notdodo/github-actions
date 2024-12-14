@@ -1,4 +1,4 @@
-FROM python:3.12-alpine AS builder
+FROM python:3.13-alpine AS builder
 HEALTHCHECK NONE
 
 ENV PATH="${PATH}:/app/.local/bin" \
@@ -10,7 +10,7 @@ ENV PATH="${PATH}:/app/.local/bin" \
     POETRY_VIRTUALENVS_CREATE=1
 
 # kics-scan ignore-line
-RUN apk add musl-dev libffi-dev gcc --no-cache
+RUN apk add --no-cahce musl-dev libffi-dev gcc
 RUN addgroup -g 1000 app && adduser -G app -u 999 -s /sbin/nologin -h /app app -D
 WORKDIR /app
 COPY pyproject.toml poetry.lock /app/
@@ -19,7 +19,7 @@ USER app
 RUN pip install poetry==${POETRY_VERSION} --no-cache-dir
 RUN poetry install --only main
 
-FROM python:3.12-alpine AS runtime
+FROM python:3.13-alpine AS runtime
 HEALTHCHECK NONE
 
 ENV VIRTUAL_ENV=/app/.venv \
