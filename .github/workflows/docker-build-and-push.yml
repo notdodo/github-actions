@@ -7,6 +7,9 @@ on:
       dockerfile:
         type: string
         default: "Dockerfile"
+      egress-policy-allowlist:
+        type: string
+        default: ""
       flavor:
         type: string
         description: "Defines a global behavior for tags"
@@ -64,7 +67,15 @@ jobs:
         # v2.10.2
         with:
           disable-sudo: ${{ inputs.disable-sudo }}
-          egress-policy: audit
+          egress-policy: block
+          allowed-endpoints: >
+            api.github.com:443
+            auth.docker.io:443
+            production.cloudflare.docker.com:443
+            registry-1.docker.io:443
+            ghcr.io:443
+            github.com:443
+            ${{ inputs.egress-policy-allowlist }}
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         # v4.2.2
       - uses: docker/setup-qemu-action@49b3bc8e6bdd4a60e6116a5414239cba5943d3cf
@@ -87,11 +98,6 @@ jobs:
           tags: ${{ inputs.tags }}
           flavor: ${{ inputs.flavor }}
           labels: ${{ inputs.labels }}
-      - name: Upload results
-        uses: github/codeql-action/upload-sarif@5618c9fc1e675841ca52c1c6b1304f5255a905a0
-        # v2.19.0
-        with:
-          sarif_file: ${{ inputs.working-directory }}/trivy_results.sarif
       - name: Build and push
         id: push
         uses: docker/build-push-action@48aba3b46d1b1fec4febb7c5d0c644b249a11355
@@ -105,6 +111,13 @@ jobs:
           tags: ${{ steps.metadata.outputs.tags }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+      - name: Generate artifact attestation
+        if: inputs.push
+        uses: actions/attest-build-provenance@7668571508540a607bdfd90a87a560489fe372eb
+        # v2.1.0
+        with:
+          subject-name: ${{ inputs.registry }}/${{ inputs.image }}
+          subject-digest: ${{ steps.push.outputs.digest }}
       - name: Run Trivy Scan
         uses: aquasecurity/trivy-action@18f2510ee396bbf400402947b394f2dd8c87dbb0
         # v0.29.0
@@ -114,10 +127,8 @@ jobs:
           ignore-unfixed: 1
           output: ${{ inputs.working-directory }}/trivy_results.sarif
           github-pat: ${{ secrets.GITHUB_TOKEN }}
-      - name: Generate artifact attestation
-        if: inputs.push
-        uses: actions/attest-build-provenance@7668571508540a607bdfd90a87a560489fe372eb
-        # v2.1.0
+      - name: Upload results
+        uses: github/codeql-action/upload-sarif@5618c9fc1e675841ca52c1c6b1304f5255a905a0
+        # v2.19.0
         with:
-          subject-name: ${{ inputs.registry }}/${{ inputs.image }}
-          subject-digest: ${{ steps.push.outputs.digest }}
+          sarif_file: ${{ inputs.working-directory }}/trivy_results.sarif
