@@ -24,7 +24,7 @@ jobs:
 
   build-docker-image:
     if: ${{ github.event_name == 'pull_request' }}
-    uses: notdodo/github-actions/.github/workflows/docker-build-and-push.yml@docker-build-and-push-v-
+    uses: notdodo/github-actions/.github/workflows/docker-build-and-push.yml@docker-build-and-push-v-0
     with:
       image: notdodo/auto-tagger
       platforms: linux/amd64
