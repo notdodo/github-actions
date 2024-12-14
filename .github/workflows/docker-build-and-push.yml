@@ -87,15 +87,6 @@ jobs:
           tags: ${{ inputs.tags }}
           flavor: ${{ inputs.flavor }}
           labels: ${{ inputs.labels }}
-      - name: Run Trivy Scan
-        uses: aquasecurity/trivy-action@18f2510ee396bbf400402947b394f2dd8c87dbb0
-        # v0.29.0
-        with:
-          image-ref: ${{ inputs.registry }}/${{ inputs.image }}
-          format: sarif
-          ignore-unfixed: 1
-          output: ${{ inputs.working-directory }}/trivy_results.sarif
-          github-pat: ${{ secrets.GITHUB_TOKEN }}
       - name: Upload results
         uses: github/codeql-action/upload-sarif@5618c9fc1e675841ca52c1c6b1304f5255a905a0
         # v2.19.0
@@ -114,6 +105,15 @@ jobs:
           tags: ${{ steps.metadata.outputs.tags }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+      - name: Run Trivy Scan
+        uses: aquasecurity/trivy-action@18f2510ee396bbf400402947b394f2dd8c87dbb0
+        # v0.29.0
+        with:
+          image-ref: ${{ inputs.registry }}/${{ inputs.image }}
+          format: sarif
+          ignore-unfixed: 1
+          output: ${{ inputs.working-directory }}/trivy_results.sarif
+          github-pat: ${{ secrets.GITHUB_TOKEN }}
       - name: Generate artifact attestation
         if: inputs.push
         uses: actions/attest-build-provenance@7668571508540a607bdfd90a87a560489fe372eb
