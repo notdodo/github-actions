@@ -161,6 +161,7 @@ jobs:
             lambda.eu-west-1.amazonaws.com:443
             static.crates.io:443
             sts.eu-west-1.amazonaws.com:443
+            zig.linus.dev:443
             ${{ inputs.egress-policy-allowlist }}
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         # v4.2.2
