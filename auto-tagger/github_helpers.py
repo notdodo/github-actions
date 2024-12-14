@@ -7,7 +7,6 @@ import os
 from datetime import datetime, timedelta
 from typing import List
 
-import requests
 from github import Github, InputGitAuthor
 from semver import Version, VersionInfo
 
@@ -18,9 +17,9 @@ from github_resources import Commit, Tag
 class GitHubHelper:
     """PyGitHub support class"""
 
-    def __init__(self, token, config) -> None:
-        self.token: str = token
-        self.config: Configuration = config
+    def __init__(self, token: str, config: Configuration) -> None:
+        self.token = token
+        self.config = config
         self.repo = Github(token).get_repo(self.config.REPOSITORY)
         self.last_available_tag = self.get_latest_tag()
         self.last_available_major_tag = self.get_latest_major_tag()
@@ -150,14 +149,9 @@ class GitHubHelper:
                     date=str(datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ")),
                 ),
             )
-            self.__create_git_ref(f"refs/tags/{tag.name}", tag.commit)
-
-    def __create_git_ref(self, ref_name: str, sha: str) -> None:
-        """Internal function to create the reference on GitHub"""
-        self.repo.create_git_ref(ref_name, sha)
+            self.repo.create_git_ref(f"refs/tags/{tag.name}", tag.commit)
 
     def delete_git_tag(self, tag_name: str) -> None:
-        """Custom function to delete a tag on the repository"""
-        headers = {"Authorization": f"Bearer {self.token}"}
-        url = f"https://api.github.com/repos/{self.config.REPOSITORY}/git/refs/tags/{tag_name}"
-        requests.delete(url, headers=headers, timeout=10)
+        """Delete a tag on the repository"""
+        ref = self.repo.get_git_ref(f"tags/{tag_name}")
+        ref.delete()
