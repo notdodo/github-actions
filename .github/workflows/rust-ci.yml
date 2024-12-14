@@ -175,6 +175,7 @@ jobs:
         # v1.2.1
         with:
           version: latest
+          mirror: https://zig.linus.dev/zig
       - name: Install Cargo Lambda
         uses: jaxxstorm/action-install-gh-release@cd6b2b78ad38bdd294341cda064ec0692b06215b
         # v1.14.0
