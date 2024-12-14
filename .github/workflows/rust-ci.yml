@@ -158,7 +158,9 @@ jobs:
             api.github.com:443
             github.com:443
             index.crates.io:443
+            lambda.eu-west-1.amazonaws.com:443
             static.crates.io:443
+            sts.eu-west-1.amazonaws.com:443
             ${{ inputs.egress-policy-allowlist }}
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         # v4.2.2
@@ -171,7 +173,7 @@ jobs:
           aws-region: ${{ inputs.aws-region }}
           retry-max-attempts: 2
       - name: Install Zig toolchain
-        uses: step-security/setup-zig@90c09b881091fd60164bbaa108febaa7ff25f962
+        uses: mlugg/setup-zig@a67e68dc5c8281d9608136d3d7ca1b282213e4ac
         # v1.2.1
         with:
           version: latest
