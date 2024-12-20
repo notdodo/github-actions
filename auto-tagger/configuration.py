@@ -12,10 +12,10 @@ from github_resources import Commit
 class BumpStrategy(StrEnum):
     """Enum containing the different version bump strategy for semver"""
 
-    MAJOR: str = "major"
-    MINOR: str = "minor"
-    PATCH: str = "patch"
-    SKIP: str = "skip"
+    MAJOR = "major"
+    MINOR = "minor"
+    PATCH = "patch"
+    SKIP = "skip"
 
 
 class Configuration:

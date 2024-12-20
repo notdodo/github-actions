@@ -14,9 +14,9 @@ semver = "^3.0.2"
 [tool.poetry.group.dev.dependencies]
 black = "^24.10.0"
 flake8 = "^7.1.1"
-mypy = { extras = ["faster-cache"], version = "^1.13.0" }
+mypy = { extras = ["faster-cache"], version = "^1.14.0" }
 isort = "^5.13.2"
-pydantic = "^2.10.3"
+pydantic = "^2.10.4"
 pylint = "^3.3.2"
 
 [tool.isort]
