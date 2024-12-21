@@ -63,7 +63,9 @@ jobs:
         uses: actions/cache@1bd1e32a3bdc45362d1e726936510720a7c30a57
         # v4.2.0
         with:
-          path: ${{ inputs.working-directory }}/.venv
+          path: |
+            ${{ inputs.working-directory }}/.venv
+            ${{ inputs.working-directory }}/.mypy_cache
           key: python-${{ inputs.python-version }}-poetry-${{ hashFiles('**/poetry.lock') }}
       - run: poetry install --no-root
         if: steps.cache-deps.outputs.cache-hit != 'true'

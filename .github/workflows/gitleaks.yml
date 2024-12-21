@@ -37,4 +37,5 @@ jobs:
         # Comments works only when the workflow is called on `pull_request:`
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_ENABLE_UPLOAD_ARTIFACT: false
           GITLEAKS_VERSION: latest
