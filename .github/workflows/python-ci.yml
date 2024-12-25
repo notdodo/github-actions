@@ -37,6 +37,7 @@ jobs:
             files.pythonhosted.org
             github.com:443
             install.python-poetry.org:443
+            objects.githubusercontent.com:443
             pypi.org:443
             ${{ inputs.egress-policy-allowlist }}
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
