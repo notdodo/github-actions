@@ -19,6 +19,7 @@ jobs:
           disable-sudo: ${{ inputs.disable-sudo }}
           egress-policy: audit
       - name: Cleanup
+        # https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/caching-dependencies-to-speed-up-workflows#managing-caches
         run: |
           echo "Fetching list of cache key"
           cacheKeysForPR=$(gh cache list --ref $BRANCH --limit 100 --json id --jq '.[].id')
