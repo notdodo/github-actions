@@ -4,6 +4,7 @@ Collection of reusable workflows and custom actions designed to streamline autom
 
 ## Available Workflows
 
+- `notdodo/github-actions/.github/workflows/clean-branch-cache.yml`: Use to cleanup the cache for a merge branch
 - `notdodo/github-actions/.github/workflows/docker-build-and-push.yml`: Builds a Dockerfile and upload the image to a registry and also performs a scan using [Trivy](https://trivy.dev/latest/)
 - `notdodo/github-actions/.github/workflows/gitleaks.yml`: Uses [Gitleaks](https://gitleaks.io/index.html) to scan the code for secrets
 - `notdodo/github-actions/.github/workflows/go-ci.yml`: Used for Golang CI linting and testing
@@ -25,6 +26,20 @@ To increase a specific semver include in any of the commit messages:
 If no special string is used the default is `[#skip]`.
 
 ## Usage examples
+
+### Clean up cache
+
+```yaml
+name: Cleanup caches by a branch
+on:
+  pull_request:
+    types:
+      - closed
+
+jobs:
+  cleanup:
+    uses: notdodo/github-actions/.github/workflows/clean-branch-cache.yml@cleanup-v0
+```
 
 ### Gitleaks
 

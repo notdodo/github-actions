@@ -32,6 +32,8 @@ jobs:
         # v45.0.5
         with:
           files_yaml: |
+            cleanup-cache:
+            - .github/workflows/clean-branch-cache.yml
             docker-build-and-push:
             - .github/workflows/docker-build-and-push.yml
             gitleaks:
@@ -48,6 +50,19 @@ jobs:
             - .github/workflows/rust-ci.yml
             auto-tagger:
             - auto-tagger/**
+
+      - name: Run auto-tag if clean-branch-cache workflow changes
+        if: steps.changed-files.outputs.cleanup-cache_any_changed == 'true'
+        # kics-scan ignore-line
+        uses: notdodo/github-actions/auto-tagger@auto-tagger-v0
+        with:
+          bind_to_major: true
+          default_bump_strategy: skip
+          default_branch: main
+          path: .github/workflows/clean-branch-cache.yml
+          prefix: cleanup
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          dry_run: false
 
       - name: Run auto-tag if docker-build-and-push workflow changes
         if: steps.changed-files.outputs.docker-build-and-push_any_changed == 'true'
