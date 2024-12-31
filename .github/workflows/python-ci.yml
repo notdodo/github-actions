@@ -9,10 +9,10 @@ on:
         default: ""
       poetry-version:
         type: string
-        default: "1.8.4"
+        default: "latest"
       python-version:
         type: string
-        default: "3.12"
+        default: "3.13"
       runs-on:
         type: string
         default: "ubuntu-latest"
