@@ -6,6 +6,9 @@ updates:
       interval: monthly
       time: "12:00"
       day: wednesday
+    commit-message:
+      prefix: "[#patch]"
+      include: scope
     groups:
       actions-deps:
         patterns:
@@ -16,6 +19,10 @@ updates:
       interval: monthly
       time: "12:00"
       day: sunday
+    commit-message:
+      prefix: "[#patch]"
+      prefix-development: ""
+      include: scope
     groups:
       auto-tagger:
         dependency-type: "production"
