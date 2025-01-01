@@ -108,7 +108,7 @@ jobs:
 
 ### Docker build and push
 
-```
+```yaml
 name: "Docker image builder and publisher"
 
 on:
