@@ -9,6 +9,10 @@ updates:
     commit-message:
       prefix: "[#patch]"
       include: scope
+    allow:
+      - dependency-name: "*"
+    ignore:
+      - dependency-name: "notdodo/github-actions/.github/workflows/*"
     groups:
       actions-deps:
         patterns:
