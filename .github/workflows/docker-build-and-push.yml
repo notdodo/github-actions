@@ -51,15 +51,13 @@ on:
       registry-password:
         required: true
 
-permissions:
-  id-token: write
-  packages: write
-  contents: read
-  attestations: write
-  security-events: write
-
 jobs:
   build-and-push-image:
+    permissions:
+      packages: write
+      contents: read
+      attestations: write
+      security-events: write
     name: Docker build and push
     runs-on: ${{ inputs.runs-on }}
     steps:
