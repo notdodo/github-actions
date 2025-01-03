@@ -41,6 +41,7 @@ jobs:
         # v4.2.2
         with:
           fetch-depth: 0
+          persist-credentials: false
       - name: Run Gosec Security Scanner
         # kics-scan ignore-line
         uses: securego/gosec@master
