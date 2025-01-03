@@ -99,14 +99,13 @@ jobs:
         run: |
           FILES=$(find . -iname "Makefile" -o -iname "GNUmakefile" -o -iname "*.mk" -o -iname "*.make")
           echo "$FILES" > "$GITHUB_WORKSPACE/files.txt"
-          echo "FILES=$FILES" >> $GITHUB_OUTPUT
+          echo "FILES=$FILES" >> $GITHUB_ENV
         shell: bash
       - if: steps.find-files.outputs.FILES != ''
         id: scan-files
         continue-on-error: true
         run: |
           go install github.com/mrtazz/checkmake/cmd/checkmake@latest
-          FILES="${{ steps.find-files.outputs.FILES }}"
           CHECKMAKE_OUTPUT=$(checkmake "$FILES" --debug)
           echo "CHECKMAKE_OUTPUT=$CHECKMAKE_OUTPUT" >> $GITHUB_OUTPUT
         shell: bash
