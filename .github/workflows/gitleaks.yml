@@ -31,6 +31,7 @@ jobs:
         # v4.2.2
         with:
           fetch-depth: 0
+          persist-credentials: false
       - name: gitleaks
         uses: gitleaks/gitleaks-action@83373cf2f8c4db6e24b41c1a9b086bb9619e9cd3
         # v2.3.7
