@@ -105,7 +105,7 @@ jobs:
         id: scan-files
         continue-on-error: true
         run: |
-          go install github.com/mrtazz/checkmake/cmd/checkmake@latest          
+          go install github.com/mrtazz/checkmake/cmd/checkmake@latest
           CHECKMAKE_OUTPUT=$(checkmake "$FILES" --debug)
           echo "CHECKMAKE_OUTPUT=$CHECKMAKE_OUTPUT" >> $GITHUB_OUTPUT
         env:
