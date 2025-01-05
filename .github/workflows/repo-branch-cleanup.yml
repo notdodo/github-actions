@@ -7,5 +7,5 @@ on:
 jobs:
   cleanup:
     uses: notdodo/github-actions/.github/workflows/clean-branch-cache.yml@cleanup-v0
-    with:
+    secrets:
       token: ${{ github.token }}
