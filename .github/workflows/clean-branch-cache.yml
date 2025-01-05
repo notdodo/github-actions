@@ -12,12 +12,16 @@ jobs:
   cleanup:
     name: Cleanup caches for a merged branch
     runs-on: ${{ inputs.runs-on }}
+    permissions:
+      actions: write
     steps:
       - uses: step-security/harden-runner@0080882f6c36860b6ba35c610c98ce87d4e2f26f
         # v2.10.2
         with:
           disable-sudo: ${{ inputs.disable-sudo }}
-          egress-policy: audit
+          egress-policy: block
+          allowed-endpoints: >
+            api.github.com:443
       - name: Cleanup
         # https://docs.github.com/en/actions/writing-workflows/choosing-what-your-workflow-does/caching-dependencies-to-speed-up-workflows#managing-caches
         run: |
