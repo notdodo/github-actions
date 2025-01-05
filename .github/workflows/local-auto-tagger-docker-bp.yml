@@ -22,4 +22,5 @@ jobs:
         type=match,pattern=auto-tagger-v(.*),group=1
     secrets:
       registry-username: notdodo
-      registry-password: ${{ secrets.GITHUB_TOKEN }}
+      registry-password: ${{ github.token }}
+      token: ${{ github.token }}
