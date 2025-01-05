@@ -10,13 +10,15 @@ on:
       runs-on:
         type: string
         default: "ubuntu-latest"
+      token:
+        type: string
+        default: ${{ github.token }}
       upload-sarif:
         type: boolean
         default: true
       working-directory:
         type: string
         default: "."
-
 jobs:
   gosec:
     runs-on: ${{ inputs.runs-on }}
@@ -53,4 +55,5 @@ jobs:
         # v2.19.0
         with:
           sarif_file: "${{ inputs.working-directory }}/results.sarif"
+          token: ${{ inputs.token }}
         if: ${{ inputs.upload-sarif }}
