@@ -13,6 +13,6 @@ concurrency:
 
 jobs:
   infra-scan:
-    uses: notdodo/github-actions/.github/workflows/infra-security-scan.yml@infra-scan-v0
+    uses: notdodo/github-actions/.github/workflows/infra-security-scan.yml@fix
     secrets:
       token: ${{ secrets.GITHUB_TOKEN }}
