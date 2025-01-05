@@ -16,9 +16,6 @@ on:
       working-directory:
         type: string
         default: "."
-    secrets:
-      token:
-        required: true
 
 jobs:
   gosec:
@@ -56,5 +53,4 @@ jobs:
         # v2.19.0
         with:
           sarif_file: "${{ inputs.working-directory }}/results.sarif"
-          token: ${{ secrets.token }}
         if: ${{ inputs.upload-sarif }}

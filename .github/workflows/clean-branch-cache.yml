@@ -7,9 +7,6 @@ on:
       runs-on:
         type: string
         default: "ubuntu-latest"
-    secrets:
-      token:
-        required: true
 
 jobs:
   cleanup:
@@ -36,6 +33,6 @@ jobs:
           done
           echo "Done"
         env:
-          GH_TOKEN: ${{ secrets.token }}
+          GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
           BRANCH: refs/pull/${{ github.event.pull_request.number }}/merge

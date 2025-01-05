@@ -19,10 +19,6 @@ on:
       working-directory:
         type: string
         default: "."
-      token:
-        type: string
-        required: false
-        default: ${{ github.token }}
 
 jobs:
   infra-security-scan:
@@ -60,7 +56,7 @@ jobs:
           output_path: ${{ inputs.working-directory }}/kics_results.sarif
           output_formats: sarif
           fail_on: high,medium
-          token: ${{ inputs.token }}
+          token: ${{ github.token }}
           enable_comments: ${{ inputs.enable-comments }}
           enable_annotations: true
           enable_jobs_summary: true
@@ -70,7 +66,6 @@ jobs:
         # v2.19.0
         with:
           sarif_file: ${{ inputs.working-directory }}/kics_results.sarif
-          token: ${{ inputs.token }}
 
   zizmor:
     name: zizmor GitHub Actions Security Analysis
@@ -100,14 +95,13 @@ jobs:
       - name: Run zizmor 🌈
         run: uvx zizmor --format sarif . > zizmor_results.sarif
         env:
-          GH_TOKEN: ${{ inputs.token }}
+          GH_TOKEN: ${{ github.token }}
       - name: Upload SARIF file
         uses: github/codeql-action/upload-sarif@5618c9fc1e675841ca52c1c6b1304f5255a905a0
         # v2.19.0
         with:
           sarif_file: zizmor_results.sarif
           category: zizmor
-          token: ${{ inputs.token }}
 
   checkmake:
     name: Check Makefile
