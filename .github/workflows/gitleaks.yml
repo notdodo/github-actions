@@ -10,9 +10,9 @@ on:
       runs-on:
         type: string
         default: "ubuntu-latest"
+    secrets:
       token:
-        type: string
-        default: ${{ github.token }}
+        required: true
 
 jobs:
   gitleaks:
@@ -40,6 +40,6 @@ jobs:
         # v2.3.7
         # Comments works only when the workflow is called on `pull_request:`
         env:
-          GITHUB_TOKEN: ${{ inputs.token }}
+          GITHUB_TOKEN: ${{ secrets.token }}
           GITLEAKS_ENABLE_UPLOAD_ARTIFACT: false
           GITLEAKS_VERSION: latest

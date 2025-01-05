@@ -13,15 +13,15 @@ on:
       runs-on:
         type: string
         default: "ubuntu-latest"
-      token:
-        type: string
-        default: ${{ github.token }}
       upload-sarif:
         type: boolean
         default: true
       working-directory:
         type: string
         default: "."
+    secrets:
+      token:
+        required: true
 
 jobs:
   infra-security-scan:
@@ -59,7 +59,7 @@ jobs:
           output_path: ${{ inputs.working-directory }}/kics_results.sarif
           output_formats: sarif
           fail_on: high,medium
-          token: ${{ inputs.token }}
+          token: ${{ secrets.token }}
           enable_comments: ${{ inputs.enable-comments }}
           enable_annotations: true
           enable_jobs_summary: true
@@ -105,7 +105,7 @@ jobs:
         with:
           sarif_file: zizmor_results.sarif
           category: zizmor
-          token: ${{ inputs.token }}
+          token: ${{ secrets.token }}
 
   checkmake:
     name: Check Makefile
