@@ -23,4 +23,4 @@ jobs:
     secrets:
       registry-username: notdodo
       registry-password: ${{ github.token }}
-      token: ${{ github.token }}
+      token: ${{ secrets.GITHUB_TOKEN }}

@@ -69,6 +69,7 @@ jobs:
         # v2.19.0
         with:
           sarif_file: ${{ inputs.working-directory }}/kics_results.sarif
+          token: ${{ secrets.token }}
 
   zizmor:
     name: zizmor GitHub Actions Security Analysis
