@@ -14,4 +14,5 @@ concurrency:
 jobs:
   infra-scan:
     uses: notdodo/github-actions/.github/workflows/infra-security-scan.yml@infra-scan-v0
-    token: ${{ github.token }}
+    with:
+      token: ${{ github.token }}
