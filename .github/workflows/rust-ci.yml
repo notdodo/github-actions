@@ -28,9 +28,6 @@ on:
       working-directory:
         type: string
         default: "."
-    secrets:
-      token:
-        required: true
 
 env:
   CARGO_TERM_COLOR: always
@@ -145,7 +142,6 @@ jobs:
         # v2.19.0
         with:
           sarif_file: ${{ inputs.working-directory }}/clippy-results.sarif
-          token: ${{ secrets.token }}
           wait-for-processing: true
 
   build-and-deploy:
