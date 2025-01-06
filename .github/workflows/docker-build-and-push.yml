@@ -54,9 +54,10 @@ on:
 jobs:
   build-and-push-image:
     permissions:
-      packages: write
-      contents: read
       attestations: write
+      contents: read
+      id-token: write
+      packages: write
       security-events: write
     name: Docker build and push
     runs-on: ${{ inputs.runs-on }}
@@ -125,9 +126,10 @@ jobs:
         with:
           image-ref: ${{ steps.build.outputs.imageid }}
           format: sarif
+          scan-type: image
           ignore-unfixed: 1
           output: ${{ inputs.working-directory }}/trivy_results.sarif
-          github-pat: ${{ github.token }}
+          github-pat: ${{ secrets.GITHUB_TOKEN }}
       - name: Upload results
         uses: github/codeql-action/upload-sarif@5618c9fc1e675841ca52c1c6b1304f5255a905a0
         # v2.19.0
@@ -140,3 +142,4 @@ jobs:
         with:
           subject-name: ${{ inputs.registry }}/${{ inputs.image }}
           subject-digest: ${{ steps.build.outputs.digest }}
+          push-to-registry: true
