@@ -29,6 +29,10 @@ jobs:
       push: false
       registry: ghcr.io
       working-directory: ./auto-tagger
+      egress-policy-allowlist: >
+        dl-cdn.alpinelinux.org:443
+        pypi.org:443
+        files.pythonhosted.org:443
     secrets:
       registry-username: notdodo
-      registry-password: ${{ github.token }}
+      registry-password: ${{ secrets.GITHUB_TOKEN }}

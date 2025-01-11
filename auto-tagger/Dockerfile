@@ -2,7 +2,7 @@ FROM python:3.13-alpine AS builder
 HEALTHCHECK NONE
 
 ENV PATH="${PATH}:/app/.local/bin" \
-    POETRY_VERSION=1.8.4 \
+    POETRY_VERSION=2.0.0 \
     PYTHONDONTWRITEBYTECODE=1 \
     POETRY_CACHE_DIR=/app/.cache \
     POETRY_NO_INTERACTION=1 \
