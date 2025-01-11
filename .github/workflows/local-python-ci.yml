@@ -31,4 +31,4 @@ jobs:
       working-directory: ./auto-tagger
     secrets:
       registry-username: notdodo
-      registry-password: ${{ github.token }}
+      registry-password: ${{ secrets.GITHUB_TOKEN }}
