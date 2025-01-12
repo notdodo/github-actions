@@ -31,5 +31,7 @@ COPY --from=builder ${VIRTUAL_ENV} ${VIRTUAL_ENV}
 COPY *.py /app/
 RUN chmod -R a+r /app
 USER app
+LABEL org.opencontainers.image.source=https://github.com/notdodo/github-actions/tree/main/auto-tagger
+LABEL org.opencontainers.image.description="A GitHub Action to automatically bump and/or create tags upon push to the default branch, using SemVer formatting."
 
 CMD ["python", "/app/main.py"]

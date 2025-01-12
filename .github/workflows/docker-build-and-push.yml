@@ -111,6 +111,7 @@ jobs:
         uses: docker/build-push-action@48aba3b46d1b1fec4febb7c5d0c644b249a11355
         # v6.10.0
         with:
+          annotations: ${{ steps.metadata.outputs.annotations }}
           context: ${{ inputs.working-directory }}
           file: ${{ inputs.working-directory }}/${{ inputs.dockerfile }}
           labels: ${{ steps.metadata.outputs.labels }}
@@ -142,3 +143,4 @@ jobs:
         with:
           subject-name: ${{ inputs.registry }}/${{ inputs.image }}
           subject-digest: ${{ steps.build.outputs.digest }}
+          push-to-registry: true
