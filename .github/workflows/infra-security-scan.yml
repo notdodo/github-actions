@@ -32,8 +32,8 @@ jobs:
       run:
         working-directory: ${{ inputs.working-directory }}
     steps:
-      - uses: step-security/harden-runner@0080882f6c36860b6ba35c610c98ce87d4e2f26f
-        # v2.10.2
+      - uses: step-security/harden-runner@c95a14d0e5bab51a9f56296a4eb0e416910cd350
+        # v2.10.3
         with:
           disable-sudo: ${{ inputs.disable-sudo }}
           egress-policy: block
@@ -63,8 +63,8 @@ jobs:
           enable_jobs_summary: true
           comments_with_queries: true
       - name: Upload SARIF file
-        uses: github/codeql-action/upload-sarif@5618c9fc1e675841ca52c1c6b1304f5255a905a0
-        # v2.19.0
+        uses: github/codeql-action/upload-sarif@3407610120cd5656b6fc71991415cb50748b9489
+        # v2.20.1
         with:
           sarif_file: ${{ inputs.working-directory }}/kics_results.sarif
 
@@ -76,8 +76,8 @@ jobs:
       pull-requests: write
       security-events: write
     steps:
-      - uses: step-security/harden-runner@0080882f6c36860b6ba35c610c98ce87d4e2f26f
-        # v2.10.2
+      - uses: step-security/harden-runner@c95a14d0e5bab51a9f56296a4eb0e416910cd350
+        # v2.10.3
         with:
           disable-sudo: ${{ inputs.disable-sudo }}
           egress-policy: block
@@ -99,8 +99,8 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
       - name: Upload SARIF file
-        uses: github/codeql-action/upload-sarif@5618c9fc1e675841ca52c1c6b1304f5255a905a0
-        # v2.19.0
+        uses: github/codeql-action/upload-sarif@3407610120cd5656b6fc71991415cb50748b9489
+        # v2.20.1
         with:
           sarif_file: zizmor_results.sarif
           category: zizmor
@@ -116,8 +116,8 @@ jobs:
       run:
         working-directory: ${{ inputs.working-directory }}
     steps:
-      - uses: step-security/harden-runner@0080882f6c36860b6ba35c610c98ce87d4e2f26f
-        # v2.10.2
+      - uses: step-security/harden-runner@c95a14d0e5bab51a9f56296a4eb0e416910cd350
+        # v2.10.3
         with:
           disable-sudo: ${{ inputs.disable-sudo }}
           egress-policy: block
@@ -133,8 +133,8 @@ jobs:
         # v4.2.2
         with:
           persist-credentials: false
-      - uses: actions/setup-go@41dfa10bad2bb2ae585af6ee5bb4d7d973ad74ed
-        # v5.1.0
+      - uses: actions/setup-go@3041bf56c941b39c61721a86cd11f3bb1338122a
+        # v5.2.0
         with:
           go-version: "oldstable"
           cache: false
