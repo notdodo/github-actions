@@ -26,8 +26,8 @@ jobs:
       pull-requests: read
       checks: write
     steps:
-      - uses: step-security/harden-runner@c95a14d0e5bab51a9f56296a4eb0e416910cd350
-        # v2.10.3
+      - uses: step-security/harden-runner@cb605e52c26070c328afc4562f0b4ada7618a84e
+        # v2.10.4
         with:
           disable-sudo: ${{ inputs.disable-sudo }}
           egress-policy: block
@@ -44,13 +44,13 @@ jobs:
         # v4.2.2
         with:
           persist-credentials: false
-      - uses: actions/setup-go@3041bf56c941b39c61721a86cd11f3bb1338122a
-        # v5.2.0
+      - uses: actions/setup-go@f111f3307d8850f501ac008e886eec1fd1932a34
+        # v5.3.0
         with:
           go-version: "oldstable"
       - name: golangci-lint
-        uses: golangci/golangci-lint-action@971e284b6050e8a5849b72094c50ab08da042db8
-        # v6.1.1
+        uses: golangci/golangci-lint-action@ec5d18412c0aeab7936cb16880d708ba2a64e1ae
+        # v6.2.0
         with:
           version: latest
           only-new-issues: true
@@ -64,8 +64,8 @@ jobs:
       run:
         working-directory: ${{ inputs.working-directory }}
     steps:
-      - uses: step-security/harden-runner@c95a14d0e5bab51a9f56296a4eb0e416910cd350
-        # v2.10.3
+      - uses: step-security/harden-runner@cb605e52c26070c328afc4562f0b4ada7618a84e
+        # v2.10.4
         with:
           disable-sudo: ${{ inputs.disable-sudo }}
           egress-policy: block
@@ -83,8 +83,8 @@ jobs:
         with:
           persist-credentials: false
       - name: Setup Go
-        uses: actions/setup-go@3041bf56c941b39c61721a86cd11f3bb1338122a
-        # v5.2.0
+        uses: actions/setup-go@f111f3307d8850f501ac008e886eec1fd1932a34
+        # v5.3.0
         with:
           go-version-file: ${{ inputs.working-directory }}/go.mod
           cache-dependency-path: |
