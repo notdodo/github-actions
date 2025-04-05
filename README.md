@@ -12,6 +12,7 @@ Collection of reusable workflows and custom actions designed to streamline autom
 - `notdodo/github-actions/.github/workflows/infra-security-scan.yml`: Used for docker, Makefiles, Kubernetes security scanning with Sarif support
 - `notdodo/github-actions/.github/workflows/python-ci.yml`: Used for Python CI linting and checking for [Poetry](https://python-poetry.org/) projects
 - `notdodo/github-actions/.github/workflows/rust-ci.yml`: Used for Rust CI linting, building and testing
+- `notdodo/github-actions/.github/workflows/terraform-ci.yml`: Used for Terraform CI linting and show plan output on Pull Requests
 
 ## Tagging
 
