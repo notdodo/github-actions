@@ -109,6 +109,9 @@ jobs:
         if: github.event_name == 'pull_request'
         env:
           PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
+          ACTOR: "${{ github.actor }}"
+          EVENT: "${{ github.event_name }}"
+          WORKDIR: "${{ inputs.working-directory }}"
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -133,7 +136,7 @@ jobs:
 
             </details>
 
-            *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Working Directory: \`${{ inputs.working-directory }}\`, Workflow: \`${{ github.workflow }}\`*`;
+            *Pusher: @${{ env.ACTOR }}, Action: \`${{ env.EVENT }}\`, Working Directory: \`${{ env.WORKDIR }}\`*`;
 
             // 3. If we have a comment, update it, otherwise create a new one
             if (botComment) {
