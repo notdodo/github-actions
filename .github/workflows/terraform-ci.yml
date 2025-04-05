@@ -18,6 +18,10 @@ jobs:
   terraform-lint:
     name: Terraform Linting
     runs-on: ${{ inputs.runs-on }}
+    permissions:
+      contents: read
+      pull-requests: write
+      security-events: write
     defaults:
       run:
         working-directory: ${{ inputs.working-directory }}
@@ -85,6 +89,9 @@ jobs:
     name: Terraform Plan
     runs-on: ${{ inputs.runs-on }}
     needs: terraform-lint
+    permissions:
+      contents: read
+      pull-requests: write
     defaults:
       run:
         working-directory: ${{ inputs.working-directory }}
