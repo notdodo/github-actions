@@ -1,0 +1,156 @@
+on:
+  workflow_call:
+    inputs:
+      disable-sudo:
+        type: boolean
+        default: true
+      egress-policy-allowlist:
+        type: string
+        default: ""
+      runs-on:
+        type: string
+        default: "ubuntu-latest"
+      working-directory:
+        type: string
+        default: "."
+
+jobs:
+  terraform-lint:
+    name: Terraform Linting
+    runs-on: ${{ inputs.runs-on }}
+    defaults:
+      run:
+        working-directory: ${{ inputs.working-directory }}
+    steps:
+      - uses: step-security/harden-runner@4d991eb9b905ef189e4c376166672c3f2f230481
+        # v2.11.0
+        with:
+          disable-sudo: ${{ inputs.disable-sudo }}
+          egress-policy: audit
+          allowed-endpoints: >
+            ${{ inputs.egress-policy-allowlist }}
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        # v4.2.2
+        with:
+          persist-credentials: false
+      - uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd
+        # v3.1.2
+      - name: Terraform fmt
+        id: fmt
+        run: terraform fmt -check
+        continue-on-error: true
+
+      - name: Terraform Init
+        id: init
+        run: terraform init -input=false
+
+      - name: Terraform Validate
+        id: validate
+        run: terraform validate -no-color
+
+      - uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684
+        # v4.2.3
+        with:
+          path: ~/.tflint.d/plugins
+          key: ${{ inputs.runs-on }}-tflint-${{ hashFiles('.tflint.hcl') }}
+      - uses: terraform-linters/setup-tflint@90f302c255ef959cbfb4bd10581afecdb7ece3e6
+        # v4.1.1
+        with:
+          tflint_version: latest
+      - name: Init TFLint
+        run: tflint --init
+        env:
+          # https://github.com/terraform-linters/tflint/blob/master/docs/user-guide/plugins.md#avoiding-rate-limiting
+          GITHUB_TOKEN: ${{ github.token }}
+      - name: Run TFLint
+        run: tflint -f compact
+
+      - name: Run Trivy Scan
+        uses: aquasecurity/trivy-action@6c175e9c4083a92bbca2f9724c8a5e33bc2d97a5
+        # v0.30.0
+        with:
+          hide-progress: true
+          format: sarif
+          scan-type: config
+          exit-code: "1"
+          output: ${{ inputs.working-directory }}/trivy_results.sarif
+          github-pat: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload results
+        uses: github/codeql-action/upload-sarif@3407610120cd5656b6fc71991415cb50748b9489
+        # v2.20.1
+        with:
+          sarif_file: ${{ inputs.working-directory }}/trivy_results.sarif
+
+  terraform-plan:
+    name: Terraform Plan
+    runs-on: ${{ inputs.runs-on }}
+    needs: terraform-lint
+    defaults:
+      run:
+        working-directory: ${{ inputs.working-directory }}
+    steps:
+      - uses: step-security/harden-runner@4d991eb9b905ef189e4c376166672c3f2f230481
+        # v2.11.0
+        with:
+          disable-sudo: ${{ inputs.disable-sudo }}
+          egress-policy: audit
+          allowed-endpoints: >
+            ${{ inputs.egress-policy-allowlist }}
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        # v4.2.2
+        with:
+          persist-credentials: false
+      - name: Terraform Plan
+        id: plan
+        run: terraform plan -no-color -input=false
+        continue-on-error: true
+      - uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
+        # v7.0.1
+        if: github.event_name == 'pull_request'
+        env:
+          PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
+          ACTOR: "${{ github.actor }}"
+          EVENT: "${{ github.event_name }}"
+          WORKDIR: "${{ inputs.working-directory }}"
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            // 1. Retrieve existing bot comments for the PR.
+            const { data: comments } = await github.rest.issues.listComments({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+            })
+            const botComment = comments.find(comment => {
+                return comment.user.type === 'Bot' && comment.body.includes('Terraform Plan 📖')
+            })
+
+            // 2. Prepare format of the comment
+            const output = `#### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
+
+            <details><summary>Show Plan</summary>
+
+            \`\`\`\n
+            ${process.env.PLAN}
+            \`\`\`
+
+            </details>
+
+            *Pusher: @${{ env.ACTOR }}, Action: \`${{ env.EVENT }}\`, Working Directory: \`${{ env.WORKDIR }}\`*`;
+
+            // 3. If we have a comment, update it, otherwise create a new one
+            if (botComment) {
+                github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: botComment.id,
+                body: output
+                })
+            } else {
+                github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: output
+                })
+            }
