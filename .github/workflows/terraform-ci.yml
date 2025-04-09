@@ -16,6 +16,12 @@ on:
       runs-on:
         type: string
         default: "ubuntu-latest"
+      sops-decrypt-file:
+        type: string
+        default: "terraform.tfvars.enc"
+      sops-decryption-key:
+        type: string
+        default: ""
       working-directory:
         type: string
         default: "."
@@ -131,6 +137,13 @@ jobs:
           retry-max-attempts: 2
       - uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd
         # v3.1.2
+      - name: Sops Binary Installer
+        uses: mdgreenwald/mozilla-sops-action@d9714e521cbaecdae64a89d2fdd576dd2aa97056
+      - name: Decrypt Secrets
+        env:
+          SOPS_AGE_KEY: ${{ inputs.sops-decryption-key }}
+        run: |
+          sops --decrypt .\terraform.tfvars.enc > .\terraform.tfvars
       - name: Terraform Init
         id: init
         run: terraform init -input=false
