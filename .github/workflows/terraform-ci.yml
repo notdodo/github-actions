@@ -159,6 +159,7 @@ jobs:
           ACTOR: "${{ github.actor }}"
           EVENT: "${{ github.event_name }}"
           WORKDIR: "${{ inputs.working-directory }}"
+          OUTCOME: "${{ steps.plan.outcome }}"
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -173,12 +174,12 @@ jobs:
             })
 
             // 2. Prepare format of the comment
-            const output = `#### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
+            const output = `#### Terraform Plan 📖\`${{ env.OUTCOME }}\`
 
             <details><summary>Show Plan</summary>
 
             \`\`\`\n
-            ${{ env.PLAN }}
+            ${process.env.PLAN}
             \`\`\`
 
             </details>
