@@ -18,7 +18,10 @@ on:
         default: "ubuntu-latest"
       sops-decrypt-file:
         type: string
-        default: "terraform.tfvars.enc"
+        default: "./terraform.tfvars.enc"
+      sops-plaintext-file:
+        type: string
+        default: "./terraform.tfvars"
       working-directory:
         type: string
         default: "."
@@ -141,9 +144,11 @@ jobs:
         uses: mdgreenwald/mozilla-sops-action@d9714e521cbaecdae64a89d2fdd576dd2aa97056
       - name: Decrypt Secrets
         env:
-          SOPS_AGE_KEY: ${{ inputs.sops-decryption-key }}
+          SOPS_AGE_KEY: ${{ secrets.sops-decryption-key }}
+          ENCRYPTED_FILE: "${{ inputs.sops-decrypt-file }}"
+          PLAINTEXT_FILE: "${{ inputs.sops-plaintext-file }}"
         run: |
-          sops --decrypt .\terraform.tfvars.enc > .\terraform.tfvars
+          sops --decrypt ${{ env.ENCRYPTED_FILE }} > ${{ env.PLAINTEXT_FILE }}
       - name: Terraform Init
         id: init
         run: terraform init -input=false
