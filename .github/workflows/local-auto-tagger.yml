@@ -15,8 +15,8 @@ jobs:
   auto-tag:
     runs-on: ubuntu-latest
     steps:
-      - uses: step-security/harden-runner@4d991eb9b905ef189e4c376166672c3f2f230481
-        # v2.11.0
+      - uses: step-security/harden-runner@c6295a65d1254861815972266d5933fd6e532bdf
+        # v2.11.1
         with:
           disable-sudo: true
           egress-policy: block
@@ -31,8 +31,8 @@ jobs:
           persist-credentials: false
       - name: Get changed files for each workflow and action
         id: changed-files
-        uses: tj-actions/changed-files@b74df86ccb65173a8e33ba5492ac1a2ca6b216fd
-        # v45.0.7
+        uses: tj-actions/changed-files@db731a131ccd81ed52a3d463b6d2a4b2856c7ec9
+        # v46.0.5
         with:
           files_yaml: |
             cleanup-cache:
