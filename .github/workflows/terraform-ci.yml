@@ -129,6 +129,8 @@ jobs:
           role-to-assume: ${{ inputs.aws-role }}
           aws-region: ${{ inputs.aws-region }}
           retry-max-attempts: 2
+      - uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd
+        # v3.1.2
       - name: Terraform Plan
         id: plan
         run: terraform plan -no-color -input=false
