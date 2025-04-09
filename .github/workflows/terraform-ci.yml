@@ -135,7 +135,7 @@ jobs:
         # v7.0.1
         if: github.event_name == 'pull_request'
         env:
-          PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
+          PLAN: "${{ steps.plan.outputs.stdout }}"
           ACTOR: "${{ github.actor }}"
           EVENT: "${{ github.event_name }}"
           WORKDIR: "${{ inputs.working-directory }}"
@@ -158,7 +158,7 @@ jobs:
             <details><summary>Show Plan</summary>
 
             \`\`\`\n
-            ${process.env.PLAN}
+            ${{ env.PLAN }}
             \`\`\`
 
             </details>
