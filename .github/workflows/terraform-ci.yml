@@ -19,12 +19,12 @@ on:
       sops-decrypt-file:
         type: string
         default: "terraform.tfvars.enc"
-      sops-decryption-key:
-        type: string
-        default: ""
       working-directory:
         type: string
         default: "."
+    secrets:
+      sops-decryption-key:
+        required: false
 
 jobs:
   terraform-lint:
