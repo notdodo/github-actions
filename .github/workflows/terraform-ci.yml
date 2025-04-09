@@ -60,6 +60,14 @@ jobs:
           role-to-assume: ${{ inputs.aws-role }}
           aws-region: ${{ inputs.aws-region }}
           retry-max-attempts: 2
+      - run: |
+          echo 'plugin_cache_dir = "$HOME/.terraform.d/plugin-cache"' > ~/.terraformrc
+          mkdir -p ~/.terraform.d/plugin-cache
+      - uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684
+        with:
+          path: ~/.terraform.d/plugin-cache
+          key: terraform-providers-${{ hashFiles('**/.terraform.lock.hcl') }}
+          restore-keys: terraform-providers-
       - uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd
         # v3.1.2
       - name: Terraform fmt
@@ -138,6 +146,14 @@ jobs:
           role-to-assume: ${{ inputs.aws-role }}
           aws-region: ${{ inputs.aws-region }}
           retry-max-attempts: 2
+      - run: |
+          echo 'plugin_cache_dir = "$HOME/.terraform.d/plugin-cache"' > ~/.terraformrc
+          mkdir -p ~/.terraform.d/plugin-cache
+      - uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684
+        with:
+          path: ~/.terraform.d/plugin-cache
+          key: terraform-providers-${{ hashFiles('**/.terraform.lock.hcl') }}
+          restore-keys: terraform-providers-
       - uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd
         # v3.1.2
       - name: Sops Binary Installer
