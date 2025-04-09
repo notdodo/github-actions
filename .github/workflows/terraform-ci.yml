@@ -1,6 +1,12 @@
 on:
   workflow_call:
     inputs:
+      aws-region:
+        type: string
+        default: "eu-west-1"
+      aws-role:
+        type: string
+        default: ""
       disable-sudo:
         type: boolean
         default: true
@@ -37,6 +43,13 @@ jobs:
         # v4.2.2
         with:
           persist-credentials: false
+      - uses: aws-actions/configure-aws-credentials@ececac1a45f3b08a01d2dd070d28d111c5fe6722
+        if: ${{ inputs.aws-role != '' }}
+        # v4.1.0
+        with:
+          role-to-assume: ${{ inputs.aws-role }}
+          aws-region: ${{ inputs.aws-region }}
+          retry-max-attempts: 2
       - uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd
         # v3.1.2
       - name: Terraform fmt
@@ -107,6 +120,13 @@ jobs:
         # v4.2.2
         with:
           persist-credentials: false
+      - uses: aws-actions/configure-aws-credentials@ececac1a45f3b08a01d2dd070d28d111c5fe6722
+        if: ${{ inputs.aws-role != '' }}
+        # v4.1.0
+        with:
+          role-to-assume: ${{ inputs.aws-role }}
+          aws-region: ${{ inputs.aws-region }}
+          retry-max-attempts: 2
       - name: Terraform Plan
         id: plan
         run: terraform plan -no-color -input=false
