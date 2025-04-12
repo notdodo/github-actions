@@ -16,6 +16,7 @@ concurrency:
 
 jobs:
   python-ci:
+    permissions: {}
     uses: notdodo/github-actions/.github/workflows/python-ci.yml@python-ci-v0
     with:
       working-directory: auto-tagger
