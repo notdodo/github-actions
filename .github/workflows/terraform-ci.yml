@@ -16,7 +16,7 @@ on:
       runs-on:
         type: string
         default: "ubuntu-latest"
-      sops-decrypt-file:
+      sops-encrypted-file:
         type: string
         default: "./terraform.tfvars.enc"
       sops-plaintext-file:
@@ -73,7 +73,6 @@ jobs:
       - name: Terraform fmt
         id: fmt
         run: terraform fmt -check
-        continue-on-error: true
 
       - name: Terraform Init
         id: init
@@ -92,8 +91,7 @@ jobs:
         # v4.1.1
         with:
           tflint_version: latest
-      - name: Init TFLint
-        run: tflint --init
+      - run: tflint --init
         env:
           # https://github.com/terraform-linters/tflint/blob/master/docs/user-guide/plugins.md#avoiding-rate-limiting
           GITHUB_TOKEN: ${{ github.token }}
@@ -161,10 +159,10 @@ jobs:
       - name: Decrypt Secrets
         env:
           SOPS_AGE_KEY: ${{ secrets.sops-decryption-key }}
-          ENCRYPTED_FILE: "${{ inputs.sops-decrypt-file }}"
+          ENCRYPTED_FILE: "${{ inputs.sops-encrypted-file }}"
           PLAINTEXT_FILE: "${{ inputs.sops-plaintext-file }}"
         run: |
-          sops --decrypt ${{ env.ENCRYPTED_FILE }} > ${{ env.PLAINTEXT_FILE }}
+          sops --decrypt "$ENCRYPTED_FILE" --output "$PLAINTEXT_FILE"
       - name: Terraform Init
         id: init
         run: terraform init -input=false

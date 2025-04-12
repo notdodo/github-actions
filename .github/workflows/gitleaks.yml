@@ -13,6 +13,8 @@ on:
 
 jobs:
   gitleaks:
+    permissions:
+      pull-requests: write
     name: gitleaks
     runs-on: ${{ inputs.runs-on }}
     if: (github.actor != 'dependabot[bot]')
