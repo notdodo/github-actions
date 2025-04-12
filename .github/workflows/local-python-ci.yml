@@ -21,6 +21,12 @@ jobs:
       working-directory: auto-tagger
 
   build-docker-image:
+    permissions:
+      attestations: write
+      contents: read
+      id-token: write
+      packages: write
+      security-events: write
     if: ${{ github.event_name == 'pull_request' }}
     uses: notdodo/github-actions/.github/workflows/docker-build-and-push.yml@docker-build-and-push-v0
     with:

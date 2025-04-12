@@ -7,6 +7,12 @@ on:
 
 jobs:
   build-push-docker-image:
+    permissions:
+      attestations: write
+      contents: read
+      id-token: write
+      packages: write
+      security-events: write
     uses: notdodo/github-actions/.github/workflows/docker-build-and-push.yml@docker-build-and-push-v0
     with:
       egress-policy-allowlist: >
