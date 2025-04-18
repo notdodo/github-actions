@@ -2,6 +2,8 @@
 
 Collection of reusable workflows and custom actions designed to streamline automation.
 
+![Alt](https://repobeats.axiom.co/api/embed/39be58fe920770fc61a415d2a67806ee014f7d82.svg "Repobeats analytics image")
+
 ## Available Workflows
 
 - `notdodo/github-actions/.github/workflows/clean-branch-cache.yml`: Use to cleanup the cache for a merge branch
