@@ -32,10 +32,10 @@ jobs:
       run:
         working-directory: ${{ inputs.working-directory }}
     steps:
-      - uses: step-security/harden-runner@c6295a65d1254861815972266d5933fd6e532bdf
-        # v2.11.1
+      - uses: step-security/harden-runner@0634a2670c59f64b4a01f0f96f84700a4088b9f0
+        # v2.12.0
         with:
-          disable-sudo: ${{ inputs.disable-sudo }}
+          disable-sudo-and-containers: ${{ inputs.disable-sudo }}
           egress-policy: block
           allowed-endpoints: >
             api.github.com:443
@@ -67,6 +67,7 @@ jobs:
         # v2.20.1
         with:
           sarif_file: ${{ inputs.working-directory }}/kics_results.sarif
+          category: kics
 
   zizmor:
     name: zizmor GitHub Actions Security Analysis
@@ -76,10 +77,10 @@ jobs:
       pull-requests: write
       security-events: write
     steps:
-      - uses: step-security/harden-runner@c6295a65d1254861815972266d5933fd6e532bdf
-        # v2.11.1
+      - uses: step-security/harden-runner@0634a2670c59f64b4a01f0f96f84700a4088b9f0
+        # v2.12.0
         with:
-          disable-sudo: ${{ inputs.disable-sudo }}
+          disable-sudo-and-containers: ${{ inputs.disable-sudo }}
           egress-policy: block
           allowed-endpoints: >
             api.github.com:443
@@ -116,10 +117,10 @@ jobs:
       run:
         working-directory: ${{ inputs.working-directory }}
     steps:
-      - uses: step-security/harden-runner@c6295a65d1254861815972266d5933fd6e532bdf
-        # v2.11.1
+      - uses: step-security/harden-runner@0634a2670c59f64b4a01f0f96f84700a4088b9f0
+        # v2.12.0
         with:
-          disable-sudo: ${{ inputs.disable-sudo }}
+          disable-sudo-and-containers: ${{ inputs.disable-sudo }}
           egress-policy: block
           allowed-endpoints: >
             api.github.com:443
@@ -141,30 +142,31 @@ jobs:
       - id: find-files
         run: |
           FILES=$(find . -iname "Makefile" -o -iname "GNUmakefile" -o -iname "*.mk" -o -iname "*.make")
-          echo "$FILES" > "$GITHUB_WORKSPACE/files.txt"
-          echo "FILES=$FILES" >> $GITHUB_OUTPUT
+          printf "%s\n" $FILES > files_list.txt
+          echo "found_files=files_list.txt" >> $GITHUB_OUTPUT
         shell: bash
-      - if: steps.find-files.outputs.FILES != ''
+      - if: steps.find-files.outputs.found_files != ''
         id: scan-files
         continue-on-error: true
         run: |
           go install github.com/mrtazz/checkmake/cmd/checkmake@latest
-          CHECKMAKE_OUTPUT=$(checkmake "$FILES" --debug)
-          echo "CHECKMAKE_OUTPUT=$CHECKMAKE_OUTPUT" >> $GITHUB_OUTPUT
-        env:
-          FILES: ${{ steps.find-files.outputs.FILES }}
+          FILES=$(cat files_list.txt | tr '\n' ' ')
+          OUTPUT=$(checkmake $FILES --debug || true)
+          echo "checkmake_output<<EOF" >> $GITHUB_OUTPUT
+          echo "$OUTPUT" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
         shell: bash
       - name: PR comment with file
-        if: github.event_name == 'pull_request' && steps.scan-files.outputs.CHECKMAKE_OUTPUT != ''
+        if: github.event_name == 'pull_request' && steps.scan-files.outputs.checkmake_output != ''
         uses: thollander/actions-comment-pull-request@24bffb9b452ba05a4f3f77933840a6a841d1b32b
         # v3.0.1
         with:
           message: |
             <details>
-            <summary>Checkmake findings</summary>
+            <summary>🛠️ Checkmake findings</summary>
 
             ```
-            ${{ steps.scan-files.outputs.CHECKMAKE_OUTPUT }}
+            ${{ steps.scan-files.outputs.checkmake_output }}
             ```
 
             </details>
