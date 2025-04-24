@@ -50,8 +50,8 @@ jobs:
         with:
           persist-credentials: false
       - name: Kics Scan
-        uses: Checkmarx/kics-github-action@09100f0152c975eb238c67030f9fd1418acb3666
-        # v2.1.6
+        uses: Checkmarx/kics-github-action@5373b38b35d09a400790b9e560189064d185391f
+        # v2.1.7
         with:
           path: .
           output_path: ${{ inputs.working-directory }}/kics_results.sarif
@@ -93,8 +93,8 @@ jobs:
         with:
           persist-credentials: false
       - name: Install the latest version of uv
-        uses: astral-sh/setup-uv@d4b2f3b6ecc6e67c4457f6d3e41ec42d3d0fcb86
-        # v5.4.2
+        uses: astral-sh/setup-uv@c7f87aa956e4c323abf06d5dec078e358f6b4d04
+        # v6.0.0
       - name: Run zizmor 🌈
         run: uvx zizmor --format sarif . > zizmor_results.sarif
         env:
