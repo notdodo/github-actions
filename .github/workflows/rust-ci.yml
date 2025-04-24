@@ -35,14 +35,16 @@ env:
 jobs:
   build:
     runs-on: ${{ inputs.runs-on }}
+    permissions:
+      contents: read
     defaults:
       run:
         working-directory: ${{ inputs.working-directory }}
     steps:
-      - uses: step-security/harden-runner@c6295a65d1254861815972266d5933fd6e532bdf
-        # v2.11.1
+      - uses: step-security/harden-runner@0634a2670c59f64b4a01f0f96f84700a4088b9f0
+        # v2.12.0
         with:
-          disable-sudo: ${{ inputs.disable-sudo }}
+          disable-sudo-and-containers: ${{ inputs.disable-sudo }}
           egress-policy: block
           allowed-endpoints: >
             api.github.com:443
@@ -60,19 +62,23 @@ jobs:
         with:
           cache-on-failure: true
           workspaces: ${{ inputs.working-directory }}
+      - name: Check formatting
+        run: cargo fmt -- --check
       - name: Build
         run: cargo build --verbose --release
 
   tests:
     runs-on: ${{ inputs.runs-on }}
+    permissions:
+      contents: read
     defaults:
       run:
         working-directory: ${{ inputs.working-directory }}
     steps:
-      - uses: step-security/harden-runner@c6295a65d1254861815972266d5933fd6e532bdf
-        # v2.11.1
+      - uses: step-security/harden-runner@0634a2670c59f64b4a01f0f96f84700a4088b9f0
+        # v2.12.0
         with:
-          disable-sudo: ${{ inputs.disable-sudo }}
+          disable-sudo-and-containers: ${{ inputs.disable-sudo }}
           egress-policy: block
           allowed-endpoints: >
             api.github.com:443
@@ -96,17 +102,16 @@ jobs:
   clippy:
     runs-on: ${{ inputs.runs-on }}
     permissions:
-      actions: read
       contents: read
       security-events: write
     defaults:
       run:
         working-directory: ${{ inputs.working-directory }}
     steps:
-      - uses: step-security/harden-runner@c6295a65d1254861815972266d5933fd6e532bdf
-        # v2.11.1
+      - uses: step-security/harden-runner@0634a2670c59f64b4a01f0f96f84700a4088b9f0
+        # v2.12.0
         with:
-          disable-sudo: ${{ inputs.disable-sudo }}
+          disable-sudo-and-containers: ${{ inputs.disable-sudo }}
           egress-policy: block
           allowed-endpoints: >
             api.github.com:443
@@ -144,15 +149,17 @@ jobs:
   build-and-deploy:
     if: ${{ inputs.build-lambda || inputs.deploy-lambda }}
     runs-on: ${{ inputs.runs-on }}
+    permissions:
+      contents: read
     needs: [build, tests, clippy]
     defaults:
       run:
         working-directory: ${{ inputs.working-directory }}
     steps:
-      - uses: step-security/harden-runner@c6295a65d1254861815972266d5933fd6e532bdf
-        # v2.11.1
+      - uses: step-security/harden-runner@0634a2670c59f64b4a01f0f96f84700a4088b9f0
+        # v2.12.0
         with:
-          disable-sudo: ${{ inputs.disable-sudo }}
+          disable-sudo-and-containers: ${{ inputs.disable-sudo }}
           egress-policy: block
           allowed-endpoints: >
             api.github.com:443
