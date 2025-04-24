@@ -142,16 +142,22 @@ jobs:
       - id: find-files
         run: |
           FILES=$(find . -iname "Makefile" -o -iname "GNUmakefile" -o -iname "*.mk" -o -iname "*.make")
-          echo "files=$FILES" >> $GITHUB_OUTPUT
+          printf "%s\n" $FILES > files_list.txt
+          echo "found_files=files_list.txt" >> $GITHUB_OUTPUT
         shell: bash
-      - if: steps.find-files.outputs.files != ''
+      - if: steps.find-files.outputs.found_files != ''
         id: scan-files
         continue-on-error: true
         run: |
           go install github.com/mrtazz/checkmake/cmd/checkmake@latest
-          CHECKMAKE_OUTPUT=$(checkmake ${{ steps.find-files.outputs.files }} --debug)
+          CHECKMAKE_OUTPUT=""
+          while IFS= read -r file; do
+            OUTPUT=$(checkmake "$file" --debug 2>&1)
+            CHECKMAKE_OUTPUT="$CHECKMAKE_OUTPUT\n==== $file ====\n$OUTPUT"
+          done < "${{ steps.find-files.outputs.found_files }}"
+
           echo "checkmake_output<<EOF" >> $GITHUB_OUTPUT
-          echo "$CHECKMAKE_OUTPUT" >> $GITHUB_OUTPUT
+          echo -e "$CHECKMAKE_OUTPUT" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
         env:
           FILES: ${{ steps.find-files.outputs.FILES }}
