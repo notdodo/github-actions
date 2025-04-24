@@ -150,8 +150,11 @@ jobs:
         continue-on-error: true
         run: |
           go install github.com/mrtazz/checkmake/cmd/checkmake@latest
-          CHECKMAKE_OUTPUT=$(checkmake $(cat files_list.txt) --debug)
-          echo "CHECKMAKE_OUTPUT=$CHECKMAKE_OUTPUT" >> $GITHUB_OUTPUT
+          FILES=$(cat files_list.txt | tr '\n' ' ')
+          OUTPUT=$(checkmake $FILES --debug || true)
+          echo "checkmake_output<<EOF" >> $GITHUB_OUTPUT
+          echo "$OUTPUT" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
         shell: bash
       - name: PR comment with file
         if: github.event_name == 'pull_request' && steps.scan-files.outputs.checkmake_output != ''
