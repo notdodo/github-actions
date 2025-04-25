@@ -114,6 +114,8 @@ jobs:
           push: ${{ inputs.push }}
           tags: ${{ steps.metadata.outputs.tags }}
           labels: ${{ steps.metadata.outputs.labels }}
+          provenance: mode=max
+          sbom: true
           cache-from: type=gha
           cache-to: type=gha,mode=max
       - name: Generate artifact attestation
