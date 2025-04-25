@@ -138,5 +138,4 @@ jobs:
         # v2.2.3
         with:
           subject-name: ${{ inputs.registry }}/${{ inputs.image }}@${{ steps.metadata.outputs.version }}
-          subject-digest: ${{ steps.build.outputs.imageid }}
           push-to-registry: true
