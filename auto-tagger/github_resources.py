@@ -2,8 +2,8 @@
 PyGitHub resource wrappers
 """
 
-from dataclasses import dataclass
-from datetime import datetime
+from dataclasses import dataclass, field
+from datetime import datetime, timezone
 
 
 @dataclass
@@ -17,6 +17,11 @@ class Commit:
     date: datetime
 
 
+def now_utf() -> datetime:
+    """Factory for Datetime"""
+    return datetime.now(timezone.utc)
+
+
 @dataclass
 class Tag:
     """Tag resource"""
@@ -25,4 +30,4 @@ class Tag:
     commit: str
     message: str = ""
     type: str = "commit"
-    date: datetime = datetime.now()
+    date: datetime = field(default_factory=now_utf)

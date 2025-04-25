@@ -35,7 +35,7 @@ jobs:
       - uses: step-security/harden-runner@0634a2670c59f64b4a01f0f96f84700a4088b9f0
         # v2.12.0
         with:
-          disable-sudo-and-containers: ${{ inputs.disable-sudo }}
+          disable-sudo: ${{ inputs.disable-sudo }}
           egress-policy: block
           allowed-endpoints: >
             api.github.com:443
@@ -142,8 +142,8 @@ jobs:
       - id: find-files
         run: |
           FILES=$(find . -iname "Makefile" -o -iname "GNUmakefile" -o -iname "*.mk" -o -iname "*.make")
-          printf "%s\n" $FILES > files_list.txt
-          echo "found_files=files_list.txt" >> $GITHUB_OUTPUT
+          echo "$FILES" > files_list.txt
+          echo "found_files=$FILES" >> $GITHUB_OUTPUT
         shell: bash
       - if: steps.find-files.outputs.found_files != ''
         id: scan-files

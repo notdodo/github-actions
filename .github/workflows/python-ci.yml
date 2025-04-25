@@ -71,10 +71,13 @@ jobs:
           key: python-${{ inputs.python-version }}-poetry-${{ hashFiles('**/poetry.lock') }}
       - run: poetry install --no-root
         if: steps.cache-deps.outputs.cache-hit != 'true'
+      - name: Install Task
+        uses: arduino/setup-task@b91d5d2c96a56797b48ac1e0e89220bf64044611
+        # v2.0.0
       - name: Linting
         run: |
-          make format-check
-          make lint
+          task format-check
+          task lint
       - name: Type checking
         run: |
-          make type-check
+          task type-check

@@ -12,15 +12,54 @@ pygithub = "^2.6.1"
 semver = "^3.0.4"
 
 [tool.poetry.group.dev.dependencies]
-black = "^25.1.0"
-flake8 = "^7.2.0"
 mypy = { extras = ["faster-cache"], version = "^1.15.0" }
-isort = "^6.0.1"
 pydantic = "^2.11.3"
 pylint = "^3.3.6"
+ruff = "^0.11.7"
 
-[tool.isort]
-profile = "black"
+[tool.ruff]
+output-format = "github"
+
+[tool.ruff.lint]
+fixable = ["ALL"]
+unfixable = []
+select = ["ALL"]
+ignore = [
+    "D2",
+    "D4",
+    "ANN",
+    "COM812",
+    "D107",
+    "ISC001",
+    "ERA001",
+    "N803",
+    "T201",
+]
+
+[tool.ruff.format]
+docstring-code-format = true
+
+[tool.ruff.lint.isort]
+case-sensitive = true
+
+[tool.ruff.lint.mccabe]
+max-complexity = 10
+
+[tool.ruff.lint.pycodestyle]
+max-line-length = 150
+
+[tool.mypy]
+plugins = ["pydantic.mypy"]
+strict = true
+pretty = true
+show_error_codes = true
+show_error_context = true
+implicit_reexport = true
+namespace_packages = true
+
+[tool.pylint."MESSAGES CONTROL"]
+persistent = "no"
+disable = ["fixme", "line-too-long"]
 
 [build-system]
 requires = ["poetry-core"]

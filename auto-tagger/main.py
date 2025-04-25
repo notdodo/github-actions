@@ -11,7 +11,7 @@ from configuration import BumpStrategy, Configuration
 from github_helpers import GitHubHelper
 
 
-def main():
+def main() -> None:
     """main"""
     config = Configuration.from_env()
 
