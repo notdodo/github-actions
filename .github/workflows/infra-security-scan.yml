@@ -142,8 +142,8 @@ jobs:
       - id: find-files
         run: |
           FILES=$(find . -iname "Makefile" -o -iname "GNUmakefile" -o -iname "*.mk" -o -iname "*.make")
-          printf "%s\n" $FILES > files_list.txt
-          echo "found_files=files_list.txt" >> $GITHUB_OUTPUT
+          echo "$FILES" > files_list.txt
+          echo "found_files=$FILES" >> $GITHUB_OUTPUT
         shell: bash
       - if: steps.find-files.outputs.found_files != ''
         id: scan-files
