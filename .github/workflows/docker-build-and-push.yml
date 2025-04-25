@@ -22,7 +22,7 @@ on:
         type: string
       platforms:
         type: string
-        default: "linux/amd64"
+        default: "linux/amd64,linux/arm64"
       push:
         type: boolean
         default: false
@@ -117,7 +117,6 @@ jobs:
           platforms: ${{ inputs.platforms }}
           provenance: mode=max
           push: ${{ inputs.push }}
-          sbom: true
           tags: ${{ steps.metadata.outputs.tags }}
       - name: Generate artifact attestation
         if: inputs.push
