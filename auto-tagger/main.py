@@ -1,5 +1,5 @@
 """
-Python script to generate a new GitHub tag bumping its version following semver rules
+Python script to generate a new GitHub tag bumping its version following SemVer rules
 """
 
 import os

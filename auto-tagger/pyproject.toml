@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "auto-tagger"
 version = "0.1.0"
-description = ""
+description = "A GitHub Action to automatically bump and/or create tags upon push to the default branch, using SemVer formatting."
 authors = ["notdodo"]
 readme = "README.md"
 package-mode = false

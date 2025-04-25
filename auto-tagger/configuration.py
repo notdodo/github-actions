@@ -3,6 +3,7 @@ Module with the configuration of the action
 """
 
 import os
+from dataclasses import dataclass
 from enum import StrEnum
 
 from github_resources import Commit
@@ -17,6 +18,7 @@ class BumpStrategy(StrEnum):
     SKIP = "skip"
 
 
+@dataclass
 class Configuration:
     """Configuration resource"""
 
@@ -28,26 +30,6 @@ class Configuration:
     REPOSITORY: str = os.environ.get("GITHUB_REPOSITORY", "")
     SUFFIX: str = ""
     DRY_RUN: bool = False
-
-    def __init__(  # noqa: PLR0913
-        self,
-        BIND_TO_MAJOR: bool,  # noqa: FBT001
-        DEFAULT_BUMP_STRATEGY: BumpStrategy,
-        DEFAULT_BRANCH: str,
-        PATH: str,
-        PREFIX: str,
-        REPOSITORY: str,
-        SUFFIX: str,
-        DRY_RUN: bool,  # noqa: FBT001
-    ) -> None:
-        self.BIND_TO_MAJOR = BIND_TO_MAJOR
-        self.DEFAULT_BUMP_STRATEGY = DEFAULT_BUMP_STRATEGY
-        self.DEFAULT_BRANCH = DEFAULT_BRANCH
-        self.PATH = PATH
-        self.PREFIX = PREFIX
-        self.REPOSITORY = REPOSITORY
-        self.SUFFIX = SUFFIX
-        self.DRY_RUN = DRY_RUN
 
     @classmethod
     def from_env(cls) -> "Configuration":
