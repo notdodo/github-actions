@@ -14,7 +14,7 @@ RUN apk add --no-cache musl-dev libffi-dev gcc
 RUN addgroup -g 1000 app && adduser -G app -u 999 -s /sbin/nologin -h /app app -D
 WORKDIR /app
 COPY pyproject.toml poetry.lock ./
-RUN chmod -R app:app . && chmod -R a+r .
+RUN chmod -R a+r .
 USER app
 RUN pip install poetry==${POETRY_VERSION} --no-cache-dir
 RUN poetry install --only main
