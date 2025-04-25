@@ -118,13 +118,6 @@ jobs:
           sbom: true
           cache-from: type=gha
           cache-to: type=gha,mode=max
-      - name: Generate artifact attestation
-        if: inputs.push
-        uses: actions/attest-build-provenance@c074443f1aee8d4aeeae555aebba3282517141b2
-        # v2.2.3
-        with:
-          subject-name: ${{ inputs.registry }}/${{ inputs.image }}@${{ steps.metadata.outputs.version }}
-          push-to-registry: true
 
       - name: Run Trivy Scan
         uses: aquasecurity/trivy-action@6c175e9c4083a92bbca2f9724c8a5e33bc2d97a5
