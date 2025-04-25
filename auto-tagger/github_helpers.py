@@ -113,8 +113,8 @@ class GitHubHelper:
                 version_str = name.removeprefix(self.config.PREFIX).removesuffix(
                     self.config.SUFFIX
                 )
-                if VersionInfo.is_valid(version_str):
-                    valid_tags.append((VersionInfo.parse(version_str), tag))
+                if not VersionInfo.is_valid(version_str):
+                    valid_tags.append((version_str, tag))
 
         if valid_tags:
             _, latest_tag = max(valid_tags, key=lambda x: x[0])
