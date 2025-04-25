@@ -108,25 +108,34 @@ jobs:
         # v6.16.0
         with:
           annotations: ${{ steps.metadata.outputs.annotations }}
-          context: ${{ inputs.working-directory }}
-          file: ${{ inputs.working-directory }}/${{ inputs.dockerfile }}
-          platforms: ${{ inputs.platforms }}
-          push: ${{ inputs.push }}
-          tags: ${{ steps.metadata.outputs.tags }}
-          labels: ${{ steps.metadata.outputs.labels }}
-          provenance: mode=max
-          sbom: true
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          context: ${{ inputs.working-directory }}
+          file: ${{ inputs.working-directory }}/${{ inputs.dockerfile }}
+          labels: ${{ steps.metadata.outputs.labels }}
+          load: true
+          platforms: ${{ inputs.platforms }}
+          provenance: mode=max
+          push: ${{ inputs.push }}
+          sbom: true
+          tags: ${{ steps.metadata.outputs.tags }}
+      - name: Generate artifact attestation
+        if: inputs.push
+        uses: actions/attest-build-provenance@c074443f1aee8d4aeeae555aebba3282517141b2
+        # v2.2.3
+        with:
+          subject-name: ${{ inputs.registry }}/${{ inputs.image }}
+          subject-digest: ${{ steps.build.outputs.imageid }}
+          push-to-registry: true
 
       - name: Run Trivy Scan
         uses: aquasecurity/trivy-action@6c175e9c4083a92bbca2f9724c8a5e33bc2d97a5
         # v0.30.0
         with:
-          image-ref: ${{ steps.build.outputs.imageid }}
           format: sarif
+          ignore-unfixed: true
+          image-ref: ${{ steps.build.outputs.imageid }}
           scan-type: image
-          ignore-unfixed: 1
           output: ${{ inputs.working-directory }}/trivy_results.sarif
           github-pat: ${{ secrets.GITHUB_TOKEN }}
       - name: Upload results
