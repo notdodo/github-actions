@@ -4,7 +4,6 @@ Module with the configuration of the action
 
 import os
 from enum import StrEnum
-from typing import List
 
 from github_resources import Commit
 
@@ -21,10 +20,7 @@ class BumpStrategy(StrEnum):
 class Configuration:
     """Configuration resource"""
 
-    # pylint: disable=invalid-name
-    # pylint: disable=too-many-instance-attributes
-    # pylint: disable=too-many-positional-arguments
-    BIND_TO_MAJOR = False
+    BIND_TO_MAJOR: bool = False
     DEFAULT_BUMP_STRATEGY: BumpStrategy = BumpStrategy.SKIP
     DEFAULT_BRANCH: str = "main"
     PATH: str = "."
@@ -33,35 +29,17 @@ class Configuration:
     SUFFIX: str = ""
     DRY_RUN: bool = False
 
-    @classmethod
-    def from_env(cls):
-        """Create default configuration instance with values from env variables"""
-        return cls(
-            BIND_TO_MAJOR=os.environ.get("INPUT_BIND_TO_MAJOR", cls.BIND_TO_MAJOR)
-            == "true",
-            DEFAULT_BUMP_STRATEGY=os.environ.get(
-                "INPUT_DEFAULT_BUMP_STRATEGY", cls.DEFAULT_BUMP_STRATEGY
-            ),
-            DEFAULT_BRANCH=os.environ.get("INPUT_MAIN_BRANCH", cls.DEFAULT_BRANCH),
-            PATH=os.environ.get("INPUT_PATH", cls.PATH),
-            PREFIX=os.environ.get("INPUT_PREFIX", cls.PREFIX),
-            REPOSITORY=os.environ.get("GITHUB_REPOSITORY", ""),
-            SUFFIX=os.environ.get("INPUT_SUFFIX", cls.SUFFIX),
-            DRY_RUN=os.environ.get("INPUT_DRY_RUN", cls.DRY_RUN) == "true",
-        )
-
-    # pylint: disable=too-many-arguments
-    def __init__(
+    def __init__(  # noqa: PLR0913
         self,
-        BIND_TO_MAJOR,
-        DEFAULT_BUMP_STRATEGY,
-        DEFAULT_BRANCH,
-        PATH,
-        PREFIX,
-        REPOSITORY,
-        SUFFIX,
-        DRY_RUN,
-    ):
+        BIND_TO_MAJOR: bool,  # noqa: FBT001
+        DEFAULT_BUMP_STRATEGY: BumpStrategy,
+        DEFAULT_BRANCH: str,
+        PATH: str,
+        PREFIX: str,
+        REPOSITORY: str,
+        SUFFIX: str,
+        DRY_RUN: bool,  # noqa: FBT001
+    ) -> None:
         self.BIND_TO_MAJOR = BIND_TO_MAJOR
         self.DEFAULT_BUMP_STRATEGY = DEFAULT_BUMP_STRATEGY
         self.DEFAULT_BRANCH = DEFAULT_BRANCH
@@ -71,7 +49,24 @@ class Configuration:
         self.SUFFIX = SUFFIX
         self.DRY_RUN = DRY_RUN
 
-    def get_bump_strategy_from_commits(self, commits: List[Commit]) -> BumpStrategy:
+    @classmethod
+    def from_env(cls) -> "Configuration":
+        """Create default configuration instance with values from env variables"""
+        return cls(
+            BIND_TO_MAJOR=os.environ.get("INPUT_BIND_TO_MAJOR", cls.BIND_TO_MAJOR)
+            == "true",
+            DEFAULT_BUMP_STRATEGY=BumpStrategy(
+                os.environ.get("INPUT_DEFAULT_BUMP_STRATEGY", cls.DEFAULT_BUMP_STRATEGY)
+            ),
+            DEFAULT_BRANCH=os.environ.get("INPUT_MAIN_BRANCH", cls.DEFAULT_BRANCH),
+            PATH=os.environ.get("INPUT_PATH", cls.PATH),
+            PREFIX=os.environ.get("INPUT_PREFIX", cls.PREFIX),
+            REPOSITORY=os.environ.get("GITHUB_REPOSITORY", ""),
+            SUFFIX=os.environ.get("INPUT_SUFFIX", cls.SUFFIX),
+            DRY_RUN=os.environ.get("INPUT_DRY_RUN", cls.DRY_RUN) == "true",
+        )
+
+    def get_bump_strategy_from_commits(self, commits: list[Commit]) -> BumpStrategy:
         """Get the bump strategy from a list of commits parsing the keywords [#<strategy>]"""
         strategies = [strategy.value for strategy in BumpStrategy]
         for commit in commits:

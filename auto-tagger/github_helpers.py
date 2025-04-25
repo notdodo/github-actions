@@ -4,8 +4,7 @@ PyGitHub wrapper
 
 import copy
 import os
-from datetime import datetime, timedelta
-from typing import List
+from datetime import datetime, timedelta, timezone
 
 from github import Github, InputGitAuthor
 from semver import Version, VersionInfo
@@ -43,23 +42,21 @@ class GitHubHelper:
         new_tag.message = os.environ.get("GITHUB_SHA", self.get_last_commit().message)
         return new_tag
 
-    def get_commits_since(self, since: datetime) -> List[Commit]:
+    def get_commits_since(self, since: datetime) -> list[Commit]:
         """Get a PaginatedList[Commit] since a predefined datetime"""
-        commits = []
-        for commit in self.repo.get_commits(
-            since=since + timedelta(seconds=1),
-            path=self.config.PATH,
-        ):
-            commits.append(
-                Commit(
-                    commit.sha,
-                    commit.commit.author.name,
-                    commit.commit.author.email,
-                    commit.commit.message,
-                    commit.commit.author.date,
-                )
+        return [
+            Commit(
+                commit.sha,
+                commit.commit.author.name,
+                commit.commit.author.email,
+                commit.commit.message,
+                commit.commit.author.date,
             )
-        return commits
+            for commit in self.repo.get_commits(
+                since=since + timedelta(seconds=1),
+                path=self.config.PATH,
+            )
+        ]
 
     def get_last_commit(self) -> Commit:
         """Get the latest commit available on the repository"""
@@ -107,37 +104,37 @@ class GitHubHelper:
 
     def get_latest_major_tag(self) -> Tag:
         """Get the latest major tag matching prefix and suffix on the repository (e.g. test-v1)"""
-        last_available_major_tag = None
+        valid_tags = []
         for tag in self.repo.get_tags():
-            if (
-                tag.name.startswith(self.config.PREFIX)
-                and tag.name.endswith(self.config.SUFFIX)
-                and not VersionInfo.is_valid(
-                    tag.name.removeprefix(self.config.PREFIX).removesuffix(
-                        self.config.SUFFIX
-                    )
-                )
+            name = tag.name
+            if name.startswith(self.config.PREFIX) and name.endswith(
+                self.config.SUFFIX
             ):
-                if (
-                    not last_available_major_tag
-                    or tag.name > last_available_major_tag.name
-                ):
-                    last_available_major_tag = Tag(
-                        name=tag.name,
-                        commit=tag.commit.sha,
-                        message=tag.commit.commit.message,
-                        date=tag.commit.commit.author.date,
-                    )
-        if not last_available_major_tag:
-            last_commit = self.get_last_commit()
-            last_available_major_tag = Tag(
-                name=self.config.PREFIX + "0" + self.config.SUFFIX,
-                commit=last_commit.sha,
-                message=last_commit.message,
-                date=last_commit.date,
+                version_str = name.removeprefix(self.config.PREFIX).removesuffix(
+                    self.config.SUFFIX
+                )
+                if VersionInfo.is_valid(version_str):
+                    valid_tags.append((VersionInfo.parse(version_str), tag))
+
+        if valid_tags:
+            _, latest_tag = max(valid_tags, key=lambda x: x[0])
+            return Tag(
+                name=latest_tag.name,
+                commit=latest_tag.commit.sha,
+                message=latest_tag.commit.commit.message,
+                date=latest_tag.commit.commit.author.date,
             )
-            self.create_git_tag(last_available_major_tag)
-        return last_available_major_tag
+
+        last_commit = self.get_last_commit()
+        default_tag_name = f"{self.config.PREFIX}0{self.config.SUFFIX}"
+        initial_tag = Tag(
+            name=default_tag_name,
+            commit=last_commit.sha,
+            message=last_commit.message,
+            date=last_commit.date,
+        )
+        self.create_git_tag(initial_tag)
+        return initial_tag
 
     def create_git_tag(self, tag: Tag) -> None:
         """Create a new tag on the repository bound to a specific commit"""
@@ -151,7 +148,7 @@ class GitHubHelper:
                 tagger=InputGitAuthor(
                     name=str(commit.author.name),
                     email=str(commit.author.email),
-                    date=str(datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ")),
+                    date=str(datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")),
                 ),
             )
             self.repo.create_git_ref(f"refs/tags/{tag.name}", tag.commit)
