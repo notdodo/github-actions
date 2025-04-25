@@ -1,0 +1,6 @@
+rules:
+  unpinned-uses:
+    config:
+      policies:
+        notdodo/github-actions/*: ref-pin
+        securego/gosec: ref-pin
