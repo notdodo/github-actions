@@ -158,17 +158,49 @@ jobs:
           echo "$OUTPUT" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
         shell: bash
-      - name: PR comment with file
+      - name: PR comment with findings
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea
+        # v7.0.1
         if: github.event_name == 'pull_request' && steps.scan-files.outputs.checkmake_output != ''
-        uses: thollander/actions-comment-pull-request@24bffb9b452ba05a4f3f77933840a6a841d1b32b
-        # v3.0.1
+        env:
+          OUTPUT: "${{ steps.scan-files.outputs.checkmake_output }}"
         with:
-          message: |
-            <details>
-            <summary>🛠️ Checkmake findings</summary>
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            // 1. Retrieve existing bot comments for the PR.
+            const { data: comments } = await github.rest.issues.listComments({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+            })
+            const botComment = comments.find(comment => {
+                return comment.user.type === 'Bot' && comment.body.includes('🛠️ Checkmake findings')
+            })
 
-            ```
-            ${{ steps.scan-files.outputs.checkmake_output }}
-            ```
+            // 2. Prepare format of the comment
+            const output = `#### 🛠️ Checkmake findings
 
-            </details>
+            <details><summary>Show findings</summary>
+
+            \`\`\`\n
+            ${process.env.OUTPUT}
+            \`\`\`
+
+            </details>`;
+
+            // 3. If we have a comment, update it, otherwise create a new one
+            if (botComment) {
+                github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: botComment.id,
+                body: output
+                })
+            } else {
+                github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: output
+                })
+            }
