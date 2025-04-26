@@ -133,8 +133,7 @@ jobs:
         with:
           format: sarif
           ignore-unfixed: true
-          image-ref: ${{ steps.build.outputs.imageid }}
-          scan-type: image
+          image-ref: ${{ inputs.registry }}/${{ inputs.image }}
           output: ${{ inputs.working-directory }}/trivy_results.sarif
           github-pat: ${{ secrets.GITHUB_TOKEN }}
       - name: Upload results
