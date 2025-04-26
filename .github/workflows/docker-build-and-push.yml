@@ -113,7 +113,6 @@ jobs:
           context: ${{ inputs.working-directory }}
           file: ${{ inputs.working-directory }}/${{ inputs.dockerfile }}
           labels: ${{ steps.metadata.outputs.labels }}
-          load: true
           platforms: ${{ inputs.platforms }}
           provenance: mode=max
           push: ${{ inputs.push }}
