@@ -67,7 +67,8 @@ jobs:
         # v2.20.1
         with:
           sarif_file: ${{ inputs.working-directory }}/kics_results.sarif
-          category: kics
+          category: devops
+        if: ${{ inputs.upload-sarif }}
 
   zizmor:
     name: zizmor GitHub Actions Security Analysis
@@ -107,7 +108,8 @@ jobs:
         # v2.20.1
         with:
           sarif_file: zizmor_results.sarif
-          category: zizmor
+          category: github-actions
+        if: ${{ inputs.upload-sarif }}
 
   checkmake:
     name: Check Makefile

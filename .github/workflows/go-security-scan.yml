@@ -57,5 +57,5 @@ jobs:
         # v2.20.1
         with:
           sarif_file: "${{ inputs.working-directory }}/results.sarif"
-          category: gosec
+          category: sast
         if: ${{ inputs.upload-sarif }}

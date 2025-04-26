@@ -39,6 +39,9 @@ on:
           type=ref,event=branch
           type=ref,event=tag
           type=ref,event=pr
+      upload-sarif:
+        type: boolean
+        default: true
       working-directory:
         type: string
         default: "."
@@ -140,4 +143,5 @@ jobs:
         # v2.20.1
         with:
           sarif_file: ${{ inputs.working-directory }}/trivy_results.sarif
-          category: trivy
+          category: container-security
+        if: ${{ inputs.upload-sarif }}

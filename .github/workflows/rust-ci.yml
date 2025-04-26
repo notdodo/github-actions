@@ -25,6 +25,9 @@ on:
       runs-on:
         type: string
         default: "ubuntu-latest"
+      upload-sarif:
+        type: boolean
+        default: true
       working-directory:
         type: string
         default: "."
@@ -144,7 +147,8 @@ jobs:
         # v2.20.1
         with:
           sarif_file: ${{ inputs.working-directory }}/clippy-results.sarif
-          wait-for-processing: true
+          category: sast
+        if: ${{ inputs.upload-sarif }}
 
   build-and-deploy:
     if: ${{ inputs.build-lambda || inputs.deploy-lambda }}
