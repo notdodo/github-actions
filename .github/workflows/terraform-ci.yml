@@ -16,10 +16,10 @@ on:
       runs-on:
         type: string
         default: "ubuntu-latest"
-      sops-encrypted-file:
+      sops-encrypted-tfvars:
         type: string
         default: "./terraform.tfvars.enc"
-      sops-plaintext-file:
+      sops-plaintext-tfvars:
         type: string
         default: "./terraform.tfvars"
       upload-sarif:
@@ -29,7 +29,7 @@ on:
         type: string
         default: "."
     secrets:
-      sops-decryption-key:
+      sops-age-key:
         required: false
 
 jobs:
@@ -48,7 +48,7 @@ jobs:
       - uses: step-security/harden-runner@0634a2670c59f64b4a01f0f96f84700a4088b9f0
         # v2.12.0
         with:
-          disable-sudo-and-containers: ${{ inputs.disable-sudo }}
+          disable-sudo: ${{ inputs.disable-sudo }}
           egress-policy: audit
           allowed-endpoints: >
             ${{ inputs.egress-policy-allowlist }}
@@ -73,6 +73,15 @@ jobs:
           restore-keys: terraform-providers-
       - uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd
         # v3.1.2
+      - name: Sops Binary Installer
+        uses: mdgreenwald/mozilla-sops-action@d9714e521cbaecdae64a89d2fdd576dd2aa97056
+      - name: Decrypt Secrets
+        env:
+          SOPS_AGE_KEY: ${{ secrets.sops-age-key }}
+          ENCRYPTED_FILE: "${{ inputs.sops-encrypted-tfvars }}"
+          PLAINTEXT_FILE: "${{ inputs.sops-plaintext-tfvars }}"
+        run: |
+          sops --decrypt "$ENCRYPTED_FILE" --output "$PLAINTEXT_FILE"
       - name: Terraform fmt
         id: fmt
         run: terraform fmt -check
@@ -96,7 +105,6 @@ jobs:
           tflint_version: latest
       - run: tflint --init
         env:
-          # https://github.com/terraform-linters/tflint/blob/master/docs/user-guide/plugins.md#avoiding-rate-limiting
           GITHUB_TOKEN: ${{ github.token }}
       - name: Run TFLint
         run: tflint -f compact
@@ -163,9 +171,9 @@ jobs:
         uses: mdgreenwald/mozilla-sops-action@d9714e521cbaecdae64a89d2fdd576dd2aa97056
       - name: Decrypt Secrets
         env:
-          SOPS_AGE_KEY: ${{ secrets.sops-decryption-key }}
-          ENCRYPTED_FILE: "${{ inputs.sops-encrypted-file }}"
-          PLAINTEXT_FILE: "${{ inputs.sops-plaintext-file }}"
+          SOPS_AGE_KEY: ${{ secrets.sops-age-key }}
+          ENCRYPTED_FILE: "${{ inputs.sops-encrypted-tfvars }}"
+          PLAINTEXT_FILE: "${{ inputs.sops-plaintext-tfvars }}"
         run: |
           sops --decrypt "$ENCRYPTED_FILE" --output "$PLAINTEXT_FILE"
       - name: Terraform Init
