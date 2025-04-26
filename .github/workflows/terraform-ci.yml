@@ -81,7 +81,7 @@ jobs:
           ENCRYPTED_FILE: "${{ inputs.sops-encrypted-tfvars }}"
           PLAINTEXT_FILE: "${{ inputs.sops-plaintext-tfvars }}"
         run: |
-          sops --decrypt "$ENCRYPTED_FILE" --output "$PLAINTEXT_FILE"
+          sops decrypt "$ENCRYPTED_FILE" --output "$PLAINTEXT_FILE"
       - name: Terraform fmt
         id: fmt
         run: terraform fmt -check
@@ -175,7 +175,7 @@ jobs:
           ENCRYPTED_FILE: "${{ inputs.sops-encrypted-tfvars }}"
           PLAINTEXT_FILE: "${{ inputs.sops-plaintext-tfvars }}"
         run: |
-          sops --decrypt "$ENCRYPTED_FILE" --output "$PLAINTEXT_FILE"
+          sops decrypt "$ENCRYPTED_FILE" --output "$PLAINTEXT_FILE"
       - name: Terraform Init
         id: init
         run: terraform init -input=false
