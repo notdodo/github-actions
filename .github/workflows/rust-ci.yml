@@ -155,6 +155,7 @@ jobs:
     runs-on: ${{ inputs.runs-on }}
     permissions:
       contents: read
+      id-token: write
     needs: [build, tests, clippy]
     defaults:
       run:
