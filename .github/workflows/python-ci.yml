@@ -68,7 +68,7 @@ jobs:
           path: |
             ${{ inputs.working-directory }}/.venv
             ${{ inputs.working-directory }}/.mypy_cache
-          key: python-${{ inputs.python-version }}-poetry-${{ hashFiles('**/poetry.lock') }}
+          key: python-${{ inputs.python-version }}-poetry-${{ hashFiles(format('{0}/poetry.lock', inputs.working-directory)) }}
       - run: poetry install --no-root
         if: steps.cache-deps.outputs.cache-hit != 'true'
       - name: Install Task
