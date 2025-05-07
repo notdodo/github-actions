@@ -56,7 +56,7 @@ jobs:
         # v4.2.2
         with:
           persist-credentials: false
-      - uses: aws-actions/configure-aws-credentials@ececac1a45f3b08a01d2dd070d28d111c5fe6722
+      - uses: aws-actions/configure-aws-credentials@f24d7193d98baebaeacc7e2227925dd47cc267f5
         if: ${{ inputs.aws-role != '' }}
         # v4.1.0
         with:
@@ -150,7 +150,7 @@ jobs:
         # v4.2.2
         with:
           persist-credentials: false
-      - uses: aws-actions/configure-aws-credentials@ececac1a45f3b08a01d2dd070d28d111c5fe6722
+      - uses: aws-actions/configure-aws-credentials@f24d7193d98baebaeacc7e2227925dd47cc267f5
         if: ${{ inputs.aws-role != '' }}
         # v4.1.0
         with:
