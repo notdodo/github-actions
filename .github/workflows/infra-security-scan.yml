@@ -50,8 +50,8 @@ jobs:
         with:
           persist-credentials: false
       - name: Kics Scan
-        uses: Checkmarx/kics-github-action@5373b38b35d09a400790b9e560189064d185391f
-        # v2.1.7
+        uses: Checkmarx/kics-github-action@1141bda1e68d7ef7e2ab27bb8d90e6b1ad341537
+        # v2.1.9
         with:
           path: .
           output_path: ${{ inputs.working-directory }}/kics_results.sarif
@@ -95,8 +95,8 @@ jobs:
         with:
           persist-credentials: false
       - name: Install the latest version of uv
-        uses: astral-sh/setup-uv@6b9c6063abd6010835644d4c2e1bef4cf5cd0fca
-        # v6.0.1
+        uses: astral-sh/setup-uv@f0ec1fc3b38f5e7cd731bb6ce540c5af426746bb
+        # v6.1.0
       - name: Run zizmor 🌈
         run: |
           wget https://raw.githubusercontent.com/notdodo/github-actions/refs/heads/main/zizmor.yml

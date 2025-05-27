@@ -193,8 +193,8 @@ jobs:
           aws-region: ${{ inputs.aws-region }}
           retry-max-attempts: 2
       - name: Install Zig toolchain
-        uses: mlugg/setup-zig@aa9ad5c14eb3452e235a441c4f9a8e89f20d97bd
-        # v2.0.0
+        uses: mlugg/setup-zig@7dccf5e6d09267c55f815f2db29495f30ba2ebca
+        # v2.0.1
         with:
           version: latest
       - name: Install Cargo Lambda
