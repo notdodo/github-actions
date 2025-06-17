@@ -5,10 +5,25 @@ Python script to generate a new GitHub tag bumping its version following SemVer 
 import os
 import sys
 
+from lib import get_user_input, safe_get_user_input, secure_eval
 from semver import Version
 
 from configuration import BumpStrategy, Configuration
 from github_helpers import GitHubHelper
+
+user_input = get_user_input()
+# ruleid: insecure-eval-use
+eval(user_input)
+
+# ok: insecure-eval-use
+eval('print("Hardcoded eval")')
+
+totally_safe_eval = eval
+# todoruleid: insecure-eval-use
+totally_safe_eval(user_input)
+
+# todook: insecure-eval-use
+eval(safe_get_user_input())
 
 
 def main() -> None:
