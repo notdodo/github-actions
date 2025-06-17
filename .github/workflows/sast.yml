@@ -10,6 +10,9 @@ on:
       runs-on:
         type: string
         default: "ubuntu-latest"
+      upload-sarif:
+        type: boolean
+        default: true
     secrets:
       semgrep_app_token:
         required: false
@@ -37,6 +40,15 @@ jobs:
         with:
           fetch-depth: 0
           persist-credentials: false
-      - run: semgrep ci
-        env:
-          SEMGREP_APP_TOKEN: ${{ secrets.semgrep_app_token }}
+      - run: |
+          if [ -n "${{ secrets.semgrep_app_token }}" ]; then
+            export SEMGREP_APP_TOKEN="${{ secrets.semgrep_app_token }}"
+          fi
+          semgrep ci --sarif --sarif-output=./sast-output.sarif
+      - name: Upload SARIF file
+        uses: github/codeql-action/upload-sarif@3407610120cd5656b6fc71991415cb50748b9489
+        # v2.20.1
+        with:
+          sarif_file: ./sast-output.sarif
+          category: sast
+        if: ${{ inputs.upload-sarif }}
