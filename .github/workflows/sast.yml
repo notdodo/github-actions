@@ -41,7 +41,8 @@ jobs:
         with:
           fetch-depth: 0
           persist-credentials: false
-      - run: |
+      - name: Semgrep
+        run: |
           if [ -n "${{ secrets.semgrep_app_token }}" ]; then
             semgrep ci --sarif --sarif-output=./sast-output.sarif
           else
