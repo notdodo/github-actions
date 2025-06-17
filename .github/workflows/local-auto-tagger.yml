@@ -53,6 +53,8 @@ jobs:
             - .github/workflows/python-ci.yml
             rust-ci:
             - .github/workflows/rust-ci.yml
+            sast:
+            - .github/workflows/sast.yml
             terraform-ci:
             - .github/workflows/terraform-ci.yml
             auto-tagger:
@@ -159,6 +161,19 @@ jobs:
           default_branch: main
           path: .github/workflows/rust-ci.yml
           prefix: rust-ci-v
+          github_token: ${{ github.token }}
+          dry_run: false
+
+      - name: Run auto-tag if sast workflow changes
+        if: steps.changed-files.outputs.sast_any_changed == 'true'
+        # kics-scan ignore-line
+        uses: notdodo/github-actions/auto-tagger@auto-tagger-v0
+        with:
+          bind_to_major: true
+          default_bump_strategy: skip
+          default_branch: main
+          path: .github/workflows/sast.yml
+          prefix: sast-v
           github_token: ${{ github.token }}
           dry_run: false
 
