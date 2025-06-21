@@ -32,8 +32,8 @@ jobs:
       run:
         working-directory: ${{ inputs.working-directory }}
     steps:
-      - uses: step-security/harden-runner@0634a2670c59f64b4a01f0f96f84700a4088b9f0
-        # v2.12.0
+      - uses: step-security/harden-runner@002fdce3c6a235733a90a27c80493a3241e56863
+        # v2.12.1
         with:
           disable-sudo: ${{ inputs.disable-sudo }}
           egress-policy: block
@@ -80,8 +80,8 @@ jobs:
       pull-requests: write
       security-events: write
     steps:
-      - uses: step-security/harden-runner@0634a2670c59f64b4a01f0f96f84700a4088b9f0
-        # v2.12.0
+      - uses: step-security/harden-runner@002fdce3c6a235733a90a27c80493a3241e56863
+        # v2.12.1
         with:
           disable-sudo-and-containers: ${{ inputs.disable-sudo }}
           egress-policy: block
@@ -97,8 +97,8 @@ jobs:
         with:
           persist-credentials: false
       - name: Install the latest version of uv
-        uses: astral-sh/setup-uv@f0ec1fc3b38f5e7cd731bb6ce540c5af426746bb
-        # v6.1.0
+        uses: astral-sh/setup-uv@445689ea25e0de0a23313031f5fe577c74ae45a1
+        # v6.3.0
       - name: Run zizmor 🌈
         run: |
           wget https://raw.githubusercontent.com/notdodo/github-actions/refs/heads/main/zizmor.yml
@@ -124,8 +124,8 @@ jobs:
       run:
         working-directory: ${{ inputs.working-directory }}
     steps:
-      - uses: step-security/harden-runner@0634a2670c59f64b4a01f0f96f84700a4088b9f0
-        # v2.12.0
+      - uses: step-security/harden-runner@002fdce3c6a235733a90a27c80493a3241e56863
+        # v2.12.1
         with:
           disable-sudo-and-containers: ${{ inputs.disable-sudo }}
           egress-policy: block
