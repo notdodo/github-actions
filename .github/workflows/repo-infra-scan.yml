@@ -24,6 +24,4 @@ jobs:
       contents: read
       pull-requests: write
       security-events: write
-    uses: notdodo/github-actions/.github/workflows/sast.yml@sast-v0
-    secrets:
-      semgrep_app_token: ${{ secrets.SEMGREP_APP_TOKEN }}
+    uses: notdodo/github-actions/.github/workflows/sast.yml@readme

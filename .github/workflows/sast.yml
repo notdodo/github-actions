@@ -29,10 +29,14 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
       - name: Semgrep
+        env:
+          SEMGREP_APP_TOKEN: ${{ secrets.semgrep_app_token }}
         run: |
-          if [ -n "${{ secrets.semgrep_app_token }}" ]; then
+          if [ -n "$SEMGREP_APP_TOKEN" ]; then
+            echo "Running authenticated scan..."
             semgrep ci --sarif --sarif-output=./sast-output.sarif
           else
+            echo "Running default scan..."
             semgrep scan --config=auto --sarif --sarif-output=./sast-output.sarif
           fi
       - name: Upload SARIF file
