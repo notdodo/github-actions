@@ -15,7 +15,7 @@ semver = "^3.0.4"
 mypy = { extras = ["faster-cache"], version = "^1.16.1" }
 pydantic = "^2.11.7"
 pylint = "^3.3.7"
-ruff = "^0.12.0"
+ruff = "^0.12.1"
 
 [tool.ruff]
 output-format = "github"
