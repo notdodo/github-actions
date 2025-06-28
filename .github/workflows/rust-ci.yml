@@ -60,8 +60,8 @@ jobs:
         with:
           persist-credentials: false
       - name: Cargo cache
-        uses: swatinem/rust-cache@9d47c6ad4b02e050fd481d890b2ea34778fd09d6
-        # v2.7.8
+        uses: swatinem/rust-cache@98c8021b550208e191a6a3145459bfc9fb29c4c0
+        # v2.8.0
         with:
           cache-on-failure: true
           workspaces: ${{ inputs.working-directory }}
@@ -94,8 +94,8 @@ jobs:
         with:
           persist-credentials: false
       - name: Cargo cache
-        uses: swatinem/rust-cache@9d47c6ad4b02e050fd481d890b2ea34778fd09d6
-        # v2.7.8
+        uses: swatinem/rust-cache@98c8021b550208e191a6a3145459bfc9fb29c4c0
+        # v2.8.0
         with:
           cache-on-failure: true
           workspaces: ${{ inputs.working-directory }}
@@ -127,8 +127,8 @@ jobs:
         with:
           persist-credentials: false
       - name: Cargo cache
-        uses: swatinem/rust-cache@9d47c6ad4b02e050fd481d890b2ea34778fd09d6
-        # v2.7.8
+        uses: swatinem/rust-cache@98c8021b550208e191a6a3145459bfc9fb29c4c0
+        # v2.8.0
         with:
           cache-on-failure: true
           cache-all-crates: true
@@ -205,8 +205,8 @@ jobs:
           platform: linux
           arch: x86_64
       - name: Cargo cache
-        uses: swatinem/rust-cache@9d47c6ad4b02e050fd481d890b2ea34778fd09d6
-        # v2.7.8
+        uses: swatinem/rust-cache@98c8021b550208e191a6a3145459bfc9fb29c4c0
+        # v2.8.0
         with:
           cache-on-failure: true
           cache-all-crates: true
