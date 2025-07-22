@@ -71,14 +71,15 @@ jobs:
             api.github.com:443
             auth.docker.io:443
             fulcio.sigstore.dev:443
-            objects.githubusercontent.com:443
-            mirror.gcr.io:443
-            pkg-containers.githubusercontent.com:443
-            rekor.sigstore.dev:443
-            production.cloudflare.docker.com:443
-            registry-1.docker.io:443
             ghcr.io:443
             github.com:443
+            mirror.gcr.io:443
+            objects.githubusercontent.com:443
+            pkg-containers.githubusercontent.com:443
+            production.cloudflare.docker.com:443
+            registry-1.docker.io:443
+            rekor.sigstore.dev:443
+            release-assets.githubusercontent.com:443
             ${{ inputs.egress-policy-allowlist }}
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         # v4.2.2
@@ -128,7 +129,6 @@ jobs:
           subject-name: ${{ inputs.registry }}/${{ inputs.image }}
           subject-digest: ${{ steps.build.outputs.imageid }}
           push-to-registry: true
-
       - name: Run Trivy Scan
         uses: aquasecurity/trivy-action@76071ef0d7ec797419534a183b498b4d6366cf37
         # v0.31.0

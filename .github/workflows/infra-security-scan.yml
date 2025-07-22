@@ -92,6 +92,7 @@ jobs:
             objects.githubusercontent.com:443
             pypi.org:443
             raw.githubusercontent.com:443
+            release-assets.githubusercontent.com:443
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         # v4.2.2
         with:
@@ -134,6 +135,7 @@ jobs:
             github.com:443
             objects.githubusercontent.com:443
             proxy.golang.org:443
+            release-assets.githubusercontent.com:443
             storage.googleapis.com:443
             sum.golang.org:443
             ${{ inputs.egress-policy-allowlist }}
