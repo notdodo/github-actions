@@ -45,8 +45,8 @@ jobs:
       run:
         working-directory: ${{ inputs.working-directory }}
     steps:
-      - uses: step-security/harden-runner@6c439dc8bdf85cadbbce9ed30d1c7b959517bc49
-        # v2.12.2
+      - uses: step-security/harden-runner@ec9f2d5744a09debf3a187a3f4f675c53b671911
+        # v2.13.0
         with:
           disable-sudo: ${{ inputs.disable-sudo }}
           egress-policy: audit
@@ -110,8 +110,8 @@ jobs:
         run: tflint -f compact
 
       - name: Run Trivy Scan
-        uses: aquasecurity/trivy-action@76071ef0d7ec797419534a183b498b4d6366cf37
-        # v0.31.0
+        uses: aquasecurity/trivy-action@dc5a429b52fcf669ce959baa2c2dd26090d2a6c4
+        # v0.32.0
         with:
           hide-progress: true
           format: sarif
@@ -139,8 +139,8 @@ jobs:
       run:
         working-directory: ${{ inputs.working-directory }}
     steps:
-      - uses: step-security/harden-runner@6c439dc8bdf85cadbbce9ed30d1c7b959517bc49
-        # v2.12.2
+      - uses: step-security/harden-runner@ec9f2d5744a09debf3a187a3f4f675c53b671911
+        # v2.13.0
         with:
           disable-sudo-and-containers: ${{ inputs.disable-sudo }}
           egress-policy: audit

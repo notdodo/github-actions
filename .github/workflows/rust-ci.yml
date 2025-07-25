@@ -44,8 +44,8 @@ jobs:
       run:
         working-directory: ${{ inputs.working-directory }}
     steps:
-      - uses: step-security/harden-runner@6c439dc8bdf85cadbbce9ed30d1c7b959517bc49
-        # v2.12.2
+      - uses: step-security/harden-runner@ec9f2d5744a09debf3a187a3f4f675c53b671911
+        # v2.13.0
         with:
           disable-sudo-and-containers: ${{ inputs.disable-sudo }}
           egress-policy: block
@@ -78,8 +78,8 @@ jobs:
       run:
         working-directory: ${{ inputs.working-directory }}
     steps:
-      - uses: step-security/harden-runner@6c439dc8bdf85cadbbce9ed30d1c7b959517bc49
-        # v2.12.2
+      - uses: step-security/harden-runner@ec9f2d5744a09debf3a187a3f4f675c53b671911
+        # v2.13.0
         with:
           disable-sudo-and-containers: ${{ inputs.disable-sudo }}
           egress-policy: block
@@ -111,8 +111,8 @@ jobs:
       run:
         working-directory: ${{ inputs.working-directory }}
     steps:
-      - uses: step-security/harden-runner@6c439dc8bdf85cadbbce9ed30d1c7b959517bc49
-        # v2.12.2
+      - uses: step-security/harden-runner@ec9f2d5744a09debf3a187a3f4f675c53b671911
+        # v2.13.0
         with:
           disable-sudo-and-containers: ${{ inputs.disable-sudo }}
           egress-policy: block
@@ -161,8 +161,8 @@ jobs:
       run:
         working-directory: ${{ inputs.working-directory }}
     steps:
-      - uses: step-security/harden-runner@6c439dc8bdf85cadbbce9ed30d1c7b959517bc49
-        # v2.12.2
+      - uses: step-security/harden-runner@ec9f2d5744a09debf3a187a3f4f675c53b671911
+        # v2.13.0
         with:
           disable-sudo-and-containers: ${{ inputs.disable-sudo }}
           egress-policy: block
@@ -193,8 +193,8 @@ jobs:
           aws-region: ${{ inputs.aws-region }}
           retry-max-attempts: 2
       - name: Install Zig toolchain
-        uses: mlugg/setup-zig@5eb0fc8bb8c4d1b027f8bd47b62fcda641d0608d
-        # v2.0.3
+        uses: mlugg/setup-zig@8d6198c65fb0feaa111df26e6b467fea8345e46f
+        # v2.0.5
         with:
           version: latest
       - name: Install Cargo Lambda
