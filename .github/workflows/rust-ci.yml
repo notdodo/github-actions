@@ -59,12 +59,11 @@ jobs:
         # v4.2.2
         with:
           persist-credentials: false
-      - name: Cargo cache
-        uses: swatinem/rust-cache@98c8021b550208e191a6a3145459bfc9fb29c4c0
-        # v2.8.0
+      - uses: actions-rust-lang/setup-rust-toolchain@fb51252c7ba57d633bc668f941da052e410add48
+        # v1.13.0
         with:
-          cache-on-failure: true
-          workspaces: ${{ inputs.working-directory }}
+          components: rustfmt
+          toolchain: ${{ inputs.rust-version }}
       - name: Check formatting
         run: cargo fmt -- --check
       - name: Build
@@ -93,12 +92,10 @@ jobs:
         # v4.2.2
         with:
           persist-credentials: false
-      - name: Cargo cache
-        uses: swatinem/rust-cache@98c8021b550208e191a6a3145459bfc9fb29c4c0
-        # v2.8.0
+      - uses: actions-rust-lang/setup-rust-toolchain@fb51252c7ba57d633bc668f941da052e410add48
+        # v1.13.0
         with:
-          cache-on-failure: true
-          workspaces: ${{ inputs.working-directory }}
+          toolchain: ${{ inputs.rust-version }}
       - name: Run tests
         run: cargo test --verbose
 
@@ -126,15 +123,11 @@ jobs:
         # v4.2.2
         with:
           persist-credentials: false
-      - name: Cargo cache
-        uses: swatinem/rust-cache@98c8021b550208e191a6a3145459bfc9fb29c4c0
-        # v2.8.0
+      - uses: actions-rust-lang/setup-rust-toolchain@fb51252c7ba57d633bc668f941da052e410add48
+        # v1.13.0
         with:
-          cache-on-failure: true
-          cache-all-crates: true
-          workspaces: ${{ inputs.working-directory }}
-      - name: Install tools
-        run: cargo install cargo-make clippy-sarif sarif-fmt
+          components: cargo-make, clippy-sarif, sarif-fmt
+          toolchain: ${{ inputs.rust-version }}
       - name: Run clippy
         run: >
           cargo make --profile gha clippy
@@ -197,20 +190,11 @@ jobs:
         # v2.0.5
         with:
           version: latest
-      - name: Install Cargo Lambda
-        uses: jaxxstorm/action-install-gh-release@6096f2a2bbfee498ced520b6922ac2c06e990ed2
-        # v2.1.0
+      - uses: actions-rust-lang/setup-rust-toolchain@fb51252c7ba57d633bc668f941da052e410add48
+        # v1.13.0
         with:
-          repo: cargo-lambda/cargo-lambda
-          platform: linux
-          arch: x86_64
-      - name: Cargo cache
-        uses: swatinem/rust-cache@98c8021b550208e191a6a3145459bfc9fb29c4c0
-        # v2.8.0
-        with:
-          cache-on-failure: true
-          cache-all-crates: true
-          workspaces: ${{ inputs.working-directory }}
+          components: cargo-lambda
+          toolchain: ${{ inputs.rust-version }}
       - name: Build Lambda
         if: ${{ inputs.build-lambda || inputs.deploy-lambda }}
         run: cargo lambda build --verbose --release
