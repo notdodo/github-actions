@@ -68,6 +68,8 @@ jobs:
         with:
           components: rustfmt
           toolchain: ${{ inputs.rust-version }}
+          cache-workspaces: |-
+            ${{ inputs.working-directory }}
       - name: Check formatting
         run: cargo fmt -- --check
       - name: Build
@@ -101,6 +103,8 @@ jobs:
         # v1.13.0
         with:
           toolchain: ${{ inputs.rust-version }}
+          cache-workspaces: |-
+            ${{ inputs.working-directory }}
       - name: Run tests
         run: cargo test --verbose
 
@@ -134,6 +138,8 @@ jobs:
         with:
           components: clippy
           toolchain: ${{ inputs.rust-version }}
+          cache-workspaces: |-
+            ${{ inputs.working-directory }}
       - run: cargo install cargo-make clippy-sarif sarif-fmt
       - name: Run clippy
         run: >
@@ -202,6 +208,8 @@ jobs:
         # v1.13.0
         with:
           toolchain: ${{ inputs.rust-version }}
+          cache-workspaces: |-
+            ${{ inputs.working-directory }}
       - run: cargo install cargo-lambda
       - name: Build Lambda
         if: ${{ inputs.build-lambda || inputs.deploy-lambda }}
