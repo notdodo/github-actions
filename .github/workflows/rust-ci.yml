@@ -201,8 +201,8 @@ jobs:
       - uses: actions-rust-lang/setup-rust-toolchain@fb51252c7ba57d633bc668f941da052e410add48
         # v1.13.0
         with:
-          components: cargo-lambda
           toolchain: ${{ inputs.rust-version }}
+      - run: cargo install cargo-lambda
       - name: Build Lambda
         if: ${{ inputs.build-lambda || inputs.deploy-lambda }}
         run: cargo lambda build --verbose --release
