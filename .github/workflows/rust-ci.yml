@@ -7,6 +7,9 @@ on:
       aws-role:
         type: string
         default: "invalid"
+      binary-name:
+        type: string
+        default: ""
       build-lambda:
         type: boolean
         default: false
@@ -199,5 +202,12 @@ jobs:
         if: ${{ inputs.build-lambda || inputs.deploy-lambda }}
         run: cargo lambda build --verbose --release
       - name: Deploy Lambda
+        env:
+          BINARY_NAME: ${{ inputs.binary-name }}
         if: ${{ inputs.deploy-lambda }}
-        run: cargo lambda deploy
+        run: |
+          if [ -z "${BINARY_NAME}" ]; then
+            cargo lambda deploy
+          else
+            cargo lambda deploy --binary-name ${BINARY_NAME}
+          fi
