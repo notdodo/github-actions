@@ -14,8 +14,8 @@ semver = "^3.0.4"
 [tool.poetry.group.dev.dependencies]
 mypy = { extras = ["faster-cache"], version = "^1.17.1" }
 pydantic = "^2.11.7"
-pylint = "^3.3.7"
-ruff = "^0.12.7"
+pylint = "^3.3.8"
+ruff = "^0.12.8"
 
 [tool.ruff]
 output-format = "github"
