@@ -81,7 +81,7 @@ jobs:
             ${{ inputs.working-directory }}/.venv
             ${{ inputs.working-directory }}/.mypy_cache
             ~/.local/.cache/uv
-          key: python-${{ inputs.python-version }}-poetry-${{ hashFiles(format('{0}/poetry.lock', inputs.working-directory), format('{0}/uv.lock', inputs.working-directory)) }}
+          key: python-${{ inputs.python-version }}-venv-${{ hashFiles(format('{0}/poetry.lock', inputs.working-directory), format('{0}/uv.lock', inputs.working-directory)) }}
       - run: poetry sync --no-root
         if: ${{ steps.cache-deps.outputs.cache-hit != 'true' && hashFiles(format('{0}/poetry.lock', inputs.working-directory)) != '' }}
       - run: uv sync --locked --all-extras --dev
