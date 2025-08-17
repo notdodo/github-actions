@@ -141,8 +141,9 @@ jobs:
         if: ${{ !inputs.push }}
         env:
           IMAGE_ID: ${{ steps.build.outputs.imageid }}
+          IMAGE: ${{ inputs.image }}
         run: |
-          docker tag "${IMAGE_ID}" "${IMAGE_ID}":latest
+          docker tag "${IMAGE_ID}" "${IMAGE}":latest
 
       - name: Generate artifact attestation
         if: inputs.push
@@ -158,7 +159,7 @@ jobs:
         with:
           format: sarif
           ignore-unfixed: true
-          image-ref: ${{ inputs.push && format('{0}/{1}', inputs.registry, inputs.image) || format('{0}:latest', steps.build.outputs.imageid) }}
+          image-ref: ${{ inputs.push && format('{0}/{1}', inputs.registry, inputs.image) || format('{0}:latest', inputs.image) }}
           # image-ref: ${{ inputs.registry }}/${{ inputs.image }}
           output: ${{ inputs.working-directory }}/trivy_results.sarif
           github-pat: ${{ secrets.GITHUB_TOKEN }}
