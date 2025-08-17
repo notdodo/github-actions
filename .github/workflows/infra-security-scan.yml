@@ -98,8 +98,8 @@ jobs:
         with:
           persist-credentials: false
       - uses: reviewdog/action-actionlint@50b75b9513baa71e6a1899a1ebaa9ac9851cf16c
+        # v1.66.0
         continue-on-error: true
-        # v1.65.2
         with:
           fail_level: any
           filter_mode: nofilter
