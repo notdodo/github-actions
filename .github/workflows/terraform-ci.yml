@@ -199,7 +199,7 @@ jobs:
             })
 
             // 2. Prepare format of the comment
-            const output = `#### Terraform Plan 📖\`${{ env.OUTCOME }}\`
+            const output = `#### Terraform Plan 📖\`${OUTCOME}\`
 
             <details><summary>Show Plan</summary>
 
@@ -209,7 +209,7 @@ jobs:
 
             </details>
 
-            *Pusher: @${{ env.ACTOR }}, Action: \`${{ env.EVENT }}\`, Working Directory: \`${{ env.WORKDIR }}\`*`;
+            *Pusher: @${ACTOR}, Action: \`${EVENT}\`, Working Directory: \`${WORKDIR}\`*`;
 
             // 3. If we have a comment, update it, otherwise create a new one
             if (botComment) {
