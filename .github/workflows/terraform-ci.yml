@@ -64,7 +64,7 @@ jobs:
           aws-region: ${{ inputs.aws-region }}
           retry-max-attempts: 2
       - run: |
-          echo 'plugin_cache_dir = "$HOME/.terraform.d/plugin-cache"' > ~/.terraformrc
+          echo "plugin_cache_dir = '$HOME/.terraform.d/plugin-cache'" > ~/.terraformrc
           mkdir -p ~/.terraform.d/plugin-cache
       - uses: actions/cache@0400d5f644dc74513175e3cd8d07132dd4860809
         with:
@@ -151,7 +151,7 @@ jobs:
           aws-region: ${{ inputs.aws-region }}
           retry-max-attempts: 2
       - run: |
-          echo 'plugin_cache_dir = "$HOME/.terraform.d/plugin-cache"' > ~/.terraformrc
+          echo "plugin_cache_dir = '$HOME/.terraform.d/plugin-cache'" > ~/.terraformrc
           mkdir -p ~/.terraform.d/plugin-cache
       - uses: actions/cache@0400d5f644dc74513175e3cd8d07132dd4860809
         with:
