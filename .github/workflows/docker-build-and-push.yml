@@ -139,8 +139,12 @@ jobs:
           tags: ${{ steps.metadata.outputs.tags }}
       - name: Ensure local tag for Trivy
         if: ${{ !inputs.push }}
+        env:
+          IMAGE_ID: ${{ steps.build.outputs.imageid }}
+          REGISTRY: ${{ inputs.registry }}
+          IMAGE: ${{ inputs.image }}
         run: |
-          docker tag ${{ steps.build.outputs.imageid }} ${{ inputs.registry }}/${{ inputs.image }}:latest
+          docker tag ${{ env.IMAGE_ID }} ${{ env.REGISTRY }}/${{ env.IMAGE }}:latest
 
       - name: Generate artifact attestation
         if: inputs.push
