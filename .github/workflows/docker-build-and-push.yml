@@ -133,16 +133,14 @@ jobs:
         uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83
         # v6.18.0
         with:
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
           context: ./${{ inputs.working-directory }}
           file: ${{ inputs.working-directory }}/${{ inputs.dockerfile }}
+          platforms: ${{ inputs.platforms }}
           load: true
           push: false
           tags: localimage:${{ github.sha }}
-
-      - run: |
-          docker images
-          docker run localimage:${{ github.sha }}
-        continue-on-error: true
       - name: Generate artifact attestation
         if: inputs.push
         uses: actions/attest-build-provenance@e8998f949152b193b063cb0ec769d69d929409be
