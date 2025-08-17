@@ -65,7 +65,7 @@ jobs:
       - uses: step-security/harden-runner@ec9f2d5744a09debf3a187a3f4f675c53b671911
         # v2.13.0
         with:
-          disable-sudo: ${{ inputs.disable-sudo }}
+          disable-sudo: false
           egress-policy: block
           allowed-endpoints: >
             api.github.com:443

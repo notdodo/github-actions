@@ -222,5 +222,5 @@ jobs:
           if [ -z "${BINARY_NAME}" ]; then
             cargo lambda deploy
           else
-            cargo lambda deploy --binary-name ${BINARY_NAME}
+            cargo lambda deploy --binary-name "${BINARY_NAME}"
           fi
