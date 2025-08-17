@@ -89,17 +89,6 @@ jobs:
         # v5.0.0
         with:
           persist-credentials: false
-      - name: Set up Docker
-        uses: docker/setup-docker-action@b60f85385d03ac8acfca6d9996982511d8620a19
-        # v4.3.0
-        with:
-          daemon-config: |
-            {
-              "debug": true,
-              "features": {
-                "containerd-snapshotter": true
-              }
-            }
       - uses: docker/setup-qemu-action@29109295f81e9208d7d86ff1c6c12d2833863392
         # v3.6.0
       - uses: docker/setup-buildx-action@e468171a9de216ec08956ac3ada2f0791b6bd435
@@ -144,16 +133,16 @@ jobs:
         uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83
         # v6.18.0
         with:
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
           context: ./${{ inputs.working-directory }}
           file: ${{ inputs.working-directory }}/${{ inputs.dockerfile }}
-          platforms: ${{ inputs.platforms }}
           load: true
-          provenance: mode=max
           push: false
-          tags: ${{ inputs.image }}:${{ github.sha }}
+          tags: localimage:${{ github.sha }}
 
+      - run: |
+          docker images
+          docker run localimage:${{ github.sha }}
+        continue-on-error: true
       - name: Generate artifact attestation
         if: inputs.push
         uses: actions/attest-build-provenance@e8998f949152b193b063cb0ec769d69d929409be
@@ -168,8 +157,7 @@ jobs:
         with:
           format: sarif
           ignore-unfixed: true
-          image-ref: ${{ inputs.push && format('{0}/{1}', inputs.registry, inputs.image) || format('{0}:{1}', inputs.image, github.sha) }}
-          # image-ref: ${{ inputs.registry }}/${{ inputs.image }}
+          image-ref: ${{ inputs.push && format('{0}/{1}', inputs.registry, inputs.image) || format('localimage:{0}', github.sha) }}
           output: ${{ inputs.working-directory }}/trivy_results.sarif
           github-pat: ${{ secrets.GITHUB_TOKEN }}
       - name: Upload results
