@@ -133,10 +133,15 @@ jobs:
           file: ${{ inputs.working-directory }}/${{ inputs.dockerfile }}
           labels: ${{ steps.metadata.outputs.labels }}
           platforms: ${{ inputs.platforms }}
-          load: true
+          load: ${{ !inputs.push }}
           provenance: mode=max
           push: ${{ inputs.push }}
           tags: ${{ steps.metadata.outputs.tags }}
+      - name: Ensure local tag for Trivy
+        if: ${{ !inputs.push }}
+        run: |
+          docker tag ${{ steps.build.outputs.imageid }} ${{ inputs.registry }}/${{ inputs.image }}:latest
+
       - name: Generate artifact attestation
         if: inputs.push
         uses: actions/attest-build-provenance@e8998f949152b193b063cb0ec769d69d929409be
@@ -151,7 +156,7 @@ jobs:
         with:
           format: sarif
           ignore-unfixed: true
-          image-ref: ${{ steps.build.outputs.imageid }}
+          image-ref: ${{ inputs.registry }}/${{ inputs.image }}:latest
           output: ${{ inputs.working-directory }}/trivy_results.sarif
           github-pat: ${{ secrets.GITHUB_TOKEN }}
       - name: Upload results
