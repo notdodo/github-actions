@@ -156,7 +156,8 @@ jobs:
         with:
           format: sarif
           ignore-unfixed: true
-          image-ref: ${{ inputs.registry }}/${{ inputs.image }}:latest
+          image-ref: ${{ inputs.push && format('"{0}/{1}"', inputs.registry, inputs.image) || format('"{0}/{1}:latest"', inputs.registry, inputs.image) }}
+          # image-ref: ${{ inputs.registry }}/${{ inputs.image }}
           output: ${{ inputs.working-directory }}/trivy_results.sarif
           github-pat: ${{ secrets.GITHUB_TOKEN }}
       - name: Upload results
