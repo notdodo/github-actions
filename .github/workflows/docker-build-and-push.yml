@@ -146,7 +146,7 @@ jobs:
           REGISTRY: ${{ inputs.registry }}
           IMAGE: ${{ inputs.image }}
         run: |
-          docker tag ${{ env.IMAGE_ID }} ${{ env.REGISTRY }}/${{ env.IMAGE }}:latest
+          docker tag "${IMAGE_ID}" "${REGISTRY}"/"${IMAGE}":latest
 
       - name: Generate artifact attestation
         if: inputs.push
