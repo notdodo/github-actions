@@ -50,12 +50,19 @@ jobs:
         # kics-scan ignore-line
         uses: securego/gosec@master
         with:
-          args: "-no-fail -fmt sarif -out ${{ inputs.working-directory }}/results.sarif ${{ inputs.working-directory }}/..."
-
+          args: "-no-fail -fmt sarif -out ${{ inputs.working-directory }}/gosec-results.sarif ${{ inputs.working-directory }}/..."
+      - uses: reviewdog/action-setup@e04ffabe3898a0af8d0fb1af00c188831c4b5893
+        # v1.3.2
+      - name: Run reviewdog
+        continue-on-error: true
+        env:
+          REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo -n "$(cat ./gosec-results.sarif)" | reviewdog -reporter=github-check -f=sarif -level=error -diff="git diff FETCH_HEAD"
       - name: Upload results
         uses: github/codeql-action/upload-sarif@3407610120cd5656b6fc71991415cb50748b9489
         # v2.20.1
         with:
-          sarif_file: "${{ inputs.working-directory }}/results.sarif"
+          sarif_file: "${{ inputs.working-directory }}/gosec-results.sarif"
           category: sast
         if: ${{ inputs.upload-sarif }}
