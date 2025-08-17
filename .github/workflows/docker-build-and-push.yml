@@ -139,6 +139,10 @@ jobs:
           push: false
           tags: localimage:${{ github.sha }}
 
+      - run: |
+          docker images
+          docker run localimage:${{ github.sha }}
+        continue-on-error: true
       - name: Generate artifact attestation
         if: inputs.push
         uses: actions/attest-build-provenance@e8998f949152b193b063cb0ec769d69d929409be
