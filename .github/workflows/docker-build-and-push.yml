@@ -133,7 +133,7 @@ jobs:
           annotations: ${{ steps.metadata.outputs.annotations }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          context: $WORKDIR
+          context: ${{ env.WORKDIR }}
           file: ${{ inputs.working-directory }}/${{ inputs.dockerfile }}
           labels: ${{ steps.metadata.outputs.labels }}
           platforms: ${{ inputs.platforms }}
@@ -148,7 +148,7 @@ jobs:
         with:
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          context: $WORKDIR
+          context: ${{ env.WORKDIR }}
           file: ${{ inputs.working-directory }}/${{ inputs.dockerfile }}
           platforms: ${{ inputs.platforms }}
           load: true
