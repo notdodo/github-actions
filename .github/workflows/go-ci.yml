@@ -50,6 +50,9 @@ jobs:
         # v2.8.0
         with:
           workdir: ${{ inputs.working-directory }}
+          fail_level: any
+          filter_mode: nofilter
+          tool_name: golangci-lint
 
   go-build-and-test:
     strategy:
