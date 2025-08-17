@@ -99,8 +99,8 @@ jobs:
         # v1.24.2
         with:
           working_directory: ${{ inputs.working-directory }}
-          fail_level: "any"
-          filter_mode: "nofilter"
+          fail_level: any
+          filter_mode: nofilter
 
       - name: Run Trivy Scan
         uses: aquasecurity/trivy-action@dc5a429b52fcf669ce959baa2c2dd26090d2a6c4
