@@ -68,7 +68,8 @@ jobs:
           installer-parallel: true
 
       # ----- UV -----
-      - uses: astral-sh/setup-uv@d9e0f98d3fc6adb07d1e3d37f3043649ddad06a1
+      - uses: astral-sh/setup-uv@4959332f0f014c5280e7eac8b70c90cb574c9f9b
+      # v6.6.0
         if: ${{ hashFiles(format('{0}/uv.lock', inputs.working-directory)) != '' }}
         # v6.5.0
         with:
