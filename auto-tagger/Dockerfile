@@ -28,7 +28,8 @@ ENV PATH="/app/.venv/bin:${PATH}"
 
 RUN addgroup -g 1000 app && adduser -G app -u 999 -s /sbin/nologin -h /app app -D
 WORKDIR /app
-COPY --from=builder --chown=app:app /app /app
+COPY --from=builder /app /app
+RUN chmod -R a+r .
 LABEL org.opencontainers.image.source=https://github.com/notdodo/github-actions/tree/main/auto-tagger
 LABEL org.opencontainers.image.description="A GitHub Action to automatically bump and/or create tags upon push to the default branch, using SemVer formatting."
 
