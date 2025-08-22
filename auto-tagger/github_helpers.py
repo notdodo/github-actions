@@ -4,7 +4,7 @@ PyGitHub wrapper
 
 import copy
 import os
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 
 from github import Github, InputGitAuthor
 from semver import Version, VersionInfo
@@ -17,6 +17,7 @@ class GitHubHelper:
     """PyGitHub support class"""
 
     def __init__(self, token: str, config: Configuration) -> None:
+        """init class"""
         self.token = token
         self.config = config
         self.repo = Github(token).get_repo(self.config.REPOSITORY)
@@ -148,7 +149,7 @@ class GitHubHelper:
                 tagger=InputGitAuthor(
                     name=str(commit.author.name),
                     email=str(commit.author.email),
-                    date=str(datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")),
+                    date=str(datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%SZ")),
                 ),
             )
             self.repo.create_git_ref(f"refs/tags/{tag.name}", tag.commit)

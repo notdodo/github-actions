@@ -1,37 +1,37 @@
 FROM python:3.13-alpine AS builder
 HEALTHCHECK NONE
 
-ENV PATH="${PATH}:/app/.local/bin" \
-    POETRY_VERSION=2.1.2 \
-    PYTHONDONTWRITEBYTECODE=1 \
-    POETRY_CACHE_DIR=/app/.cache \
-    POETRY_NO_INTERACTION=1 \
-    POETRY_VIRTUALENVS_IN_PROJECT=1 \
-    POETRY_VIRTUALENVS_CREATE=1
+ENV UV_LINK_MODE=copy \
+    UV_COMPILE_BYTECODE=1 \
+    UV_PYTHON_DOWNLOADS=never \
+    UV_PYTHON=python3.13 \
+    UV_NO_PROGRESS=1
 
-# kics-scan ignore-line
-RUN apk add --no-cache musl-dev libffi-dev gcc
-RUN addgroup -g 1000 app && adduser -G app -u 999 -s /sbin/nologin -h /app app -D
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
 WORKDIR /app
-COPY pyproject.toml poetry.lock ./
-RUN chmod -R a+r .
-USER app
-RUN pip install poetry==${POETRY_VERSION} --no-cache-dir
-RUN poetry install --only main
+RUN --mount=type=cache,target=/root/.cache \
+    --mount=type=bind,source=uv.lock,target=uv.lock \
+    --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
+    uv sync \
+    --locked \
+    --no-dev \
+    --no-install-project --no-editable
+COPY pyproject.toml uv.lock ./
+COPY *.py ./
+RUN --mount=type=cache,target=/root/.cache/uv \
+    uv sync --locked --no-editable --no-dev
 
 FROM python:3.13-alpine AS runtime
 HEALTHCHECK NONE
 
-ENV VIRTUAL_ENV=/app/.venv \
-    PATH="/app/.venv/bin:${PATH}"
+ENV PATH="/app/.venv/bin:${PATH}"
 
 RUN addgroup -g 1000 app && adduser -G app -u 999 -s /sbin/nologin -h /app app -D
 WORKDIR /app
-COPY --from=builder ${VIRTUAL_ENV} ${VIRTUAL_ENV}
-COPY *.py ./
+COPY --from=builder /app /app
 RUN chmod -R a+r .
-USER app
 LABEL org.opencontainers.image.source=https://github.com/notdodo/github-actions/tree/main/auto-tagger
 LABEL org.opencontainers.image.description="A GitHub Action to automatically bump and/or create tags upon push to the default branch, using SemVer formatting."
 
-CMD ["python", "/app/main.py"]
+USER app
+CMD ["python", "-OO", "/app/main.py"]
