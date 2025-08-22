@@ -126,6 +126,7 @@ jobs:
             api.github.com:443
             github.com:443
             index.crates.io:443
+            raw.githubusercontent.com:443
             static.crates.io:443  
             static.rust-lang.org:443
             ${{ inputs.egress-policy-allowlist }}
