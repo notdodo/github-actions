@@ -1,21 +1,27 @@
-[tool.poetry]
+[project]
 name = "auto-tagger"
 version = "0.1.0"
 description = "A GitHub Action to automatically bump and/or create tags upon push to the default branch, using SemVer formatting."
-authors = ["notdodo"]
+authors = [
+    { name = "notdodo", email = "6991986+notdodo@users.noreply.github.com" },
+]
+requires-python = ">3.12.0"
 readme = "README.md"
-package-mode = false
+dependencies = ["pygithub>=2.7.0", "semver>=3.0.4"]
 
-[tool.poetry.dependencies]
-python = "^3.11"
-pygithub = "^2.7.0"
-semver = "^3.0.4"
+[dependency-groups]
+dev = [
+    "mypy[faster-cache]>=1.17.1,<2",
+    "ruff>=0.12.7,<0.13",
+    "pydantic>=2.11.7,<3",
+]
 
-[tool.poetry.group.dev.dependencies]
-mypy = { extras = ["faster-cache"], version = "^1.17.1" }
-pydantic = "^2.11.7"
-pylint = "^3.3.8"
-ruff = "^0.12.10"
+[tool.uv]
+package = false
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
 [tool.ruff]
 output-format = "github"
@@ -24,17 +30,7 @@ output-format = "github"
 fixable = ["ALL"]
 unfixable = []
 select = ["ALL"]
-ignore = [
-    "D2",
-    "D4",
-    "ANN",
-    "COM812",
-    "D107",
-    "ISC001",
-    "ERA001",
-    "N803",
-    "T201",
-]
+ignore = ["D2", "D4", "ANN", "COM812", "ISC001", "ERA001", "PLR0913", "T201"]
 
 [tool.ruff.format]
 docstring-code-format = true
@@ -60,7 +56,3 @@ namespace_packages = true
 [tool.pylint."MESSAGES CONTROL"]
 persistent = "no"
 disable = ["fixme", "line-too-long"]
-
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
