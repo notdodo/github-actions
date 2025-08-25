@@ -49,6 +49,9 @@ jobs:
             - .github/workflows/go-security-scan.yml
             infra-security-scan:
             - .github/workflows/infra-security-scan.yml
+            pulumi:
+            - .github/workflows/pulumi-preview.yml
+            - .github/workflows/pulumi-up.yml
             python-ci:
             - .github/workflows/python-ci.yml
             rust-ci:
@@ -135,6 +138,19 @@ jobs:
           default_branch: main
           path: .github/workflows/infra-security-scan.yml
           prefix: infra-scan-v
+          github_token: ${{ github.token }}
+          dry_run: false
+
+      - name: Run auto-tag if pulumi workflows changes
+        if: steps.changed-files.outputs.pulumi_any_changed == 'true'
+        # kics-scan ignore-line
+        uses: notdodo/github-actions/auto-tagger@auto-tagger-v0
+        with:
+          bind_to_major: true
+          default_bump_strategy: skip
+          default_branch: main
+          path: .github/workflows/
+          prefix: pulumi-v
           github_token: ${{ github.token }}
           dry_run: false
 
