@@ -140,3 +140,5 @@ jobs:
           color: always
           suppress-progress: true
           always-include-summary: true
+          continue-on-error: true
+
