@@ -52,12 +52,14 @@ jobs:
           egress-policy: block
           allowed-endpoints: >
             api.github.com:443
+            api.pulumi.com:443
             files.pythonhosted.org:443
             github.com:443
             install.python-poetry.org:443
             objects.githubusercontent.com:443
             pypi.org:443
             release-assets.githubusercontent.com:443
+            *.${{ inputs.aws-region }}.amazonaws.com:443
             ${{ inputs.egress-policy-allowlist }}
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
         # v5.0.0
