@@ -32,6 +32,10 @@ on:
         type: string
         default: "."
 
+concurrency:
+  group: ghas-${{ github.repository }}-pulumi-up-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   pulumi-up:
     permissions:

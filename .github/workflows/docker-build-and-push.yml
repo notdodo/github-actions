@@ -61,6 +61,9 @@ jobs:
       security-events: write
     name: Docker build and push
     runs-on: ${{ inputs.runs-on }}
+    defaults:
+      run:
+        working-directory: ${{ inputs.working-directory }}
     steps:
       - uses: step-security/harden-runner@ec9f2d5744a09debf3a187a3f4f675c53b671911
         # v2.13.0
@@ -166,7 +169,6 @@ jobs:
           REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           echo -n "$(cat ./trivy_results.sarif)" | reviewdog -reporter=github-check -f=sarif -level=warning -diff="git diff FETCH_HEAD"
-        working-directory: ${{ inputs.working-directory }}
       - name: Upload results
         uses: github/codeql-action/upload-sarif@3407610120cd5656b6fc71991415cb50748b9489
         # v2.20.1
