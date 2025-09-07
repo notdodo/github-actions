@@ -97,8 +97,8 @@ jobs:
         # v5.0.0
         with:
           persist-credentials: false
-      - uses: reviewdog/action-actionlint@e37e2ca68a70112d21e135229272da28ce2d0d5a
-        # v1.66.1
+      - uses: reviewdog/action-actionlint@95395aac8c053577d0bc67eb7b74936c660c6f66
+        # v1.67.0
         continue-on-error: true
         with:
           fail_level: any
@@ -113,8 +113,8 @@ jobs:
           uvx zizmor --format sarif . > zizmor_results.sarif
         env:
           GH_TOKEN: ${{ github.token }}
-      - uses: reviewdog/action-setup@e04ffabe3898a0af8d0fb1af00c188831c4b5893
-        # v1.3.2
+      - uses: reviewdog/action-setup@d8edfce3dd5e1ec6978745e801f9c50b5ef80252
+        # v1.4.0
       - name: Run reviewdog
         continue-on-error: true
         env:
