@@ -153,16 +153,16 @@ jobs:
           subject-digest: ${{ steps.build.outputs.imageid }}
           push-to-registry: true
       - name: Run Trivy Scan
-        uses: aquasecurity/trivy-action@f9424c10c36e288d5fa79bd3dfd1aeb2d6eae808
-        # v0.33.0
+        uses: aquasecurity/trivy-action@b6643a29fecd7f34b3597bc6acb0a98b03d33ff8
+        # v0.33.1
         with:
           format: sarif
           ignore-unfixed: true
           image-ref: ${{ inputs.push && format('{0}/{1}', inputs.registry, inputs.image) || format('localimage:{0}', github.sha) }}
           output: ${{ inputs.working-directory }}/trivy_results.sarif
           github-pat: ${{ secrets.GITHUB_TOKEN }}
-      - uses: reviewdog/action-setup@e04ffabe3898a0af8d0fb1af00c188831c4b5893
-        # v1.3.2
+      - uses: reviewdog/action-setup@d8edfce3dd5e1ec6978745e801f9c50b5ef80252
+        # v1.4.0
       - name: Run reviewdog
         continue-on-error: true
         env:

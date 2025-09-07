@@ -149,8 +149,8 @@ jobs:
           | clippy-sarif
           | tee clippy-results.sarif
           | sarif-fmt
-      - uses: reviewdog/action-setup@e04ffabe3898a0af8d0fb1af00c188831c4b5893
-        # v1.3.2
+      - uses: reviewdog/action-setup@d8edfce3dd5e1ec6978745e801f9c50b5ef80252
+        # v1.4.0
       - name: Run reviewdog
         continue-on-error: true
         env:
@@ -202,8 +202,8 @@ jobs:
         # v5.0.0
         with:
           persist-credentials: false
-      - uses: aws-actions/configure-aws-credentials@7474bc4690e29a8392af63c5b98e7449536d5c3a
-        # v4.3.1
+      - uses: aws-actions/configure-aws-credentials@a03048d87541d1d9fcf2ecf528a4a65ba9bd7838
+        # v5.0.0
         with:
           role-to-assume: ${{ inputs.aws-role }}
           aws-region: ${{ inputs.aws-region }}
