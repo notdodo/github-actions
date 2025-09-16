@@ -49,8 +49,8 @@ jobs:
       run:
         working-directory: ${{ inputs.working-directory }}
     steps:
-      - uses: step-security/harden-runner@ec9f2d5744a09debf3a187a3f4f675c53b671911
-        # v2.13.0
+      - uses: step-security/harden-runner@f4a75cfd619ee5ce8d5b864b0d183aff3c69b55a
+        # v2.13.1
         with:
           disable-sudo-and-containers: ${{ inputs.disable-sudo }}
           egress-policy: block
@@ -91,8 +91,8 @@ jobs:
           installer-parallel: true
 
       # ----- UV -----
-      - uses: astral-sh/setup-uv@557e51de59eb14aaaba2ed9621916900a91d50c6
-        # v6.6.1
+      - uses: astral-sh/setup-uv@b75a909f75acd358c2196fb9a5f1299a9a8868a4
+        # v6.7.0
         if: ${{ hashFiles(format('{0}/uv.lock', inputs.working-directory)) != '' }}
         # v6.5.0
         with:
