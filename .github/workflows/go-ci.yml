@@ -95,7 +95,7 @@ jobs:
         run: go test -v ./...
 
   go-action-detection:
-    name: Go Dependency Submission
+    name: Go Dependency Submission for Dependabot
     if: ${{ inputs.dependency-submission }}
     runs-on: ${{ inputs.runs-on }}
     steps:

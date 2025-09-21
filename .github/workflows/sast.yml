@@ -23,11 +23,15 @@ jobs:
     container:
       image: semgrep/semgrep:1.125.0
     steps:
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
-        # v5.0.0
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           fetch-depth: 0
           persist-credentials: false
+      - name: "Dependency Review"
+        uses: actions/dependency-review-action@595b5aeba73380359d98a5e087f648dbb0edce1b # v4.7.3
+        with:
+          fail-on-severity: moderate
+          comment-summary-in-pr: on-failure
       - name: Semgrep
         env:
           SEMGREP_APP_TOKEN: ${{ secrets.semgrep_app_token }}
@@ -39,8 +43,7 @@ jobs:
             echo "Running default scan..."
             semgrep scan --config=auto --sarif --sarif-output=./sast-output.sarif
           fi
-      - uses: reviewdog/action-setup@d8edfce3dd5e1ec6978745e801f9c50b5ef80252
-        # v1.4.0
+      - uses: reviewdog/action-setup@d8edfce3dd5e1ec6978745e801f9c50b5ef80252 # v1.4.0
       - name: Run reviewdog
         continue-on-error: true
         env:
@@ -48,8 +51,7 @@ jobs:
         run: |
           echo -n "$(cat ./sast-output.sarif)" | reviewdog -reporter=github-check -f=sarif -level=error -diff="git diff FETCH_HEAD"
       - name: Upload SARIF file
-        uses: github/codeql-action/upload-sarif@3407610120cd5656b6fc71991415cb50748b9489
-        # v2.20.1
+        uses: github/codeql-action/upload-sarif@3407610120cd5656b6fc71991415cb50748b9489 # v2.20.1
         with:
           sarif_file: ./sast-output.sarif
           category: sast

@@ -47,8 +47,7 @@ jobs:
       run:
         working-directory: ${{ inputs.working-directory }}
     steps:
-      - uses: step-security/harden-runner@f4a75cfd619ee5ce8d5b864b0d183aff3c69b55a
-        # v2.13.1
+      - uses: step-security/harden-runner@f4a75cfd619ee5ce8d5b864b0d183aff3c69b55a # v2.13.1
         with:
           disable-sudo-and-containers: ${{ inputs.disable-sudo }}
           egress-policy: block
@@ -59,12 +58,10 @@ jobs:
             static.crates.io:443
             static.rust-lang.org:443
             ${{ inputs.egress-policy-allowlist }}
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
-        # v5.0.0
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           persist-credentials: false
-      - uses: actions-rust-lang/setup-rust-toolchain@2fcdc490d667999e01ddbbf0f2823181beef6b39
-        # v1.15.0
+      - uses: actions-rust-lang/setup-rust-toolchain@2fcdc490d667999e01ddbbf0f2823181beef6b39 # v1.15.0
         with:
           components: rustfmt
           toolchain: ${{ inputs.rust-version }}
@@ -83,8 +80,7 @@ jobs:
       run:
         working-directory: ${{ inputs.working-directory }}
     steps:
-      - uses: step-security/harden-runner@f4a75cfd619ee5ce8d5b864b0d183aff3c69b55a
-        # v2.13.1
+      - uses: step-security/harden-runner@f4a75cfd619ee5ce8d5b864b0d183aff3c69b55a # v2.13.1
         with:
           disable-sudo-and-containers: ${{ inputs.disable-sudo }}
           egress-policy: block
@@ -95,12 +91,10 @@ jobs:
             static.crates.io:443
             static.rust-lang.org:443
             ${{ inputs.egress-policy-allowlist }}
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
-        # v5.0.0
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           persist-credentials: false
-      - uses: actions-rust-lang/setup-rust-toolchain@2fcdc490d667999e01ddbbf0f2823181beef6b39
-        # v1.15.0
+      - uses: actions-rust-lang/setup-rust-toolchain@2fcdc490d667999e01ddbbf0f2823181beef6b39 # v1.15.0
         with:
           toolchain: ${{ inputs.rust-version }}
           cache-workspaces: |-
@@ -117,8 +111,7 @@ jobs:
       run:
         working-directory: ${{ inputs.working-directory }}
     steps:
-      - uses: step-security/harden-runner@f4a75cfd619ee5ce8d5b864b0d183aff3c69b55a
-        # v2.13.1
+      - uses: step-security/harden-runner@f4a75cfd619ee5ce8d5b864b0d183aff3c69b55a # v2.13.1
         with:
           disable-sudo-and-containers: ${{ inputs.disable-sudo }}
           egress-policy: block
@@ -131,12 +124,10 @@ jobs:
             static.crates.io:443  
             static.rust-lang.org:443
             ${{ inputs.egress-policy-allowlist }}
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
-        # v5.0.0
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           persist-credentials: false
-      - uses: actions-rust-lang/setup-rust-toolchain@2fcdc490d667999e01ddbbf0f2823181beef6b39
-        # v1.15.0
+      - uses: actions-rust-lang/setup-rust-toolchain@2fcdc490d667999e01ddbbf0f2823181beef6b39 # v1.15.0
         with:
           components: clippy
           toolchain: ${{ inputs.rust-version }}
@@ -149,8 +140,7 @@ jobs:
           | clippy-sarif
           | tee clippy-results.sarif
           | sarif-fmt
-      - uses: reviewdog/action-setup@d8edfce3dd5e1ec6978745e801f9c50b5ef80252
-        # v1.4.0
+      - uses: reviewdog/action-setup@d8edfce3dd5e1ec6978745e801f9c50b5ef80252 # v1.4.0
       - name: Run reviewdog
         continue-on-error: true
         env:
@@ -158,8 +148,7 @@ jobs:
         run: |
           echo -n "$(cat ./clippy-results.sarif)" | reviewdog -reporter=github-check -f=sarif -level=warning -diff="git diff FETCH_HEAD"
       - name: Upload results
-        uses: github/codeql-action/upload-sarif@3407610120cd5656b6fc71991415cb50748b9489
-        # v2.20.1
+        uses: github/codeql-action/upload-sarif@3407610120cd5656b6fc71991415cb50748b9489 # v2.20.1
         with:
           sarif_file: ${{ inputs.working-directory }}/clippy-results.sarif
           category: sast
@@ -176,8 +165,7 @@ jobs:
       run:
         working-directory: ${{ inputs.working-directory }}
     steps:
-      - uses: step-security/harden-runner@f4a75cfd619ee5ce8d5b864b0d183aff3c69b55a
-        # v2.13.1
+      - uses: step-security/harden-runner@f4a75cfd619ee5ce8d5b864b0d183aff3c69b55a # v2.13.1
         with:
           disable-sudo-and-containers: ${{ inputs.disable-sudo }}
           egress-policy: block
@@ -198,23 +186,19 @@ jobs:
             zigmirror.nesovic.dev:443
             zig.nekos.space:443
             ${{ inputs.egress-policy-allowlist }}
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
-        # v5.0.0
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           persist-credentials: false
-      - uses: aws-actions/configure-aws-credentials@a03048d87541d1d9fcf2ecf528a4a65ba9bd7838
-        # v5.0.0
+      - uses: aws-actions/configure-aws-credentials@a03048d87541d1d9fcf2ecf528a4a65ba9bd7838 # v5.0.0
         with:
           role-to-assume: ${{ inputs.aws-role }}
           aws-region: ${{ inputs.aws-region }}
           retry-max-attempts: 2
       - name: Install Zig toolchain
-        uses: mlugg/setup-zig@8d6198c65fb0feaa111df26e6b467fea8345e46f
-        # v2.0.5
+        uses: mlugg/setup-zig@8d6198c65fb0feaa111df26e6b467fea8345e46f # v2.0.5
         with:
           version: latest
-      - uses: actions-rust-lang/setup-rust-toolchain@2fcdc490d667999e01ddbbf0f2823181beef6b39
-        # v1.15.0
+      - uses: actions-rust-lang/setup-rust-toolchain@2fcdc490d667999e01ddbbf0f2823181beef6b39 # v1.15.0
         with:
           toolchain: ${{ inputs.rust-version }}
           cache-workspaces: |-

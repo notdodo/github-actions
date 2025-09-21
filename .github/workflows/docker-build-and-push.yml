@@ -65,8 +65,7 @@ jobs:
       run:
         working-directory: ${{ inputs.working-directory }}
     steps:
-      - uses: step-security/harden-runner@f4a75cfd619ee5ce8d5b864b0d183aff3c69b55a
-        # v2.13.1
+      - uses: step-security/harden-runner@f4a75cfd619ee5ce8d5b864b0d183aff3c69b55a # v2.13.1
         with:
           disable-sudo: false
           egress-policy: block
@@ -88,19 +87,15 @@ jobs:
             rekor.sigstore.dev:443
             release-assets.githubusercontent.com:443
             ${{ inputs.egress-policy-allowlist }}
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
-        # v5.0.0
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           persist-credentials: false
-      - uses: docker/setup-qemu-action@29109295f81e9208d7d86ff1c6c12d2833863392
-        # v3.6.0
-      - uses: docker/setup-buildx-action@e468171a9de216ec08956ac3ada2f0791b6bd435
-        # v3.11.1
+      - uses: docker/setup-qemu-action@29109295f81e9208d7d86ff1c6c12d2833863392 # v3.6.0
+      - uses: docker/setup-buildx-action@e468171a9de216ec08956ac3ada2f0791b6bd435 # v3.11.1
         with:
           cache-binary: false
       - name: Log in to the Container registry
-        uses: docker/login-action@184bdaa0721073962dff0199f1fb9940f07167d1
-        # v3.5.0
+        uses: docker/login-action@184bdaa0721073962dff0199f1fb9940f07167d1 # v3.5.0
         with:
           registry: ${{ inputs.registry }}
           username: ${{ secrets.registry-username }}
@@ -108,8 +103,7 @@ jobs:
       - name: Extract metadata (tags, labels) for Docker
         id: metadata
         if: inputs.push
-        uses: docker/metadata-action@c1e51972afc2121e065aed6d45c65596fe445f3f
-        # v5.8.0
+        uses: docker/metadata-action@c1e51972afc2121e065aed6d45c65596fe445f3f # v5.8.0
         with:
           images: ${{ inputs.registry }}/${{ inputs.image }}
           tags: ${{ inputs.tags }}
@@ -117,8 +111,7 @@ jobs:
       - name: Build and push
         id: build
         if: inputs.push
-        uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83
-        # v6.18.0
+        uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83 # v6.18.0
         with:
           annotations: ${{ steps.metadata.outputs.annotations }}
           cache-from: type=gha
@@ -133,8 +126,7 @@ jobs:
       - name: Build push locally
         id: build-local
         if: ${{ !inputs.push }}
-        uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83
-        # v6.18.0
+        uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83 # v6.18.0
         with:
           cache-from: type=gha
           cache-to: type=gha,mode=max
@@ -146,23 +138,20 @@ jobs:
           tags: localimage:${{ github.sha }}
       - name: Generate artifact attestation
         if: inputs.push
-        uses: actions/attest-build-provenance@977bb373ede98d70efdf65b84cb5f73e068dcc2a
-        # v3.0.0
+        uses: actions/attest-build-provenance@977bb373ede98d70efdf65b84cb5f73e068dcc2a # v3.0.0
         with:
           subject-name: ${{ inputs.registry }}/${{ inputs.image }}
           subject-digest: ${{ steps.build.outputs.imageid }}
           push-to-registry: true
       - name: Run Trivy Scan
-        uses: aquasecurity/trivy-action@b6643a29fecd7f34b3597bc6acb0a98b03d33ff8
-        # v0.33.1
+        uses: aquasecurity/trivy-action@b6643a29fecd7f34b3597bc6acb0a98b03d33ff8 # v0.33.1
         with:
           format: sarif
           ignore-unfixed: true
           image-ref: ${{ inputs.push && format('{0}/{1}', inputs.registry, inputs.image) || format('localimage:{0}', github.sha) }}
           output: ${{ inputs.working-directory }}/trivy_results.sarif
           github-pat: ${{ secrets.GITHUB_TOKEN }}
-      - uses: reviewdog/action-setup@d8edfce3dd5e1ec6978745e801f9c50b5ef80252
-        # v1.4.0
+      - uses: reviewdog/action-setup@d8edfce3dd5e1ec6978745e801f9c50b5ef80252 # v1.4.0
       - name: Run reviewdog
         continue-on-error: true
         env:
@@ -170,8 +159,7 @@ jobs:
         run: |
           echo -n "$(cat ./trivy_results.sarif)" | reviewdog -reporter=github-check -f=sarif -level=warning -diff="git diff FETCH_HEAD"
       - name: Upload results
-        uses: github/codeql-action/upload-sarif@3407610120cd5656b6fc71991415cb50748b9489
-        # v2.20.1
+        uses: github/codeql-action/upload-sarif@3407610120cd5656b6fc71991415cb50748b9489 # v2.20.1
         with:
           sarif_file: ${{ inputs.working-directory }}/trivy_results.sarif
           category: container-security

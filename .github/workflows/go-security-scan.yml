@@ -31,8 +31,7 @@ jobs:
     env:
       GO111MODULE: on
     steps:
-      - uses: step-security/harden-runner@f4a75cfd619ee5ce8d5b864b0d183aff3c69b55a
-        # v2.13.1
+      - uses: step-security/harden-runner@f4a75cfd619ee5ce8d5b864b0d183aff3c69b55a # v2.13.1
         with:
           disable-sudo: ${{ inputs.disable-sudo }}
           egress-policy: block
@@ -44,8 +43,7 @@ jobs:
             release-assets.githubusercontent.com:443
             ${{ inputs.egress-policy-allowlist }}
       - name: Checkout Source
-        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
-        # v5.0.0
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           persist-credentials: false
       - name: Run Gosec Security Scanner
@@ -53,8 +51,7 @@ jobs:
         uses: securego/gosec@master
         with:
           args: "-no-fail -fmt sarif -out ${{ inputs.working-directory }}/gosec-results.sarif ${{ inputs.working-directory }}/..."
-      - uses: reviewdog/action-setup@d8edfce3dd5e1ec6978745e801f9c50b5ef80252
-        # v1.4.0
+      - uses: reviewdog/action-setup@d8edfce3dd5e1ec6978745e801f9c50b5ef80252 # v1.4.0
       - name: Run reviewdog
         continue-on-error: true
         env:
@@ -62,8 +59,7 @@ jobs:
         run: |
           echo -n "$(cat ./gosec-results.sarif)" | reviewdog -reporter=github-check -f=sarif -level=error -diff="git diff FETCH_HEAD"
       - name: Upload results
-        uses: github/codeql-action/upload-sarif@3407610120cd5656b6fc71991415cb50748b9489
-        # v2.20.1
+        uses: github/codeql-action/upload-sarif@3407610120cd5656b6fc71991415cb50748b9489 # v2.20.1
         with:
           sarif_file: "${{ inputs.working-directory }}/gosec-results.sarif"
           category: sast

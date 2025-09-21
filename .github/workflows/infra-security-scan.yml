@@ -32,8 +32,7 @@ jobs:
       run:
         working-directory: ${{ inputs.working-directory }}
     steps:
-      - uses: step-security/harden-runner@f4a75cfd619ee5ce8d5b864b0d183aff3c69b55a
-        # v2.13.1
+      - uses: step-security/harden-runner@f4a75cfd619ee5ce8d5b864b0d183aff3c69b55a # v2.13.1
         with:
           disable-sudo: ${{ inputs.disable-sudo }}
           egress-policy: block
@@ -47,13 +46,11 @@ jobs:
             registry.npmjs.org:443
             ${{ inputs.egress-policy-allowlist }}
       - name: Checkout Source
-        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
-        # v5.0.0
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           persist-credentials: false
       - name: Kics Scan
-        uses: Checkmarx/kics-github-action@71454548efb714daa457caae25c01d64cc0be9d2
-        # v2.1.13
+        uses: Checkmarx/kics-github-action@71454548efb714daa457caae25c01d64cc0be9d2 # v2.1.13
         with:
           path: .
           output_path: ${{ inputs.working-directory }}/kics_results.sarif
@@ -65,8 +62,7 @@ jobs:
           enable_jobs_summary: true
           comments_with_queries: true
       - name: Upload SARIF file
-        uses: github/codeql-action/upload-sarif@3407610120cd5656b6fc71991415cb50748b9489
-        # v2.20.1
+        uses: github/codeql-action/upload-sarif@3407610120cd5656b6fc71991415cb50748b9489 # v2.20.1
         with:
           sarif_file: ${{ inputs.working-directory }}/kics_results.sarif
           category: devops
@@ -80,8 +76,7 @@ jobs:
       pull-requests: write
       security-events: write
     steps:
-      - uses: step-security/harden-runner@f4a75cfd619ee5ce8d5b864b0d183aff3c69b55a
-        # v2.13.1
+      - uses: step-security/harden-runner@f4a75cfd619ee5ce8d5b864b0d183aff3c69b55a # v2.13.1
         with:
           disable-sudo: ${{ inputs.disable-sudo }}
           egress-policy: block
@@ -93,28 +88,24 @@ jobs:
             pypi.org:443
             raw.githubusercontent.com:443
             release-assets.githubusercontent.com:443
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
-        # v5.0.0
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           persist-credentials: false
-      - uses: reviewdog/action-actionlint@95395aac8c053577d0bc67eb7b74936c660c6f66
-        # v1.67.0
+      - uses: reviewdog/action-actionlint@95395aac8c053577d0bc67eb7b74936c660c6f66 # v1.67.0
         continue-on-error: true
         with:
           fail_level: any
           filter_mode: nofilter
           tool_name: actionlint
       - name: Install the latest version of uv
-        uses: astral-sh/setup-uv@b75a909f75acd358c2196fb9a5f1299a9a8868a4
-        # v6.7.0
+        uses: astral-sh/setup-uv@b75a909f75acd358c2196fb9a5f1299a9a8868a4 # v6.7.0
       - name: Run zizmor 🌈
         run: |
           wget https://raw.githubusercontent.com/notdodo/github-actions/refs/heads/main/zizmor.yml
           uvx zizmor --format sarif . > zizmor_results.sarif
         env:
           GH_TOKEN: ${{ github.token }}
-      - uses: reviewdog/action-setup@d8edfce3dd5e1ec6978745e801f9c50b5ef80252
-        # v1.4.0
+      - uses: reviewdog/action-setup@d8edfce3dd5e1ec6978745e801f9c50b5ef80252 # v1.4.0
       - name: Run reviewdog
         continue-on-error: true
         env:
@@ -122,8 +113,7 @@ jobs:
         run: |
           echo -n "$(cat ./zizmor_results.sarif)" | reviewdog -reporter=github-check -f=sarif -level=warning -diff="git diff FETCH_HEAD"
       - name: Upload SARIF file
-        uses: github/codeql-action/upload-sarif@3407610120cd5656b6fc71991415cb50748b9489
-        # v2.20.1
+        uses: github/codeql-action/upload-sarif@3407610120cd5656b6fc71991415cb50748b9489 # v2.20.1
         with:
           sarif_file: zizmor_results.sarif
           category: github-actions
