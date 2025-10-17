@@ -6,7 +6,7 @@ on:
     paths:
       - .github/workflows/*.yml
       - auto-tagger/**
-      - "!.github/workflows/local-*.yml"
+      - '!.github/workflows/local-*.yml'
 
 concurrency:
   group: ghas-auto-tagger-${{ github.ref }}

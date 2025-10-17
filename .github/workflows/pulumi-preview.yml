@@ -33,7 +33,7 @@ on:
         default: '.'
 
 concurrency:
-  group: ghas-${{ github.repository }}-pulumi-preview-${{ github.ref }}
+  group: ghas-${{ github.repository }}-pulumi-preview-${{ inputs.stack-name }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -124,6 +124,7 @@ jobs:
           secret-ids: >
             ${{ inputs.aws-secrets-mapping }}
       - uses: pulumi/actions@d7ceb0215da5a14ec84f50b703365ddf0194a9c8 # v6.6.0
+        name: Pulumi Preview
         with:
           command: preview
           stack-name: ${{ inputs.stack-name }}

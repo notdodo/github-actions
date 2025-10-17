@@ -9,13 +9,13 @@ on:
         default: true
       egress-policy-allowlist:
         type: string
-        default: ""
+        default: ''
       runs-on:
         type: string
-        default: "ubuntu-latest"
+        default: 'ubuntu-latest'
       working-directory:
         type: string
-        default: "."
+        default: '.'
 
 jobs:
   go-lint:

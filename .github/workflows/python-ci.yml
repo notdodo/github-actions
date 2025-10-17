@@ -6,19 +6,19 @@ on:
         default: true
       egress-policy-allowlist:
         type: string
-        default: ""
+        default: ''
       poetry-version:
         type: string
-        default: "latest"
+        default: 'latest'
       python-version:
         type: string
-        default: "3.13"
+        default: '3.13'
       runs-on:
         type: string
-        default: "ubuntu-latest"
+        default: 'ubuntu-latest'
       working-directory:
         type: string
-        default: "."
+        default: '.'
 
 jobs:
   install-and-checks:
@@ -80,7 +80,7 @@ jobs:
       - run: uv sync --locked --all-extras --dev
         if: ${{ steps.cache-deps.outputs.cache-hit != 'true' && hashFiles(format('{0}/uv.lock', inputs.working-directory)) != '' }}
       - name: Install Task
-        uses: arduino/setup-task@b91d5d2c96a56797b48ac1e0e89220bf64044611 # v2.0.0
+        uses: go-task/setup-task@0ab1b2a65bc55236a3bc64cde78f80e20e8885c2 # v1.0.0
         with:
           repo-token: ${{ github.token }}
       - name: Linting
