@@ -6,13 +6,13 @@ on:
         default: true
       dockerfile:
         type: string
-        default: "Dockerfile"
+        default: 'Dockerfile'
       egress-policy-allowlist:
         type: string
-        default: ""
+        default: ''
       flavor:
         type: string
-        description: "Defines a global behavior for tags"
+        description: 'Defines a global behavior for tags'
         default: |
           latest=auto
           prefix=
@@ -22,16 +22,16 @@ on:
         type: string
       platforms:
         type: string
-        default: "linux/amd64,linux/arm64"
+        default: 'linux/amd64,linux/arm64'
       push:
         type: boolean
         default: false
       registry:
         type: string
-        default: ""
+        default: ''
       runs-on:
         type: string
-        default: "ubuntu-latest"
+        default: 'ubuntu-latest'
       tags:
         type: string
         default: |
@@ -44,7 +44,7 @@ on:
         default: true
       working-directory:
         type: string
-        default: "."
+        default: '.'
     secrets:
       registry-username:
         required: true
@@ -159,7 +159,7 @@ jobs:
         run: |
           echo -n "$(cat ./trivy_results.sarif)" | reviewdog -reporter=github-check -f=sarif -level=warning -diff="git diff FETCH_HEAD"
       - name: Upload results
-        uses: github/codeql-action/upload-sarif@3407610120cd5656b6fc71991415cb50748b9489 # v2.20.1
+        uses: github/codeql-action/upload-sarif@16140ae1a102900babc80a33c44059580f687047 #  v4.30.9
         with:
           sarif_file: ${{ inputs.working-directory }}/trivy_results.sarif
           category: container-security

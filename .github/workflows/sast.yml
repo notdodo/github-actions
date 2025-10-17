@@ -3,7 +3,7 @@ on:
     inputs:
       runs-on:
         type: string
-        default: "ubuntu-latest"
+        default: 'ubuntu-latest'
       upload-sarif:
         type: boolean
         default: true
@@ -27,7 +27,7 @@ jobs:
         with:
           fetch-depth: 0
           persist-credentials: false
-      - name: "Dependency Review"
+      - name: 'Dependency Review'
         if: github.event_name == 'pull_request'
         uses: actions/dependency-review-action@56339e523c0409420f6c2c9a2f4292bbb3c07dd3 # v4.8.0
         with:
@@ -52,7 +52,7 @@ jobs:
         run: |
           echo -n "$(cat ./sast-output.sarif)" | reviewdog -reporter=github-check -f=sarif -level=error -diff="git diff FETCH_HEAD"
       - name: Upload SARIF file
-        uses: github/codeql-action/upload-sarif@3407610120cd5656b6fc71991415cb50748b9489 # v2.20.1
+        uses: github/codeql-action/upload-sarif@16140ae1a102900babc80a33c44059580f687047 #  v4.30.9
         with:
           sarif_file: ./sast-output.sarif
           category: sast

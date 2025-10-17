@@ -5,7 +5,6 @@ updates:
     schedule:
       interval: monthly
       time: "12:00"
-      day: wednesday
     commit-message:
       prefix: "[#patch]"
       include: scope
@@ -18,7 +17,6 @@ updates:
     schedule:
       interval: monthly
       time: "12:00"
-      day: sunday
     commit-message:
       prefix: "[#patch]"
       prefix-development: ""

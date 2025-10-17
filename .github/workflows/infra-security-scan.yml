@@ -6,19 +6,19 @@ on:
         default: true
       egress-policy-allowlist:
         type: string
-        default: ""
+        default: ''
       enable-comments:
         type: boolean
         default: true
       runs-on:
         type: string
-        default: "ubuntu-latest"
+        default: 'ubuntu-latest'
       upload-sarif:
         type: boolean
         default: true
       working-directory:
         type: string
-        default: "."
+        default: '.'
 
 jobs:
   infra-security-scan:
@@ -62,7 +62,7 @@ jobs:
           enable_jobs_summary: true
           comments_with_queries: true
       - name: Upload SARIF file
-        uses: github/codeql-action/upload-sarif@3407610120cd5656b6fc71991415cb50748b9489 # v2.20.1
+        uses: github/codeql-action/upload-sarif@16140ae1a102900babc80a33c44059580f687047 #  v4.30.9
         with:
           sarif_file: ${{ inputs.working-directory }}/kics_results.sarif
           category: devops
@@ -97,8 +97,10 @@ jobs:
           fail_level: any
           filter_mode: nofilter
           tool_name: actionlint
-      - name: Install the latest version of uv
+      - name: Install uv
         uses: astral-sh/setup-uv@d0cc045d04ccac9d8b7881df0226f9e82c39688e # v6.8.0
+        with:
+          enable-cache: true
       - name: Run zizmor 🌈
         run: |
           wget https://raw.githubusercontent.com/notdodo/github-actions/refs/heads/main/zizmor.yml
@@ -113,7 +115,7 @@ jobs:
         run: |
           echo -n "$(cat ./zizmor_results.sarif)" | reviewdog -reporter=github-check -f=sarif -level=warning -diff="git diff FETCH_HEAD"
       - name: Upload SARIF file
-        uses: github/codeql-action/upload-sarif@3407610120cd5656b6fc71991415cb50748b9489 # v2.20.1
+        uses: github/codeql-action/upload-sarif@16140ae1a102900babc80a33c44059580f687047 #  v4.30.9
         with:
           sarif_file: zizmor_results.sarif
           category: github-actions
