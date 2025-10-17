@@ -3,13 +3,13 @@ on:
     inputs:
       aws-region:
         type: string
-        default: "eu-west-1"
+        default: 'eu-west-1'
       aws-role:
         type: string
-        default: "invalid"
+        default: 'invalid'
       binary-name:
         type: string
-        default: ""
+        default: ''
       build-lambda:
         type: boolean
         default: false
@@ -21,19 +21,19 @@ on:
         default: true
       egress-policy-allowlist:
         type: string
-        default: ""
+        default: ''
       rust-version:
         type: string
-        default: "stable"
+        default: 'stable'
       runs-on:
         type: string
-        default: "ubuntu-latest"
+        default: 'ubuntu-latest'
       upload-sarif:
         type: boolean
         default: true
       working-directory:
         type: string
-        default: "."
+        default: '.'
 
 env:
   CARGO_TERM_COLOR: always
@@ -148,7 +148,7 @@ jobs:
         run: |
           echo -n "$(cat ./clippy-results.sarif)" | reviewdog -reporter=github-check -f=sarif -level=warning -diff="git diff FETCH_HEAD"
       - name: Upload results
-        uses: github/codeql-action/upload-sarif@3407610120cd5656b6fc71991415cb50748b9489 # v2.20.1
+        uses: github/codeql-action/upload-sarif@16140ae1a102900babc80a33c44059580f687047 #  v4.30.9
         with:
           sarif_file: ${{ inputs.working-directory }}/clippy-results.sarif
           category: sast
@@ -189,7 +189,7 @@ jobs:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           persist-credentials: false
-      - uses: aws-actions/configure-aws-credentials@a03048d87541d1d9fcf2ecf528a4a65ba9bd7838 # v5.0.0
+      - uses: aws-actions/configure-aws-credentials@00943011d9042930efac3dcd3a170e4273319bc8 # v5.1.0
         with:
           role-to-assume: ${{ inputs.aws-role }}
           aws-region: ${{ inputs.aws-region }}
