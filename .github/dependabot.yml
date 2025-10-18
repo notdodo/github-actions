@@ -8,6 +8,8 @@ updates:
     commit-message:
       prefix: "[#patch]"
       include: scope
+    cooldown:
+      default-days: 4
     groups:
       actions-deps:
         patterns:
@@ -26,3 +28,5 @@ updates:
         dependency-type: "production"
       auto-tagger-dev:
         dependency-type: "development"
+    cooldown:
+      default-days: 4
