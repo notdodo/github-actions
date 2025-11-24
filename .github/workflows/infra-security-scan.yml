@@ -50,7 +50,7 @@ jobs:
         with:
           persist-credentials: false
       - name: Kics Scan
-        uses: Checkmarx/kics-github-action@86775e425429260b2044a0611f3031e0a0f71b0b # v2.1.15
+        uses: Checkmarx/kics-github-action@6b6fc1162a0f06704e4cca6e5f8e008ab20fabe5 # v2.1.16
         with:
           path: .
           output_path: ${{ inputs.working-directory }}/kics_results.sarif
@@ -62,7 +62,7 @@ jobs:
           enable_jobs_summary: true
           comments_with_queries: true
       - name: Upload SARIF file
-        uses: github/codeql-action/upload-sarif@16140ae1a102900babc80a33c44059580f687047 #  v4.30.9
+        uses: github/codeql-action/upload-sarif@e12f0178983d466f2f6028f5cc7a6d786fd97f4b #  v4.31.4
         with:
           sarif_file: ${{ inputs.working-directory }}/kics_results.sarif
           category: devops
@@ -107,7 +107,7 @@ jobs:
           uvx zizmor --format sarif . > zizmor_results.sarif
         env:
           GH_TOKEN: ${{ github.token }}
-      - uses: reviewdog/action-setup@d8edfce3dd5e1ec6978745e801f9c50b5ef80252 # v1.4.0
+      - uses: reviewdog/action-setup@d8a7baabd7f3e8544ee4dbde3ee41d0011c3a93f # v1.5.0
       - name: Run reviewdog
         continue-on-error: true
         env:
@@ -115,7 +115,7 @@ jobs:
         run: |
           echo -n "$(cat ./zizmor_results.sarif)" | reviewdog -reporter=github-check -f=sarif -level=warning -diff="git diff FETCH_HEAD"
       - name: Upload SARIF file
-        uses: github/codeql-action/upload-sarif@16140ae1a102900babc80a33c44059580f687047 #  v4.30.9
+        uses: github/codeql-action/upload-sarif@e12f0178983d466f2f6028f5cc7a6d786fd97f4b #  v4.31.4
         with:
           sarif_file: zizmor_results.sarif
           category: github-actions
