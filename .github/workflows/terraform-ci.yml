@@ -107,7 +107,7 @@ jobs:
           exit-code: '1'
           output: ${{ inputs.working-directory }}/trivy_results.sarif
           github-pat: ${{ secrets.GITHUB_TOKEN }}
-      - uses: reviewdog/action-setup@d8edfce3dd5e1ec6978745e801f9c50b5ef80252 # v1.4.0
+      - uses: reviewdog/action-setup@d8a7baabd7f3e8544ee4dbde3ee41d0011c3a93f # v1.5.0
       - name: Run reviewdog
         continue-on-error: true
         env:
@@ -115,7 +115,7 @@ jobs:
         run: |
           echo -n "$(cat ./trivy_results.sarif)" | reviewdog -reporter=github-check -f=sarif -level=error -diff="git diff FETCH_HEAD"
       - name: Upload results
-        uses: github/codeql-action/upload-sarif@16140ae1a102900babc80a33c44059580f687047 #  v4.30.9
+        uses: github/codeql-action/upload-sarif@e12f0178983d466f2f6028f5cc7a6d786fd97f4b #  v4.31.4
         with:
           sarif_file: ${{ inputs.working-directory }}/trivy_results.sarif
           category: devops
