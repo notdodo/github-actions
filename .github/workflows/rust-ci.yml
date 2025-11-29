@@ -58,7 +58,7 @@ jobs:
             static.crates.io:443
             static.rust-lang.org:443
             ${{ inputs.egress-policy-allowlist }}
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
         with:
           persist-credentials: false
       - uses: actions-rust-lang/setup-rust-toolchain@1780873c7b576612439a134613cc4cc74ce5538c # v1.15.2
@@ -91,7 +91,7 @@ jobs:
             static.crates.io:443
             static.rust-lang.org:443
             ${{ inputs.egress-policy-allowlist }}
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
         with:
           persist-credentials: false
       - uses: actions-rust-lang/setup-rust-toolchain@1780873c7b576612439a134613cc4cc74ce5538c # v1.15.2
@@ -124,7 +124,7 @@ jobs:
             static.crates.io:443  
             static.rust-lang.org:443
             ${{ inputs.egress-policy-allowlist }}
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
         with:
           persist-credentials: false
       - uses: actions-rust-lang/setup-rust-toolchain@1780873c7b576612439a134613cc4cc74ce5538c # v1.15.2
@@ -148,7 +148,7 @@ jobs:
         run: |
           echo -n "$(cat ./clippy-results.sarif)" | reviewdog -reporter=github-check -f=sarif -level=warning -diff="git diff FETCH_HEAD"
       - name: Upload results
-        uses: github/codeql-action/upload-sarif@e12f0178983d466f2f6028f5cc7a6d786fd97f4b #  v4.31.4
+        uses: github/codeql-action/upload-sarif@fdbfb4d2750291e159f0156def62b853c2798ca2 #  v4.31.5
         with:
           sarif_file: ${{ inputs.working-directory }}/clippy-results.sarif
           category: sast
@@ -186,10 +186,10 @@ jobs:
             zigmirror.nesovic.dev:443
             zig.nekos.space:443
             ${{ inputs.egress-policy-allowlist }}
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
         with:
           persist-credentials: false
-      - uses: aws-actions/configure-aws-credentials@00943011d9042930efac3dcd3a170e4273319bc8 # v5.1.0
+      - uses: aws-actions/configure-aws-credentials@61815dcd50bd041e203e49132bacad1fd04d2708 # v5.1.1
         with:
           role-to-assume: ${{ inputs.aws-role }}
           aws-region: ${{ inputs.aws-region }}
