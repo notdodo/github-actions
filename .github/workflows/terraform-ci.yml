@@ -184,7 +184,7 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            // 1. Retrieve existing bot comments for the PR.
+            const { PLAN, ACTOR, EVENT, WORKDIR, OUTCOME } = process.env;
             const { data: comments } = await github.rest.issues.listComments({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
@@ -194,7 +194,6 @@ jobs:
                 return comment.user.type === 'Bot' && comment.body.includes('Terraform Plan 📖')
             })
 
-            // 2. Prepare format of the comment
             const output = `#### Terraform Plan 📖\`${OUTCOME}\`
 
             <details><summary>Show Plan</summary>
@@ -207,7 +206,6 @@ jobs:
 
             *Pusher: @${ACTOR}, Action: \`${EVENT}\`, Working Directory: \`${WORKDIR}\`*`;
 
-            // 3. If we have a comment, update it, otherwise create a new one
             if (botComment) {
                 github.rest.issues.updateComment({
                 owner: context.repo.owner,
