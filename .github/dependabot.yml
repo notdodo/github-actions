@@ -9,7 +9,7 @@ updates:
       prefix: "[#patch]"
       include: scope
     cooldown:
-      default-days: 4
+      default-days: 7
     groups:
       actions-deps:
         patterns:
@@ -29,4 +29,4 @@ updates:
       auto-tagger-dev:
         dependency-type: "development"
     cooldown:
-      default-days: 4
+      default-days: 7
