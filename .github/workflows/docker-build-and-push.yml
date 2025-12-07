@@ -96,7 +96,7 @@ jobs:
             rekor.sigstore.dev:443
             release-assets.githubusercontent.com:443
             ${{ inputs.egress-policy-allowlist }}
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
         with:
           persist-credentials: false
       - uses: docker/setup-qemu-action@c7c53464625b32c7a7e944ae62b3e17d2b600130 # v3.7.0
@@ -112,7 +112,7 @@ jobs:
       - name: Extract metadata (tags, labels) for Docker
         id: metadata
         if: inputs.push
-        uses: docker/metadata-action@318604b99e75e41977312d83839a89be02ca4893 # v5.9.0
+        uses: docker/metadata-action@c299e40c65443455700f0fdfc63efafe5b349051 # v5.10.0
         with:
           images: ${{ inputs.registry }}/${{ inputs.image }}
           tags: ${{ inputs.tags }}
@@ -163,7 +163,7 @@ jobs:
           severity: ${{ inputs.trivy-severity }}
           output: ${{ inputs.working-directory }}/trivy_results.sarif
           github-pat: ${{ secrets.GITHUB_TOKEN }}
-      - uses: reviewdog/action-setup@d8edfce3dd5e1ec6978745e801f9c50b5ef80252 # v1.4.0
+      - uses: reviewdog/action-setup@d8a7baabd7f3e8544ee4dbde3ee41d0011c3a93f # v1.5.0
         if: inputs.scan-image
       - name: Run reviewdog
         if: inputs.scan-image
@@ -174,7 +174,7 @@ jobs:
           echo -n "$(cat ./trivy_results.sarif)" | reviewdog -reporter=github-check -f=sarif -level=warning -diff="git diff FETCH_HEAD"
       - name: Upload results
         if: ${{ inputs.scan-image && inputs.upload-sarif }}
-        uses: github/codeql-action/upload-sarif@16140ae1a102900babc80a33c44059580f687047 #  v4.30.9
+        uses: github/codeql-action/upload-sarif@fdbfb4d2750291e159f0156def62b853c2798ca2 #  v4.31.5
         with:
           sarif_file: ${{ inputs.working-directory }}/trivy_results.sarif
           category: container-security
