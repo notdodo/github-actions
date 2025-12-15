@@ -22,6 +22,9 @@ on:
       egress-policy-allowlist:
         type: string
         default: ''
+      lambda-arch:
+        type: string
+        default: x86_64 # valid: x86_64 | arm64
       rust-version:
         type: string
         default: 'stable'
@@ -206,7 +209,14 @@ jobs:
       - run: cargo install cargo-lambda
       - name: Build Lambda
         if: ${{ inputs.build-lambda || inputs.deploy-lambda }}
-        run: cargo lambda build --verbose --release
+        env:
+          ARCH: ${{ inputs.lambda-arch }}
+        run: |
+          if [ "${ARCH}" = "arm64" ]; then
+            cargo lambda build --verbose --release --arm64
+          else
+            cargo lambda build --verbose --release
+          fi
       - name: Deploy Lambda
         env:
           BINARY_NAME: ${{ inputs.binary-name }}
