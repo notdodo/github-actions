@@ -20,9 +20,20 @@ def main() -> None:
 
     if os.environ.get("GITHUB_REF_NAME") != config.DEFAULT_BRANCH:
         print("Not running from the default branch")
-        sys.exit()
+        sys.exit(0)
 
-    github_helper = GitHubHelper(os.environ.get("INPUT_GITHUB_TOKEN", ""), config)
+    token = os.environ.get("INPUT_GITHUB_TOKEN", "").strip()
+    if not token:
+        print(
+            "Missing INPUT_GITHUB_TOKEN; refusing to call the GitHub API without credentials."
+        )
+        sys.exit(1)
+
+    try:
+        github_helper = GitHubHelper(token, config)
+    except Exception as exc:  # noqa: BLE001 - surface the error in the action logs
+        print(f"Failed to initialise GitHub helper: {exc}")
+        sys.exit(1)
     last_tag = github_helper.last_available_tag
 
     print(f"Last available tag: {last_tag}")
