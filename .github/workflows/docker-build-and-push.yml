@@ -81,10 +81,8 @@ jobs:
           allowed-endpoints: >
             api.github.com:443
             auth.docker.io:443
-            check.trivy.dev:443
             download.docker.com:443
             fulcio.sigstore.dev:443
-            get.trivy.dev:443
             ghcr.io:443
             github.com:443
             githubapp.com:443
@@ -97,6 +95,7 @@ jobs:
             registry-1.docker.io:443
             rekor.sigstore.dev:443
             release-assets.githubusercontent.com:443
+            trivy.dev:443
             ${{ inputs.egress-policy-allowlist }}
       - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
         with:
