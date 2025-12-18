@@ -86,6 +86,7 @@ jobs:
             fulcio.sigstore.dev:443
             ghcr.io:443
             github.com:443
+            githubapp.com:443
             index.docker.io:443
             mirror.gcr.io:443
             objects.githubusercontent.com:443
