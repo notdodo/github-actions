@@ -1,14 +1,19 @@
-"""
-PyGitHub resource wrappers
-"""
+"""Thin, typed resource wrappers for PyGitHub objects."""
+
+from __future__ import annotations
 
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
+from typing import Final
+
+__all__ = ["Commit", "Tag"]
+
+_DEFAULT_TAG_TYPE: Final[str] = "commit"
 
 
 @dataclass
 class Commit:
-    """Commit resource"""
+    """Commit resource."""
 
     sha: str
     author_name: str
@@ -17,17 +22,17 @@ class Commit:
     date: datetime
 
 
-def now_utf() -> datetime:
-    """Factory for Datetime"""
+def now_utc() -> datetime:
+    """Return the current UTC datetime; kept as a factory for dataclass defaults."""
     return datetime.now(UTC)
 
 
 @dataclass
 class Tag:
-    """Tag resource"""
+    """Tag resource."""
 
     name: str
     commit: str
     message: str = ""
-    type: str = "commit"
-    date: datetime = field(default_factory=now_utf)
+    type: str = _DEFAULT_TAG_TYPE
+    date: datetime = field(default_factory=now_utc)

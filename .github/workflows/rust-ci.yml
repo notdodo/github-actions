@@ -184,10 +184,10 @@ jobs:
             static.rust-lang.org:443
             sts.eu-west-1.amazonaws.com:443
             zig.linus.dev:443
+            zig.nekos.space:443
             ziglang.org:443
             zigmirror.hryx.net:443
             zigmirror.nesovic.dev:443
-            zig.nekos.space:443
             ${{ inputs.egress-policy-allowlist }}
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
         with:

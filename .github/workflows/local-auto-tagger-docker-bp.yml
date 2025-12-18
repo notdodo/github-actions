@@ -17,8 +17,8 @@ jobs:
     with:
       egress-policy-allowlist: >
         dl-cdn.alpinelinux.org:443
-        pypi.org:443
         files.pythonhosted.org:443
+        pypi.org:443
       image: notdodo/auto-tagger
       push: true
       registry: ghcr.io

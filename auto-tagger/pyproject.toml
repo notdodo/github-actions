@@ -10,7 +10,12 @@ readme = "README.md"
 dependencies = ["pygithub>=2.7.0", "semver>=3.0.4"]
 
 [dependency-groups]
-dev = ["mypy[faster-cache]>=1.17.1", "ruff>=0.12.7", "pydantic>=2.11.7"]
+dev = [
+    "mypy[faster-cache]>=1.17.1",
+    "ruff>=0.12.7",
+    "pydantic>=2.11.7",
+    "pytest>=9.0.2",
+]
 
 [tool.uv]
 package = false
