@@ -17,7 +17,6 @@ version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
     { name = "pygithub" },
-    { name = "pytest" },
     { name = "semver" },
 ]
 
@@ -25,13 +24,13 @@ dependencies = [
 dev = [
     { name = "mypy", extra = ["faster-cache"] },
     { name = "pydantic" },
+    { name = "pytest" },
     { name = "ruff" },
 ]
 
 [package.metadata]
 requires-dist = [
     { name = "pygithub", specifier = ">=2.7.0" },
-    { name = "pytest", specifier = ">=9.0.2" },
     { name = "semver", specifier = ">=3.0.4" },
 ]
 
@@ -39,6 +38,7 @@ requires-dist = [
 dev = [
     { name = "mypy", extras = ["faster-cache"], specifier = ">=1.17.1" },
     { name = "pydantic", specifier = ">=2.11.7" },
+    { name = "pytest", specifier = ">=9.0.2" },
     { name = "ruff", specifier = ">=0.12.7" },
 ]
 
