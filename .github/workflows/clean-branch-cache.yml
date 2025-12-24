@@ -1,3 +1,5 @@
+name: Clean Branch Cache
+
 on:
   workflow_call:
     inputs:

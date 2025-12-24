@@ -1,3 +1,5 @@
+name: Infra Security Scan
+
 on:
   workflow_call:
     inputs:
@@ -52,7 +54,7 @@ jobs:
       - name: Kics Scan
         uses: Checkmarx/kics-github-action@6b6fc1162a0f06704e4cca6e5f8e008ab20fabe5 # v2.1.16
         with:
-          path: .
+          path: ${{ inputs.working-directory }}
           output_path: ${{ inputs.working-directory }}/kics_results.sarif
           output_formats: sarif
           fail_on: high,medium
@@ -101,7 +103,7 @@ jobs:
         uses: astral-sh/setup-uv@1e862dfacbd1d6d858c55d9b792c756523627244 # v7.1.4
         with:
           enable-cache: true
-      - name: Run zizmor 🌈
+      - name: Run zizmor
         run: |
           wget https://raw.githubusercontent.com/notdodo/github-actions/refs/heads/main/zizmor.yml
           uvx zizmor --format sarif . > zizmor_results.sarif

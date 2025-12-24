@@ -1,3 +1,5 @@
+name: Terraform CI
+
 on:
   workflow_call:
     inputs:
@@ -171,12 +173,16 @@ jobs:
         run: terraform init -input=false
       - name: Terraform Plan
         id: plan
-        run: terraform plan -no-color -input=false
+        run: |
+          terraform plan -no-color -input=false | tee plan.txt
+          echo "plan<<EOF" >> $GITHUB_OUTPUT
+          cat plan.txt >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
         continue-on-error: true
       - uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
         if: github.event_name == 'pull_request'
         env:
-          PLAN: '${{ steps.plan.outputs.stdout }}'
+          PLAN: '${{ steps.plan.outputs.plan }}'
           ACTOR: '${{ github.actor }}'
           EVENT: '${{ github.event_name }}'
           WORKDIR: '${{ inputs.working-directory }}'

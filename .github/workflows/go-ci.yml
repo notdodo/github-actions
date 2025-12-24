@@ -1,9 +1,14 @@
+name: Go CI
+
 on:
   workflow_call:
     inputs:
       dependency-submission:
         type: boolean
         default: true
+      matrix-platforms:
+        type: string
+        default: '["ubuntu-latest","macos-latest","windows-latest"]'
       disable-sudo:
         type: boolean
         default: true
@@ -57,7 +62,7 @@ jobs:
   go-build-and-test:
     strategy:
       matrix:
-        platform: [ubuntu-latest, macos-latest, windows-latest]
+        platform: ${{ fromJSON(inputs.matrix-platforms) }}
     runs-on: ${{ matrix.platform }}
     permissions:
       contents: read
@@ -88,7 +93,7 @@ jobs:
           cache-dependency-path: |
             ${{ inputs.working-directory }}/**/*.sum
       - name: Install dependencies
-        run: go get -v .
+        run: go mod download
       - name: Build
         run: go build -v ./...
       - name: Test with the Go CLI

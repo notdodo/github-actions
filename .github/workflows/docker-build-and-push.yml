@@ -1,3 +1,5 @@
+name: Docker Build and Push
+
 on:
   workflow_call:
     inputs:
@@ -56,9 +58,9 @@ on:
         default: '.'
     secrets:
       registry-username:
-        required: true
+        required: false
       registry-password:
-        required: true
+        required: false
 
 jobs:
   build-and-push-image:
@@ -76,7 +78,7 @@ jobs:
     steps:
       - uses: step-security/harden-runner@20cf305ff2072d973412fa9b1e3a4f227bda3c76 # v2.14.0
         with:
-          disable-sudo: false
+          disable-sudo: ${{ inputs.disable-sudo }}
           egress-policy: block
           allowed-endpoints: >
             api.github.com:443
@@ -106,6 +108,7 @@ jobs:
           cache-binary: false
       - name: Log in to the Container registry
         uses: docker/login-action@5e57cd118135c172c3672efd75eb46360885c0ef # v3.6.0
+        if: inputs.push
         with:
           registry: ${{ inputs.registry }}
           username: ${{ secrets.registry-username }}
@@ -151,7 +154,7 @@ jobs:
         uses: actions/attest-build-provenance@977bb373ede98d70efdf65b84cb5f73e068dcc2a # v3.0.0
         with:
           subject-name: ${{ inputs.registry }}/${{ inputs.image }}
-          subject-digest: ${{ steps.build.outputs.imageid }}
+          subject-digest: ${{ steps.build.outputs.digest }}
           push-to-registry: true
       - name: Run Trivy Scan
         uses: aquasecurity/trivy-action@b6643a29fecd7f34b3597bc6acb0a98b03d33ff8 # v0.33.1
@@ -164,6 +167,34 @@ jobs:
           severity: ${{ inputs.trivy-severity }}
           output: ${{ inputs.working-directory }}/trivy_results.sarif
           github-pat: ${{ secrets.GITHUB_TOKEN }}
+      - name: Generate SBOM
+        uses: aquasecurity/trivy-action@b6643a29fecd7f34b3597bc6acb0a98b03d33ff8 # v0.33.1
+        if: inputs.push
+        with:
+          format: spdx-json
+          image-ref: ${{ format('{0}/{1}@{2}', inputs.registry, inputs.image, steps.build.outputs.digest) }}
+          output: ${{ inputs.working-directory }}/sbom.spdx.json
+          github-pat: ${{ secrets.GITHUB_TOKEN }}
+      - name: Attest SBOM
+        uses: actions/attest-sbom@4651f806c01d8637787e274ac3bdf724ef169f34 # v3.0.0
+        if: inputs.push
+        with:
+          subject-name: ${{ inputs.registry }}/${{ inputs.image }}
+          subject-digest: ${{ steps.build.outputs.digest }}
+          sbom-path: ${{ inputs.working-directory }}/sbom.spdx.json
+      - name: Install cosign
+        uses: sigstore/cosign-installer@faadad0cce49287aee09b3a48701e75088a2c6ad # v4.0.0
+        if: inputs.push
+      - name: Sign image
+        if: inputs.push
+        env:
+          COSIGN_YES: 'true'
+          IMAGE_REF: ${{ format('{0}/{1}@{2}', inputs.registry, inputs.image, steps.build.outputs.digest) }}
+          CERT_IDENTITY: ${{ format('https://github.com/{0}', github.workflow_ref) }}
+          CERT_OIDC_ISSUER: https://token.actions.githubusercontent.com
+        run: |
+          cosign sign "${IMAGE_REF}"
+          cosign verify --certificate-identity "${CERT_IDENTITY}" --certificate-oidc-issuer "${CERT_OIDC_ISSUER}" "${IMAGE_REF}"
       - uses: reviewdog/action-setup@d8a7baabd7f3e8544ee4dbde3ee41d0011c3a93f # v1.5.0
         if: inputs.scan-image
       - name: Run reviewdog

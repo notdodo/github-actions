@@ -1,3 +1,5 @@
+name: Rust CI
+
 on:
   workflow_call:
     inputs:
@@ -6,7 +8,7 @@ on:
         default: 'eu-west-1'
       aws-role:
         type: string
-        default: 'invalid'
+        default: ''
       binary-name:
         type: string
         default: ''
@@ -136,7 +138,7 @@ jobs:
           toolchain: ${{ inputs.rust-version }}
           cache-workspaces: |-
             ${{ inputs.working-directory }}
-      - run: cargo install cargo-make clippy-sarif sarif-fmt
+      - run: cargo install --locked cargo-make clippy-sarif sarif-fmt
       - name: Run clippy
         run: >
           cargo make --profile gha clippy
@@ -193,6 +195,7 @@ jobs:
         with:
           persist-credentials: false
       - uses: aws-actions/configure-aws-credentials@61815dcd50bd041e203e49132bacad1fd04d2708 # v5.1.1
+        if: ${{ inputs.aws-role != '' }}
         with:
           role-to-assume: ${{ inputs.aws-role }}
           aws-region: ${{ inputs.aws-region }}

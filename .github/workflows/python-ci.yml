@@ -1,3 +1,5 @@
+name: Python CI
+
 on:
   workflow_call:
     inputs:
@@ -22,7 +24,8 @@ on:
 
 jobs:
   install-and-checks:
-    permissions: {}
+    permissions:
+      contents: read
     runs-on: ${{ inputs.runs-on }}
     defaults:
       run:
