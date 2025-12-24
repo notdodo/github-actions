@@ -1,3 +1,5 @@
+name: Gitleaks
+
 on:
   workflow_call:
     inputs:
@@ -7,6 +9,9 @@ on:
       egress-policy-allowlist:
         type: string
         default: ''
+      gitleaks-version:
+        type: string
+        default: 'latest'
       runs-on:
         type: string
         default: 'ubuntu-latest'
@@ -40,4 +45,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
           GITLEAKS_ENABLE_UPLOAD_ARTIFACT: false
-          GITLEAKS_VERSION: latest
+          GITLEAKS_VERSION: ${{ inputs.gitleaks-version }}

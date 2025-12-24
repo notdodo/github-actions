@@ -1,3 +1,5 @@
+name: Pulumi Up
+
 on:
   workflow_call:
     inputs:
