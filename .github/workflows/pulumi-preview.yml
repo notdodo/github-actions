@@ -74,7 +74,7 @@ jobs:
           python-version: ${{ inputs.python-version }}
 
       # ----- Poetry -----
-      - uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+      - uses: actions/cache@9255dc7a253b0ccc959486e2bca901246202afeb # v5.0.1
         if: ${{ hashFiles(format('{0}/poetry.lock', inputs.working-directory)) != '' }}
         with:
           path: ~/.local/bin/
@@ -88,12 +88,12 @@ jobs:
           installer-parallel: true
 
       # ----- UV -----
-      - uses: astral-sh/setup-uv@1e862dfacbd1d6d858c55d9b792c756523627244 # v7.1.4
+      - uses: astral-sh/setup-uv@681c641aba71e4a1c380be3ab5e12ad51f415867 # v7.1.6
         if: ${{ hashFiles(format('{0}/uv.lock', inputs.working-directory)) != '' }}
         with:
           enable-cache: true
       - id: cache-deps
-        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        uses: actions/cache@9255dc7a253b0ccc959486e2bca901246202afeb # v5.0.1
         with:
           path: |
             ${{ inputs.working-directory }}/.venv
@@ -110,7 +110,7 @@ jobs:
           # kics-scan ignore-line
           requested-token-type: urn:pulumi:token-type:access_token:personal
           scope: user:notdodo
-      - uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+      - uses: actions/cache@9255dc7a253b0ccc959486e2bca901246202afeb # v5.0.1
         with:
           path: ${{ env.PULUMI_HOME }}/plugins
           key: python-${{ inputs.python-version }}-venv-${{ hashFiles(format('{0}/poetry.lock', inputs.working-directory), format('{0}/uv.lock', inputs.working-directory)) }}
