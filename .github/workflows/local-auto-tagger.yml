@@ -16,61 +16,6 @@ jobs:
     permissions:
       contents: write
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        stategy:
-          - fail-fast: true
-        include:
-          - name: cleanup-cache
-            change_paths: .github/workflows/clean-branch-cache.yml
-            tag_path: .github/workflows/clean-branch-cache.yml
-            prefix: cleanup-v
-          - name: docker-build-and-push
-            change_paths: .github/workflows/docker-build-and-push.yml
-            tag_path: .github/workflows/docker-build-and-push.yml
-            prefix: docker-build-and-push-v
-          - name: gitleaks
-            change_paths: .github/workflows/gitleaks.yml
-            tag_path: .github/workflows/gitleaks.yml
-            prefix: gitleaks-v
-          - name: go-ci
-            change_paths: .github/workflows/go-ci.yml
-            tag_path: .github/workflows/go-ci.yml
-            prefix: go-ci-v
-          - name: go-security-scan
-            change_paths: .github/workflows/go-security-scan.yml
-            tag_path: .github/workflows/go-security-scan.yml
-            prefix: go-sec-v
-          - name: infra-security-scan
-            change_paths: .github/workflows/infra-security-scan.yml
-            tag_path: .github/workflows/infra-security-scan.yml
-            prefix: infra-scan-v
-          - name: pulumi
-            change_paths: |
-              .github/workflows/pulumi-preview.yml
-              .github/workflows/pulumi-up.yml
-            tag_path: .github/workflows/
-            prefix: pulumi-v
-          - name: python-ci
-            change_paths: .github/workflows/python-ci.yml
-            tag_path: .github/workflows/python-ci.yml
-            prefix: python-ci-v
-          - name: rust-ci
-            change_paths: .github/workflows/rust-ci.yml
-            tag_path: .github/workflows/rust-ci.yml
-            prefix: rust-ci-v
-          - name: sast
-            change_paths: .github/workflows/sast.yml
-            tag_path: .github/workflows/sast.yml
-            prefix: sast-v
-          - name: terraform-ci
-            change_paths: .github/workflows/terraform-ci.yml
-            tag_path: .github/workflows/terraform-ci.yml
-            prefix: terraform-ci-v
-          - name: auto-tagger
-            change_paths: auto-tagger/**
-            tag_path: ./auto-tagger/
-            prefix: auto-tagger-v
     steps:
       - uses: step-security/harden-runner@20cf305ff2072d973412fa9b1e3a4f227bda3c76 # v2.14.0
         with:
@@ -84,21 +29,189 @@ jobs:
         with:
           fetch-depth: 0
           persist-credentials: false
-      - name: Detect changes for ${{ matrix.name }}
+      - name: Get changed files for each workflow and action
         id: changed-files
         uses: tj-actions/changed-files@e0021407031f5be11a464abee9a0776171c79891 # v47.0.1
         with:
-          files: ${{ matrix.change_paths }}
+          files_yaml: |
+            cleanup-cache:
+            - .github/workflows/clean-branch-cache.yml
+            docker-build-and-push:
+            - .github/workflows/docker-build-and-push.yml
+            gitleaks:
+            - .github/workflows/gitleaks.yml
+            go-ci:
+            - .github/workflows/go-ci.yml
+            go-security-scan:
+            - .github/workflows/go-security-scan.yml
+            infra-security-scan:
+            - .github/workflows/infra-security-scan.yml
+            pulumi:
+            - .github/workflows/pulumi-preview.yml
+            - .github/workflows/pulumi-up.yml
+            python-ci:
+            - .github/workflows/python-ci.yml
+            rust-ci:
+            - .github/workflows/rust-ci.yml
+            sast:
+            - .github/workflows/sast.yml
+            terraform-ci:
+            - .github/workflows/terraform-ci.yml
+            auto-tagger:
+            - auto-tagger/**
 
-      - name: Run auto-tag if target changes
-        if: steps.changed-files.outputs.any_changed == 'true'
+      - name: Run auto-tag if clean-branch-cache workflow changes
+        if: steps.changed-files.outputs.cleanup-cache_any_changed == 'true'
         # kics-scan ignore-line
         uses: notdodo/github-actions/auto-tagger@auto-tagger-v0
         with:
           bind_to_major: true
           default_bump_strategy: skip
           default_branch: main
-          path: ${{ matrix.tag_path }}
-          prefix: ${{ matrix.prefix }}
+          path: .github/workflows/clean-branch-cache.yml
+          prefix: cleanup-v
+          github_token: ${{ github.token }}
+          dry_run: false
+
+      - name: Run auto-tag if docker-build-and-push workflow changes
+        if: steps.changed-files.outputs.docker-build-and-push_any_changed == 'true'
+        # kics-scan ignore-line
+        uses: notdodo/github-actions/auto-tagger@auto-tagger-v0
+        with:
+          bind_to_major: true
+          default_bump_strategy: skip
+          default_branch: main
+          path: .github/workflows/docker-build-and-push.yml
+          prefix: docker-build-and-push-v
+          github_token: ${{ github.token }}
+          dry_run: false
+
+      - name: Run auto-tag if gitleaks workflow changes
+        if: steps.changed-files.outputs.gitleaks_any_changed == 'true'
+        # kics-scan ignore-line
+        uses: notdodo/github-actions/auto-tagger@auto-tagger-v0
+        with:
+          bind_to_major: true
+          default_bump_strategy: skip
+          default_branch: main
+          path: .github/workflows/gitleaks.yml
+          prefix: gitleaks-v
+          github_token: ${{ github.token }}
+          dry_run: false
+
+      - name: Run auto-tag if go-ci workflow changes
+        if: steps.changed-files.outputs.go-ci_any_changed == 'true'
+        # kics-scan ignore-line
+        uses: notdodo/github-actions/auto-tagger@auto-tagger-v0
+        with:
+          bind_to_major: true
+          default_bump_strategy: skip
+          default_branch: main
+          path: .github/workflows/go-ci.yml
+          prefix: go-ci-v
+          github_token: ${{ github.token }}
+          dry_run: false
+
+      - name: Run auto-tag if go-security-scan workflow changes
+        if: steps.changed-files.outputs.go-security-scan_any_changed == 'true'
+        # kics-scan ignore-line
+        uses: notdodo/github-actions/auto-tagger@auto-tagger-v0
+        with:
+          bind_to_major: true
+          default_bump_strategy: skip
+          default_branch: main
+          path: .github/workflows/go-security-scan.yml
+          prefix: go-sec-v
+          github_token: ${{ github.token }}
+          dry_run: false
+
+      - name: Run auto-tag if infra-security-scan workflow changes
+        if: steps.changed-files.outputs.infra-security-scan_any_changed == 'true'
+        # kics-scan ignore-line
+        uses: notdodo/github-actions/auto-tagger@auto-tagger-v0
+        with:
+          bind_to_major: true
+          default_bump_strategy: skip
+          default_branch: main
+          path: .github/workflows/infra-security-scan.yml
+          prefix: infra-scan-v
+          github_token: ${{ github.token }}
+          dry_run: false
+
+      - name: Run auto-tag if pulumi workflows changes
+        if: steps.changed-files.outputs.pulumi_any_changed == 'true'
+        # kics-scan ignore-line
+        uses: notdodo/github-actions/auto-tagger@auto-tagger-v0
+        with:
+          bind_to_major: true
+          default_bump_strategy: skip
+          default_branch: main
+          path: .github/workflows/
+          prefix: pulumi-v
+          github_token: ${{ github.token }}
+          dry_run: false
+
+      - name: Run auto-tag if python-ci workflow changes
+        if: steps.changed-files.outputs.python-ci_any_changed == 'true'
+        # kics-scan ignore-line
+        uses: notdodo/github-actions/auto-tagger@auto-tagger-v0
+        with:
+          bind_to_major: true
+          default_bump_strategy: skip
+          default_branch: main
+          path: .github/workflows/python-ci.yml
+          prefix: python-ci-v
+          github_token: ${{ github.token }}
+          dry_run: false
+
+      - name: Run auto-tag if rust-ci workflow changes
+        if: steps.changed-files.outputs.rust-ci_any_changed == 'true'
+        # kics-scan ignore-line
+        uses: notdodo/github-actions/auto-tagger@auto-tagger-v0
+        with:
+          bind_to_major: true
+          default_bump_strategy: skip
+          default_branch: main
+          path: .github/workflows/rust-ci.yml
+          prefix: rust-ci-v
+          github_token: ${{ github.token }}
+          dry_run: false
+
+      - name: Run auto-tag if sast workflow changes
+        if: steps.changed-files.outputs.sast_any_changed == 'true'
+        # kics-scan ignore-line
+        uses: notdodo/github-actions/auto-tagger@auto-tagger-v0
+        with:
+          bind_to_major: true
+          default_bump_strategy: skip
+          default_branch: main
+          path: .github/workflows/sast.yml
+          prefix: sast-v
+          github_token: ${{ github.token }}
+          dry_run: false
+
+      - name: Run auto-tag if terraform-ci workflow changes
+        if: steps.changed-files.outputs.terraform-ci_any_changed == 'true'
+        # kics-scan ignore-line
+        uses: notdodo/github-actions/auto-tagger@auto-tagger-v0
+        with:
+          bind_to_major: true
+          default_bump_strategy: skip
+          default_branch: main
+          path: .github/workflows/terraform-ci.yml
+          prefix: terraform-ci-v
+          github_token: ${{ github.token }}
+          dry_run: false
+
+      - name: Run auto-tag if auto-tagger action changes
+        if: steps.changed-files.outputs.auto-tagger_any_changed == 'true'
+        # kics-scan ignore-line
+        uses: notdodo/github-actions/auto-tagger@auto-tagger-v0
+        with:
+          bind_to_major: true
+          default_bump_strategy: skip
+          default_branch: main
+          path: ./auto-tagger/
+          prefix: auto-tagger-v
           github_token: ${{ github.token }}
           dry_run: false
