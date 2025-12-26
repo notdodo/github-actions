@@ -63,7 +63,7 @@ jobs:
             objects.githubusercontent.com:443
             pypi.org:443
             release-assets.githubusercontent.com:443
-            *.${{ inputs.aws-region }}.amazonaws.com:443
+            *.amazonaws.com:443
             ${{ inputs.egress-policy-allowlist }}
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
         with:
