@@ -65,7 +65,7 @@ jobs:
             pypi.org:443
             release-assets.githubusercontent.com:443
             ${{ inputs.egress-policy-allowlist }}
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           persist-credentials: false
       - uses: actions/setup-python@83679a892e2d95755f2dac6acb0bfd1e9ac5d548 # v6.1.0
@@ -73,7 +73,7 @@ jobs:
           python-version: ${{ inputs.python-version }}
 
       # ----- Poetry -----
-      - uses: actions/cache@9255dc7a253b0ccc959486e2bca901246202afeb # v5.0.1
+      - uses: actions/cache@8b402f58fbc84540c8b491a91e594a4576fec3d7 # v5.0.2
         if: ${{ hashFiles(format('{0}/poetry.lock', inputs.working-directory)) != '' }}
         with:
           path: ~/.local/bin/
@@ -92,7 +92,7 @@ jobs:
         with:
           enable-cache: true
       - id: cache-deps
-        uses: actions/cache@9255dc7a253b0ccc959486e2bca901246202afeb # v5.0.1
+        uses: actions/cache@8b402f58fbc84540c8b491a91e594a4576fec3d7 # v5.0.2
         with:
           path: |
             ${{ inputs.working-directory }}/.venv
@@ -109,7 +109,7 @@ jobs:
           # kics-scan ignore-line
           requested-token-type: urn:pulumi:token-type:access_token:personal
           scope: user:notdodo
-      - uses: actions/cache@9255dc7a253b0ccc959486e2bca901246202afeb # v5.0.1
+      - uses: actions/cache@8b402f58fbc84540c8b491a91e594a4576fec3d7 # v5.0.2
         with:
           path: ${{ env.PULUMI_HOME }}/plugins
           key: python-${{ inputs.python-version }}-venv-${{ hashFiles(format('{0}/poetry.lock', inputs.working-directory), format('{0}/uv.lock', inputs.working-directory)) }}
