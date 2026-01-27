@@ -54,7 +54,7 @@ jobs:
           allowed-endpoints: >
             raw.githubusercontent.com:443
             ${{ inputs.egress-policy-allowlist }}
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           persist-credentials: false
       - uses: aws-actions/configure-aws-credentials@61815dcd50bd041e203e49132bacad1fd04d2708 # v5.1.1
@@ -66,7 +66,7 @@ jobs:
       - run: |
           echo "plugin_cache_dir = '$HOME/.terraform.d/plugin-cache'" > ~/.terraformrc
           mkdir -p ~/.terraform.d/plugin-cache
-      - uses: actions/cache@9255dc7a253b0ccc959486e2bca901246202afeb # v5.0.1
+      - uses: actions/cache@8b402f58fbc84540c8b491a91e594a4576fec3d7 # v5.0.2
         with:
           path: ~/.terraform.d/plugin-cache
           key: terraform-providers-${{ hashFiles('**/.terraform.lock.hcl') }}
@@ -141,7 +141,7 @@ jobs:
           egress-policy: audit
           allowed-endpoints: >
             ${{ inputs.egress-policy-allowlist }}
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           persist-credentials: false
       - uses: aws-actions/configure-aws-credentials@61815dcd50bd041e203e49132bacad1fd04d2708 # v5.1.1
@@ -153,7 +153,7 @@ jobs:
       - run: |
           echo "plugin_cache_dir = '$HOME/.terraform.d/plugin-cache'" > ~/.terraformrc
           mkdir -p ~/.terraform.d/plugin-cache
-      - uses: actions/cache@9255dc7a253b0ccc959486e2bca901246202afeb # v5.0.1
+      - uses: actions/cache@8b402f58fbc84540c8b491a91e594a4576fec3d7 # v5.0.2
         with:
           path: ~/.terraform.d/plugin-cache
           key: terraform-providers-${{ hashFiles('**/.terraform.lock.hcl') }}
