@@ -16,6 +16,8 @@ jobs:
     uses: notdodo/github-actions/.github/workflows/docker-build-and-push.yml@docker-build-and-push-v0
     with:
       egress-policy-allowlist: >
+        *.githubapp.com:443
+        *.trivy.dev:443
         dl-cdn.alpinelinux.org:443
         files.pythonhosted.org:443
         pypi.org:443
