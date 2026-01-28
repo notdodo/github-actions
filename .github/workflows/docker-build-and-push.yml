@@ -81,13 +81,14 @@ jobs:
           disable-sudo: ${{ inputs.disable-sudo }}
           egress-policy: block
           allowed-endpoints: >
+            *.githubapp.com:443
+            *.trivy.dev:443
             api.github.com:443
             auth.docker.io:443
             download.docker.com:443
             fulcio.sigstore.dev:443
             ghcr.io:443
             github.com:443
-            githubapp.com:443
             index.docker.io:443
             mirror.gcr.io:443
             objects.githubusercontent.com:443
@@ -97,7 +98,6 @@ jobs:
             registry-1.docker.io:443
             rekor.sigstore.dev:443
             release-assets.githubusercontent.com:443
-            trivy.dev:443
             ${{ inputs.egress-policy-allowlist }}
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
