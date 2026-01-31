@@ -16,7 +16,7 @@ inputs:
     default: "."
   prefix:
     description: "Prefix to use for tag generation (e.g., 'v')."
-    default: ""
+    default: "v"
   suffix:
     description: "Suffix to use for tag generation (e.g., '-test')."
     default: ""

@@ -1,84 +1,125 @@
-"""
-Python script to generate a new GitHub tag bumping its version following SemVer rules
-"""
+"""Python script to generate a new GitHub tag bumping its version following SemVer rules."""
 
+from __future__ import annotations
+
+import logging
 import os
-import sys
+from typing import TYPE_CHECKING
 
 from semver import Version
 
-from configuration import BumpStrategy, Configuration
+from configuration import Configuration, ConfigurationError
 from github_helpers import GitHubHelper
+from github_resources import BumpStrategy
+
+if TYPE_CHECKING:
+    from collections.abc import Mapping
 
 
-def main() -> None:
-    """main"""
-    config = Configuration.from_env()
+def _configure_logging(env: Mapping[str, str]) -> logging.Logger:
+    """Configure a simple, consistent logger for action output."""
+    level_name = env.get("LOG_LEVEL", "INFO").upper()
+    level = getattr(logging, level_name, logging.INFO)
+    logging.basicConfig(level=level, format="%(levelname)s: %(message)s")
+    return logging.getLogger("auto_tagger")
 
+
+def run(
+    config: Configuration,
+    github: GitHubHelper,
+    env: Mapping[str, str],
+    logger: logging.Logger,
+) -> int:
+    """Execute the auto-tagging workflow."""
     if config.DRY_RUN:
-        print("Running in dry-run mode!")
+        logger.info("Running in dry-run mode.")
 
-    if os.environ.get("GITHUB_REF_NAME") != config.DEFAULT_BRANCH:
-        print("Not running from the default branch")
-        sys.exit(0)
-
-    token = os.environ.get("INPUT_GITHUB_TOKEN", "").strip()
-    if not token:
-        print(
-            "Missing INPUT_GITHUB_TOKEN; refusing to call the GitHub API without credentials."
+    ref_name = env.get("GITHUB_REF_NAME")
+    if ref_name and ref_name != config.DEFAULT_BRANCH:
+        logger.info(
+            "Not running from the default branch (%s != %s).",
+            ref_name,
+            config.DEFAULT_BRANCH,
         )
-        sys.exit(1)
+        return 0
 
-    try:
-        github_helper = GitHubHelper(token, config)
-    except Exception as exc:  # noqa: BLE001 - surface the error in the action logs
-        print(f"Failed to initialise GitHub helper: {exc}")
-        sys.exit(1)
-    last_tag = github_helper.last_available_tag
+    last_tag = github.last_available_tag
+    logger.info("Last available tag: %s", last_tag.name)
 
-    print(f"Last available tag: {last_tag}")
-    bump_strategy = config.get_bump_strategy_from_commits(
-        github_helper.get_commits_since(last_tag.date)
-    )
+    commits = github.get_commits_since(last_tag.date)
+    bump_strategy = config.get_bump_strategy_from_commits(commits)
 
-    if bump_strategy == BumpStrategy.SKIP:
-        print("No need to create a new tag, skipping")
-        sys.exit()
+    if bump_strategy is BumpStrategy.SKIP:
+        logger.info("No need to create a new tag, skipping.")
+        return 0
 
-    new_tag = github_helper.bump_tag_version(bump_strategy, last_tag)
-    print(f"Creating new tag version: {new_tag}")
-    github_helper.create_git_tag(new_tag)
+    new_tag = github.bump_tag_version(bump_strategy, last_tag)
+    logger.info("Creating new tag version: %s", new_tag.name)
+    github.create_git_tag(new_tag)
 
     if config.BIND_TO_MAJOR:
-        last_major_tag = github_helper.last_available_major_tag
-        last_major_tag.commit = os.environ.get(
-            "GITHUB_SHA", github_helper.get_last_commit().sha
-        )
-        last_major_tag.message = os.environ.get(
-            "GITHUB_SHA", github_helper.get_last_commit().message
-        )
-        if bump_strategy != BumpStrategy.MAJOR:
-            github_helper.delete_git_tag(last_major_tag.name)
-            print(
-                f"Binding major tag {last_major_tag} to latest commit: {last_major_tag.commit}"
+        last_commit = github.get_last_commit()
+        last_major_tag = github.last_available_major_tag
+        last_major_tag.commit = env.get("GITHUB_SHA", last_commit.sha)
+        last_major_tag.message = last_commit.message
+
+        if bump_strategy is not BumpStrategy.MAJOR:
+            github.delete_git_tag(last_major_tag.name)
+            logger.info(
+                "Binding major tag %s to latest commit: %s",
+                last_major_tag.name,
+                last_major_tag.commit,
             )
-            github_helper.create_git_tag(last_major_tag)
-        else:
-            new_major_tag_name = (
-                config.PREFIX
-                + str(
-                    Version.parse(
-                        new_tag.name.removeprefix(config.PREFIX).removesuffix(
-                            config.SUFFIX
-                        )
-                    ).major
-                )
-                + config.SUFFIX
-            )
-            last_major_tag.name = new_major_tag_name
-            print(f"Creating new major tag {last_major_tag}")
-            github_helper.create_git_tag(last_major_tag)
+            github.create_git_tag(last_major_tag)
+            return 0
+
+        version_str = new_tag.name.removeprefix(config.PREFIX).removesuffix(
+            config.SUFFIX
+        )
+        major_version = Version.parse(version_str).major
+        last_major_tag.name = f"{config.PREFIX}{major_version}{config.SUFFIX}"
+        logger.info("Creating new major tag %s", last_major_tag.name)
+        github.create_git_tag(last_major_tag)
+
+    return 0
+
+
+def run_from_env(env: Mapping[str, str] | None = None) -> int:
+    """Run the application using environment variables."""
+    environment = env or os.environ
+    logger = _configure_logging(environment)
+
+    try:
+        config = Configuration.from_env(environment)
+        config.validate()
+    except ConfigurationError:
+        logger.exception("Invalid configuration.")
+        return 2
+
+    token = environment.get("INPUT_GITHUB_TOKEN", "").strip()
+    if not token:
+        logger.error(
+            "Missing INPUT_GITHUB_TOKEN; refusing to call the GitHub API without credentials."
+        )
+        return 1
+
+    try:
+        github = GitHubHelper(token, config)
+    except Exception:
+        logger.exception("Failed to initialise GitHub helper.")
+        return 1
+
+    try:
+        return run(config, github, environment, logger)
+    except Exception:
+        logger.exception("Auto-tagger failed.")
+        return 1
+
+
+def main() -> int:
+    """CLI entrypoint for the GitHub Action container."""
+    return run_from_env()
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

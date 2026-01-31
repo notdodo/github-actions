@@ -60,4 +60,5 @@ If there are no tags already available with the specified format, a new one with
 Bumping a tag version can happen in two methods:
 
 - Any commit message that includes `[#major]`, `[#minor]`, `[#patch]` triggers the respective SemVer bump. If two or more are present, the order is from `major` to `patch`.
-- If no commit message contains the keyword, the default value is used from `default_bump_strategy`.
+- If any commit includes `[#skip]`, the action skips tagging even if other bump markers are present.
+- If no commit message contains any keyword, the default value is used from `default_bump_strategy`.
