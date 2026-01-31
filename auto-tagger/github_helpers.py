@@ -10,11 +10,13 @@ from typing import TYPE_CHECKING, Protocol, cast
 if TYPE_CHECKING:
     from collections.abc import Sequence
 
+    from configuration import Configuration
+
 from github import Github, InputGitAuthor
+from github.GithubException import GithubException
 from semver import Version, VersionInfo
 
-from configuration import BumpStrategy, Configuration
-from github_resources import Commit, Tag
+from github_resources import BumpStrategy, Commit, Tag
 
 
 class GitCommitAuthor(Protocol):
@@ -120,6 +122,7 @@ class GitHubHelper:
             "GitHubClient", github_client or Github(self.token)
         )
         self.repo: GitRepository = self.github_client.get_repo(self.config.REPOSITORY)
+        self._last_commit_cache: Commit | None = None
         self.last_available_tag: Tag = self.get_latest_tag()
         self.last_available_major_tag: Tag = self.get_latest_major_tag()
 
@@ -145,28 +148,39 @@ class GitHubHelper:
 
     def get_commits_since(self, since: datetime) -> list[Commit]:
         """Get commits since a predefined datetime."""
+        if since.tzinfo is None:
+            since = since.replace(tzinfo=UTC)
+        path_filter = self.config.commit_path_filter
         return [
             self._to_commit_resource(commit)
             for commit in self.repo.get_commits(
-                since=since + timedelta(seconds=1), path=self.config.PATH
+                since=since + timedelta(seconds=1), path=path_filter
             )
         ]
 
     def get_last_commit(self) -> Commit:
         """Get the latest commit available on the repository."""
+        if self._last_commit_cache is not None:
+            return self._last_commit_cache
+        path_filter = self.config.commit_path_filter
         default_commit_list = self.repo.get_commits(
-            since=datetime.fromtimestamp(0, tz=UTC), path=self.config.PATH
+            since=datetime.fromtimestamp(0, tz=UTC), path=path_filter
         )
         if not default_commit_list:
             message = "Unable to resolve last commit: repository returned no commits."
             raise RuntimeError(message)
         fallback_sha = default_commit_list[0].sha
-        commit = self.repo.get_commit(os.environ.get("GITHUB_SHA", fallback_sha))
-        return self._to_commit_resource(commit)
+        target_sha = os.environ.get("GITHUB_SHA", fallback_sha)
+        try:
+            commit = self.repo.get_commit(target_sha)
+        except (GithubException, ValueError):
+            commit = default_commit_list[0]
+        self._last_commit_cache = self._to_commit_resource(commit)
+        return self._last_commit_cache
 
     def get_latest_tag(self) -> Tag:
         """Get the latest semver tag matching prefix and suffix on the repository (e.g. v0.2.1)."""
-        matching_tags: list[Tag] = []
+        matching_tags: list[tuple[Version, Tag]] = []
         for tag in self.repo.get_tags():
             name = tag.name
             if not name.startswith(self.config.PREFIX) or not name.endswith(
@@ -178,17 +192,24 @@ class GitHubHelper:
             )
             if not VersionInfo.is_valid(version_str):
                 continue
+            version = Version.parse(version_str)
             matching_tags.append(
-                Tag(
-                    name=name,
-                    commit=tag.commit.sha,
-                    message=tag.commit.commit.message,
-                    date=tag.commit.commit.author.date,
+                (
+                    version,
+                    Tag(
+                        name=name,
+                        commit=tag.commit.sha,
+                        message=tag.commit.commit.message,
+                        date=tag.commit.commit.author.date,
+                    ),
                 )
             )
 
         if matching_tags:
-            return max(matching_tags, key=lambda candidate: candidate.date)
+            _, latest_tag = max(
+                matching_tags, key=lambda candidate: (candidate[0], candidate[1].date)
+            )
+            return latest_tag
 
         last_commit = self.get_last_commit()
         default_tag = Tag(

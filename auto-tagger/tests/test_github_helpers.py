@@ -8,9 +8,9 @@ from dataclasses import dataclass
 from datetime import UTC, datetime, timedelta
 from typing import cast
 
-from configuration import BumpStrategy, Configuration
+from configuration import Configuration
 from github_helpers import GitHubHelper, GitRepository
-from github_resources import Tag
+from github_resources import BumpStrategy, Tag
 
 
 @dataclass
@@ -175,3 +175,21 @@ def test_get_latest_major_tag_prefers_highest_numeric_value() -> None:
         "token", Configuration(DRY_RUN=True), github_client=DummyGithub(repo)
     )
     assert helper.last_available_major_tag.name == "v10"
+
+
+def test_get_latest_tag_prefers_highest_semver() -> None:
+    """Prefer the highest semver tag, even if older."""
+    older = datetime(2025, 1, 1, 12, 0, tzinfo=UTC)
+    newer = datetime(2025, 1, 2, 12, 0, tzinfo=UTC)
+    commits = [
+        build_commit("1", older, "older"),
+        build_commit("2", newer, "newer"),
+    ]
+    tag_newer_date = DummyTag(name="v1.9.0", commit=commits[1])
+    tag_higher_version = DummyTag(name="v1.10.0", commit=commits[0])
+    repo = DummyRepo(tags=[tag_newer_date, tag_higher_version], commits=commits)
+    helper = GitHubHelper(
+        "token", Configuration(DRY_RUN=True), github_client=DummyGithub(repo)
+    )
+
+    assert helper.last_available_tag.name == "v1.10.0"
