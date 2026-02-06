@@ -76,7 +76,7 @@ jobs:
       run:
         working-directory: ${{ inputs.working-directory }}
     steps:
-      - uses: step-security/harden-runner@20cf305ff2072d973412fa9b1e3a4f227bda3c76 # v2.14.0
+      - uses: step-security/harden-runner@e3f713f2d8f53843e71c69a996d56f51aa9adfb9 # v2.14.1
         with:
           disable-sudo: ${{ inputs.disable-sudo }}
           egress-policy: block
@@ -108,7 +108,7 @@ jobs:
         with:
           cache-binary: false
       - name: Log in to the Container registry
-        uses: docker/login-action@5e57cd118135c172c3672efd75eb46360885c0ef # v3.6.0
+        uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9 # v3.7.0
         if: inputs.push
         with:
           registry: ${{ inputs.registry }}
@@ -152,7 +152,7 @@ jobs:
           tags: localimage:${{ github.sha }}
       - name: Generate artifact attestation
         if: inputs.push
-        uses: actions/attest-build-provenance@00014ed6ed5efc5b1ab7f7f34a39eb55d41aa4f8 # v3.1.0
+        uses: actions/attest-build-provenance@96278af6caaf10aea03fd8d33a09a777ca52d62f # v3.2.0
         with:
           subject-name: ${{ inputs.registry }}/${{ inputs.image }}
           subject-digest: ${{ steps.build.outputs.digest }}
