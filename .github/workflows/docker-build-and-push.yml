@@ -37,6 +37,9 @@ on:
       scan-image:
         type: boolean
         default: true
+      sign-image:
+        type: boolean
+        default: true
       tags:
         type: string
         default: |
@@ -56,6 +59,19 @@ on:
       working-directory:
         type: string
         default: '.'
+    outputs:
+      image_name:
+        description: "Full image name (<registry>/<image>)."
+        value: ${{ jobs.build-and-push-image.outputs.image_name }}
+      image_digest:
+        description: "Pushed image digest (sha256:...), empty when push=false."
+        value: ${{ jobs.build-and-push-image.outputs.image_digest }}
+      image_ref:
+        description: "Immutable image reference (<registry>/<image>@<digest>), empty when push=false."
+        value: ${{ jobs.build-and-push-image.outputs.image_ref }}
+      local_image_ref:
+        description: "Local image reference used when push=false."
+        value: ${{ jobs.build-and-push-image.outputs.local_image_ref }}
     secrets:
       registry-username:
         required: false
@@ -64,6 +80,11 @@ on:
 
 jobs:
   build-and-push-image:
+    outputs:
+      image_name: ${{ steps.workflow-outputs.outputs.image_name }}
+      image_digest: ${{ steps.workflow-outputs.outputs.image_digest }}
+      image_ref: ${{ steps.workflow-outputs.outputs.image_ref }}
+      local_image_ref: ${{ steps.workflow-outputs.outputs.local_image_ref }}
     permissions:
       artifact-metadata: write
       attestations: write
@@ -144,6 +165,18 @@ jobs:
           load: true
           push: false
           tags: localimage:${{ github.sha }}
+      - name: Set workflow outputs
+        id: workflow-outputs
+        env:
+          IMAGE_NAME: ${{ format('{0}/{1}', inputs.registry, inputs.image) }}
+          IMAGE_DIGEST: ${{ inputs.push && steps.build.outputs.digest || '' }}
+          IMAGE_REF: ${{ inputs.push && format('{0}/{1}@{2}', inputs.registry, inputs.image, steps.build.outputs.digest) || '' }}
+          LOCAL_IMAGE_REF: ${{ !inputs.push && format('localimage:{0}', github.sha) || '' }}
+        run: |
+          echo "image_name=${IMAGE_NAME}" >> "${GITHUB_OUTPUT}"
+          echo "image_digest=${IMAGE_DIGEST}" >> "${GITHUB_OUTPUT}"
+          echo "image_ref=${IMAGE_REF}" >> "${GITHUB_OUTPUT}"
+          echo "local_image_ref=${LOCAL_IMAGE_REF}" >> "${GITHUB_OUTPUT}"
       - name: Generate artifact attestation
         if: inputs.push
         uses: actions/attest-build-provenance@96278af6caaf10aea03fd8d33a09a777ca52d62f # v3.2.0
@@ -180,17 +213,18 @@ jobs:
           sbom-path: ${{ inputs.working-directory }}/sbom.spdx.json
       - name: Install cosign
         uses: sigstore/cosign-installer@faadad0cce49287aee09b3a48701e75088a2c6ad # v4.0.0
-        if: inputs.push
+        if: inputs.push && inputs.sign-image
       - name: Sign image
-        if: inputs.push
+        if: inputs.push && inputs.sign-image
         env:
           COSIGN_YES: 'true'
           IMAGE_REF: ${{ format('{0}/{1}@{2}', inputs.registry, inputs.image, steps.build.outputs.digest) }}
-          CERT_IDENTITY: ${{ format('https://github.com/{0}', github.workflow_ref) }}
           CERT_OIDC_ISSUER: https://token.actions.githubusercontent.com
         run: |
           cosign sign "${IMAGE_REF}"
-          cosign verify --certificate-identity "${CERT_IDENTITY}" --certificate-oidc-issuer "${CERT_OIDC_ISSUER}" "${IMAGE_REF}"
+          cosign verify \
+            --certificate-identity-regexp '^https://github.com/notdodo/github-actions/.github/workflows/docker-build-and-push.yml@refs/tags/docker-build-and-push-v[0-9]+$' \
+            --certificate-oidc-issuer "${CERT_OIDC_ISSUER}" "${IMAGE_REF}"
       - uses: reviewdog/action-setup@d8a7baabd7f3e8544ee4dbde3ee41d0011c3a93f # v1.5.0
         if: inputs.scan-image
       - name: Run reviewdog
