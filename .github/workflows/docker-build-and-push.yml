@@ -140,7 +140,7 @@ jobs:
       - name: Build and push
         id: build
         if: inputs.push
-        uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83 # v6.18.0
+        uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8 # v6.19.2
         with:
           annotations: ${{ steps.metadata.outputs.annotations }}
           cache-from: type=gha
@@ -155,7 +155,7 @@ jobs:
       - name: Build push locally
         id: build-local
         if: ${{ !inputs.push }}
-        uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83 # v6.18.0
+        uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8 # v6.19.2
         with:
           cache-from: type=gha
           cache-to: type=gha,mode=max
@@ -173,10 +173,12 @@ jobs:
           IMAGE_REF: ${{ inputs.push && format('{0}/{1}@{2}', inputs.registry, inputs.image, steps.build.outputs.digest) || '' }}
           LOCAL_IMAGE_REF: ${{ !inputs.push && format('localimage:{0}', github.sha) || '' }}
         run: |
-          echo "image_name=${IMAGE_NAME}" >> "${GITHUB_OUTPUT}"
-          echo "image_digest=${IMAGE_DIGEST}" >> "${GITHUB_OUTPUT}"
-          echo "image_ref=${IMAGE_REF}" >> "${GITHUB_OUTPUT}"
-          echo "local_image_ref=${LOCAL_IMAGE_REF}" >> "${GITHUB_OUTPUT}"
+          {
+            echo "image_name=${IMAGE_NAME}"
+            echo "image_digest=${IMAGE_DIGEST}"
+            echo "image_ref=${IMAGE_REF}"
+            echo "local_image_ref=${LOCAL_IMAGE_REF}"
+          } >> "${GITHUB_OUTPUT}"
       - name: Generate artifact attestation
         if: inputs.push
         uses: actions/attest-build-provenance@96278af6caaf10aea03fd8d33a09a777ca52d62f # v3.2.0
@@ -186,7 +188,7 @@ jobs:
           push-to-registry: true
           create-storage-record: ${{ startsWith(inputs.registry, 'ghcr.io') }}
       - name: Run Trivy Scan
-        uses: aquasecurity/trivy-action@b6643a29fecd7f34b3597bc6acb0a98b03d33ff8 # v0.33.1
+        uses: aquasecurity/trivy-action@c1824fd6edce30d7ab345a9989de00bbd46ef284 # v0.34.0
         if: inputs.scan-image
         with:
           format: sarif
@@ -197,7 +199,7 @@ jobs:
           output: ${{ inputs.working-directory }}/trivy_results.sarif
           github-pat: ${{ secrets.GITHUB_TOKEN }}
       - name: Generate SBOM
-        uses: aquasecurity/trivy-action@b6643a29fecd7f34b3597bc6acb0a98b03d33ff8 # v0.33.1
+        uses: aquasecurity/trivy-action@c1824fd6edce30d7ab345a9989de00bbd46ef284 # v0.34.0
         if: inputs.push
         with:
           format: spdx-json
