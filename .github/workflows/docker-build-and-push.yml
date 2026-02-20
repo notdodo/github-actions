@@ -173,10 +173,12 @@ jobs:
           IMAGE_REF: ${{ inputs.push && format('{0}/{1}@{2}', inputs.registry, inputs.image, steps.build.outputs.digest) || '' }}
           LOCAL_IMAGE_REF: ${{ !inputs.push && format('localimage:{0}', github.sha) || '' }}
         run: |
-          echo "image_name=${IMAGE_NAME}" >> "${GITHUB_OUTPUT}"
-          echo "image_digest=${IMAGE_DIGEST}" >> "${GITHUB_OUTPUT}"
-          echo "image_ref=${IMAGE_REF}" >> "${GITHUB_OUTPUT}"
-          echo "local_image_ref=${LOCAL_IMAGE_REF}" >> "${GITHUB_OUTPUT}"
+          {
+            echo "image_name=${IMAGE_NAME}"
+            echo "image_digest=${IMAGE_DIGEST}"
+            echo "image_ref=${IMAGE_REF}"
+            echo "local_image_ref=${LOCAL_IMAGE_REF}"
+          } >> "${GITHUB_OUTPUT}"
       - name: Generate artifact attestation
         if: inputs.push
         uses: actions/attest-build-provenance@96278af6caaf10aea03fd8d33a09a777ca52d62f # v3.2.0
