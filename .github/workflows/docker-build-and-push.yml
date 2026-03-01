@@ -188,7 +188,7 @@ jobs:
           push-to-registry: true
           create-storage-record: ${{ startsWith(inputs.registry, 'ghcr.io') }}
       - name: Run Trivy Scan
-        uses: aquasecurity/trivy-action@c1824fd6edce30d7ab345a9989de00bbd46ef284 # v0.34.0
+        uses: aquasecurity/trivy-action@e368e328979b113139d6f9068e03accaed98a518 # v0.34.1
         if: inputs.scan-image
         with:
           format: sarif
@@ -199,7 +199,7 @@ jobs:
           output: ${{ inputs.working-directory }}/trivy_results.sarif
           github-pat: ${{ secrets.GITHUB_TOKEN }}
       - name: Generate SBOM
-        uses: aquasecurity/trivy-action@c1824fd6edce30d7ab345a9989de00bbd46ef284 # v0.34.0
+        uses: aquasecurity/trivy-action@e368e328979b113139d6f9068e03accaed98a518 # v0.34.1
         if: inputs.push
         with:
           format: spdx-json
@@ -238,7 +238,7 @@ jobs:
           echo -n "$(cat ./trivy_results.sarif)" | reviewdog -reporter=github-check -f=sarif -level=warning -diff="git diff FETCH_HEAD"
       - name: Upload results
         if: ${{ inputs.scan-image && inputs.upload-sarif }}
-        uses: github/codeql-action/upload-sarif@5d4e8d1aca955e8d8589aabd499c5cae939e33c7 #  v4.31.9
+        uses: github/codeql-action/upload-sarif@89a39a4e59826350b863aa6b6252a07ad50cf83e #  v4.32.4
         with:
           sarif_file: ${{ inputs.working-directory }}/trivy_results.sarif
           category: container-security
