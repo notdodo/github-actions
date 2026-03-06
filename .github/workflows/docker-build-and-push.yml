@@ -61,16 +61,16 @@ on:
         default: '.'
     outputs:
       image_name:
-        description: "Full image name (<registry>/<image>)."
+        description: 'Full image name (<registry>/<image>).'
         value: ${{ jobs.build-and-push-image.outputs.image_name }}
       image_digest:
-        description: "Pushed image digest (sha256:...), empty when push=false."
+        description: 'Pushed image digest (sha256:...), empty when push=false.'
         value: ${{ jobs.build-and-push-image.outputs.image_digest }}
       image_ref:
-        description: "Immutable image reference (<registry>/<image>@<digest>), empty when push=false."
+        description: 'Immutable image reference (<registry>/<image>@<digest>), empty when push=false.'
         value: ${{ jobs.build-and-push-image.outputs.image_ref }}
       local_image_ref:
-        description: "Local image reference used when push=false."
+        description: 'Local image reference used when push=false.'
         value: ${{ jobs.build-and-push-image.outputs.local_image_ref }}
     secrets:
       registry-username:
@@ -179,14 +179,6 @@ jobs:
             echo "image_ref=${IMAGE_REF}"
             echo "local_image_ref=${LOCAL_IMAGE_REF}"
           } >> "${GITHUB_OUTPUT}"
-      - name: Generate artifact attestation
-        if: inputs.push
-        uses: actions/attest-build-provenance@96278af6caaf10aea03fd8d33a09a777ca52d62f # v3.2.0
-        with:
-          subject-name: ${{ inputs.registry }}/${{ inputs.image }}
-          subject-digest: ${{ steps.build.outputs.digest }}
-          push-to-registry: true
-          create-storage-record: ${{ startsWith(inputs.registry, 'ghcr.io') }}
       - name: Run Trivy Scan
         uses: aquasecurity/trivy-action@e368e328979b113139d6f9068e03accaed98a518 # v0.34.1
         if: inputs.scan-image
@@ -206,12 +198,14 @@ jobs:
           image-ref: ${{ format('{0}/{1}@{2}', inputs.registry, inputs.image, steps.build.outputs.digest) }}
           output: ${{ inputs.working-directory }}/sbom.spdx.json
           github-pat: ${{ secrets.GITHUB_TOKEN }}
-      - name: Attest SBOM
-        uses: actions/attest-sbom@4651f806c01d8637787e274ac3bdf724ef169f34 # v3.0.0
+      - name: Generate artifact and SBOM attestation
         if: inputs.push
+        uses: actions/attest@59d89421af93a897026c735860bf21b6eb4f7b26 # v4.1.0
         with:
           subject-name: ${{ inputs.registry }}/${{ inputs.image }}
           subject-digest: ${{ steps.build.outputs.digest }}
+          push-to-registry: true
+          create-storage-record: ${{ startsWith(inputs.registry, 'ghcr.io') }}
           sbom-path: ${{ inputs.working-directory }}/sbom.spdx.json
       - name: Install cosign
         uses: sigstore/cosign-installer@faadad0cce49287aee09b3a48701e75088a2c6ad # v4.0.0
