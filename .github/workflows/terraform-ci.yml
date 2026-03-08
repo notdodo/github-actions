@@ -52,7 +52,9 @@ jobs:
           disable-sudo: ${{ inputs.disable-sudo }}
           egress-policy: audit
           allowed-endpoints: >
+            codeload.github.com:443
             raw.githubusercontent.com:443
+            release-assets.githubusercontent.com:443
             ${{ inputs.egress-policy-allowlist }}
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
@@ -101,7 +103,7 @@ jobs:
           filter_mode: nofilter
 
       - name: Run Trivy Scan
-        uses: aquasecurity/trivy-action@e368e328979b113139d6f9068e03accaed98a518 # v0.34.1
+        uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1 # v0.35.0
         with:
           hide-progress: true
           format: sarif

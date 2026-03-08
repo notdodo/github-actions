@@ -110,10 +110,12 @@ jobs:
             *.sigstore.dev:443
             *.trivy.dev:443
             api.github.com:443
+            codeload.github.com:443
             docker-images-prod.*.r2.cloudflarestorage.com:443
             ghcr.io:443
             github.com:443
             mirror.gcr.io:443
+            release-assets.githubusercontent.com:443
             ${{ inputs.egress-policy-allowlist }}
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
@@ -180,7 +182,7 @@ jobs:
             echo "local_image_ref=${LOCAL_IMAGE_REF}"
           } >> "${GITHUB_OUTPUT}"
       - name: Run Trivy Scan
-        uses: aquasecurity/trivy-action@e368e328979b113139d6f9068e03accaed98a518 # v0.34.1
+        uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1 # v0.35.0
         if: inputs.scan-image
         with:
           format: sarif
@@ -191,7 +193,7 @@ jobs:
           output: ${{ inputs.working-directory }}/trivy_results.sarif
           github-pat: ${{ secrets.GITHUB_TOKEN }}
       - name: Generate SBOM
-        uses: aquasecurity/trivy-action@e368e328979b113139d6f9068e03accaed98a518 # v0.34.1
+        uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1 # v0.35.0
         if: inputs.push
         with:
           format: spdx-json
