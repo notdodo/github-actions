@@ -30,7 +30,7 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
       - name: 'Dependency Review'
-        if: github.event_name == 'pull_request'
+        if: github.event_name == 'pull_request' && inputs.upload-sarif
         uses: actions/dependency-review-action@05fe4576374b728f0c523d6a13d64c25081e0803 # v4.8.3
         with:
           fail-on-severity: moderate
