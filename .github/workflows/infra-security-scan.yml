@@ -34,7 +34,7 @@ jobs:
       run:
         working-directory: ${{ inputs.working-directory }}
     steps:
-      - uses: step-security/harden-runner@5ef0c079ce82195b2a36a210272d6b661572d83e # v2.14.2
+      - uses: step-security/harden-runner@58077d3c7e43986b6b15fba718e8ea69e387dfcc # v2.15.1
         with:
           disable-sudo: ${{ inputs.disable-sudo }}
           egress-policy: block
@@ -52,7 +52,7 @@ jobs:
         with:
           persist-credentials: false
       - name: Kics Scan
-        uses: Checkmarx/kics-github-action@00def9108246ec656aea725db2167522d26a99d2 # v2.1.19
+        uses: Checkmarx/kics-github-action@05aa5eb70eede1355220f4ca5238d96b397e30a6 # v2.1.20
         with:
           path: ${{ inputs.working-directory }}
           output_path: ${{ inputs.working-directory }}/kics_results.sarif
@@ -64,7 +64,7 @@ jobs:
           enable_jobs_summary: true
           comments_with_queries: true
       - name: Upload SARIF file
-        uses: github/codeql-action/upload-sarif@89a39a4e59826350b863aa6b6252a07ad50cf83e #  v4.32.4
+        uses: github/codeql-action/upload-sarif@0d579ffd059c29b07949a3cce3983f0780820c98 #  v4.32.6
         with:
           sarif_file: ${{ inputs.working-directory }}/kics_results.sarif
           category: devops
@@ -78,7 +78,7 @@ jobs:
       pull-requests: write
       security-events: write
     steps:
-      - uses: step-security/harden-runner@5ef0c079ce82195b2a36a210272d6b661572d83e # v2.14.2
+      - uses: step-security/harden-runner@58077d3c7e43986b6b15fba718e8ea69e387dfcc # v2.15.1
         with:
           disable-sudo: ${{ inputs.disable-sudo }}
           egress-policy: block
@@ -117,7 +117,7 @@ jobs:
         run: |
           echo -n "$(cat ./zizmor_results.sarif)" | reviewdog -reporter=github-check -f=sarif -level=warning -diff="git diff FETCH_HEAD"
       - name: Upload SARIF file
-        uses: github/codeql-action/upload-sarif@89a39a4e59826350b863aa6b6252a07ad50cf83e #  v4.32.4
+        uses: github/codeql-action/upload-sarif@0d579ffd059c29b07949a3cce3983f0780820c98 #  v4.32.6
         with:
           sarif_file: zizmor_results.sarif
           category: github-actions
