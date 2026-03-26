@@ -64,7 +64,9 @@ jobs:
             install.python-poetry.org:443
             objects.githubusercontent.com:443
             pypi.org:443
+            raw.githubusercontent.com:443
             release-assets.githubusercontent.com:443
+            releases.astral.sh:443
             ${{ inputs.egress-policy-allowlist }}
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
