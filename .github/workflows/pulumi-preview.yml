@@ -74,7 +74,7 @@ jobs:
           python-version: ${{ inputs.python-version }}
 
       # ----- Poetry -----
-      - uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5.0.3
+      - uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5.0.4
         if: ${{ hashFiles(format('{0}/poetry.lock', inputs.working-directory)) != '' }}
         with:
           path: ~/.local/bin/
@@ -93,7 +93,7 @@ jobs:
         with:
           enable-cache: true
       - id: cache-deps
-        uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5.0.3
+        uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5.0.4
         with:
           path: |
             ${{ inputs.working-directory }}/.venv
@@ -110,7 +110,7 @@ jobs:
           # kics-scan ignore-line
           requested-token-type: urn:pulumi:token-type:access_token:personal
           scope: user:notdodo
-      - uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5.0.3
+      - uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5.0.4
         with:
           path: ${{ env.PULUMI_HOME }}/plugins
           key: python-${{ inputs.python-version }}-venv-${{ hashFiles(format('{0}/poetry.lock', inputs.working-directory), format('{0}/uv.lock', inputs.working-directory)) }}
