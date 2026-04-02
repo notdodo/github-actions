@@ -181,13 +181,23 @@ jobs:
             index.crates.io:443
             lambda.eu-west-1.amazonaws.com:443
             objects.githubusercontent.com:443
+            pkg.earth:443
             pkg.machengine.org:443
             static.crates.io:443
             static.rust-lang.org:443
             sts.eu-west-1.amazonaws.com:443
+            zig-mirror.tsimnet.eu:443
+            zig.chainsafe.dev:443
+            zig.karearl.com:443, 
             zig.linus.dev:443
+            zig.mirror.mschae23.de:443
             zig.nekos.space:443
+            zig.savalione.com:443
+            zig.squirl.dev:443
+            zig.tilok.dev:443
+            ziglang.freetls.fastly.net:443
             ziglang.org:443
+            zigmirror.com:443
             zigmirror.hryx.net:443
             zigmirror.nesovic.dev:443
             ${{ inputs.egress-policy-allowlist }}
