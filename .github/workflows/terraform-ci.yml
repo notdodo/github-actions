@@ -12,6 +12,9 @@ on:
       disable-sudo:
         type: boolean
         default: true
+      environment:
+        type: string
+        default: ''
       egress-policy-allowlist:
         type: string
         default: ''
@@ -38,6 +41,7 @@ jobs:
   terraform-lint:
     name: Terraform Linting
     runs-on: ${{ inputs.runs-on }}
+    environment: ${{ inputs.environment != '' && inputs.environment || null }}
     permissions:
       contents: read
       pull-requests: write
@@ -129,6 +133,7 @@ jobs:
     name: Terraform Plan
     runs-on: ${{ inputs.runs-on }}
     needs: terraform-lint
+    environment: ${{ inputs.environment != '' && inputs.environment || null }}
     permissions:
       contents: read
       pull-requests: write
