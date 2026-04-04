@@ -7,12 +7,12 @@ authors = [
 ]
 requires-python = ">=3.12"
 readme = "README.md"
-dependencies = ["pygithub>=2.7.0", "semver>=3.0.4"]
+dependencies = ["pygithub>=2.9.0", "semver>=3.0.4"]
 
 [dependency-groups]
 dev = [
-    "mypy[faster-cache]>=1.19.1",
-    "ruff>=0.14.14",
+    "mypy[faster-cache]>=1.20.0",
+    "ruff>=0.15.9",
     "pydantic>=2.12.5",
     "pytest>=9.0.2",
 ]
