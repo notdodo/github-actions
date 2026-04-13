@@ -27,7 +27,7 @@ jobs:
     environment: ${{ inputs.environment != '' && inputs.environment || null }}
     if: (github.repository_owner == 'notdodo')
     container:
-      image: semgrep/semgrep:1.125.0
+      image: semgrep/semgrep:1.159.0
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
