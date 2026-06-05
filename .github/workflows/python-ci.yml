@@ -31,7 +31,7 @@ jobs:
       run:
         working-directory: ${{ inputs.working-directory }}
     steps:
-      - uses: step-security/harden-runner@8d3c67de8e2fe68ef647c8db1e6a09f647780f40 # v2.19.0
+      - uses: step-security/harden-runner@9af89fc71515a100421586dfdb3dc9c984fbf411 # v2.19.4
         with:
           disable-sudo-and-containers: ${{ inputs.disable-sudo }}
           egress-policy: block
@@ -85,7 +85,7 @@ jobs:
       - run: uv sync --locked --all-extras --dev
         if: ${{ steps.cache-deps.outputs.cache-hit != 'true' && hashFiles(format('{0}/uv.lock', inputs.working-directory)) != '' }}
       - name: Install Task
-        uses: go-task/setup-task@3be4020d41929789a01026e0e427a4321ce0ad44 # v2.0.0
+        uses: go-task/setup-task@01a4adf9db2d14c1de7a560f09170b6e0df736aa # v2.1.0
         with:
           repo-token: ${{ github.token }}
       - name: Linting

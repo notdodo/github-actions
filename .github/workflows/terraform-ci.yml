@@ -51,7 +51,7 @@ jobs:
       run:
         working-directory: ${{ inputs.working-directory }}
     steps:
-      - uses: step-security/harden-runner@8d3c67de8e2fe68ef647c8db1e6a09f647780f40 # v2.19.0
+      - uses: step-security/harden-runner@9af89fc71515a100421586dfdb3dc9c984fbf411 # v2.19.4
         with:
           disable-sudo: ${{ inputs.disable-sudo }}
           egress-policy: audit
@@ -63,7 +63,7 @@ jobs:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           persist-credentials: false
-      - uses: aws-actions/configure-aws-credentials@ec61189d14ec14c8efccab744f656cffd0e33f37 # v6.1.0
+      - uses: aws-actions/configure-aws-credentials@acca2b1b2070338fb9fd1ca27ecee81d687e58e5 # v6.1.2
         if: ${{ inputs.aws-role != '' }}
         with:
           role-to-assume: ${{ inputs.aws-role }}
@@ -77,9 +77,9 @@ jobs:
           path: ~/.terraform.d/plugin-cache
           key: terraform-providers-${{ hashFiles('**/.terraform.lock.hcl') }}
           restore-keys: terraform-providers-
-      - uses: hashicorp/setup-terraform@5e8dbf3c6d9deaf4193ca7a8fb23f2ac83bb6c85 # v4.0.0
+      - uses: hashicorp/setup-terraform@dfe3c3f87815947d99a8997f908cb6525fc44e9e # v4.0.1
       - name: Sops Binary Installer
-        uses: mdgreenwald/mozilla-sops-action@d9714e521cbaecdae64a89d2fdd576dd2aa97056
+        uses: mdgreenwald/mozilla-sops-action@fe9db4c6a9f56efabf8855966e98c7ec9d09eb3e
       - name: Decrypt Secrets
         env:
           SOPS_AGE_KEY: ${{ secrets.sops-age-key }}
@@ -123,7 +123,7 @@ jobs:
         run: |
           echo -n "$(cat ./trivy_results.sarif)" | reviewdog -reporter=github-check -f=sarif -level=error -diff="git diff FETCH_HEAD"
       - name: Upload results
-        uses: github/codeql-action/upload-sarif@95e58e9a2cdfd71adc6e0353d5c52f41a045d225 #  v4.35.2
+        uses: github/codeql-action/upload-sarif@7211b7c8077ea37d8641b6271f6a365a22a5fbfa #  v4.36.0
         with:
           sarif_file: ${{ inputs.working-directory }}/trivy_results.sarif
           category: devops
@@ -142,7 +142,7 @@ jobs:
       run:
         working-directory: ${{ inputs.working-directory }}
     steps:
-      - uses: step-security/harden-runner@8d3c67de8e2fe68ef647c8db1e6a09f647780f40 # v2.19.0
+      - uses: step-security/harden-runner@9af89fc71515a100421586dfdb3dc9c984fbf411 # v2.19.4
         with:
           disable-sudo-and-containers: ${{ inputs.disable-sudo }}
           egress-policy: audit
@@ -151,7 +151,7 @@ jobs:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           persist-credentials: false
-      - uses: aws-actions/configure-aws-credentials@ec61189d14ec14c8efccab744f656cffd0e33f37 # v6.1.0
+      - uses: aws-actions/configure-aws-credentials@acca2b1b2070338fb9fd1ca27ecee81d687e58e5 # v6.1.2
         if: ${{ inputs.aws-role != '' }}
         with:
           role-to-assume: ${{ inputs.aws-role }}
@@ -165,9 +165,9 @@ jobs:
           path: ~/.terraform.d/plugin-cache
           key: terraform-providers-${{ hashFiles('**/.terraform.lock.hcl') }}
           restore-keys: terraform-providers-
-      - uses: hashicorp/setup-terraform@5e8dbf3c6d9deaf4193ca7a8fb23f2ac83bb6c85 # v4.0.0
+      - uses: hashicorp/setup-terraform@dfe3c3f87815947d99a8997f908cb6525fc44e9e # v4.0.1
       - name: Sops Binary Installer
-        uses: mdgreenwald/mozilla-sops-action@d9714e521cbaecdae64a89d2fdd576dd2aa97056
+        uses: mdgreenwald/mozilla-sops-action@fe9db4c6a9f56efabf8855966e98c7ec9d09eb3e
       - name: Decrypt Secrets
         env:
           SOPS_AGE_KEY: ${{ secrets.sops-age-key }}
