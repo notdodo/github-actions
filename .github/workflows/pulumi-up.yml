@@ -71,20 +71,20 @@ jobs:
             release-assets.githubusercontent.com:443
             releases.astral.sh:443
             ${{ inputs.egress-policy-allowlist }}
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           persist-credentials: false
-      - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
         with:
           python-version: ${{ inputs.python-version }}
 
       # ----- Poetry -----
-      - uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         if: ${{ hashFiles(format('{0}/poetry.lock', inputs.working-directory)) != '' }}
         with:
           path: ~/.local/bin/
           key: poetry-${{ inputs.poetry-version }}
-      - uses: snok/install-poetry@76e04a911780d5b312d89783f7b1cd627778900a # v1.4.1
+      - uses: snok/install-poetry@a783c322200f0519c7926aa6faa857c4e23e9263 # v1.4.2
         if: ${{ hashFiles(format('{0}/poetry.lock', inputs.working-directory)) != '' }}
         with:
           version: ${{ inputs.poetry-version }}
@@ -93,12 +93,12 @@ jobs:
           installer-parallel: true
 
       # ----- UV -----
-      - uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
+      - uses: astral-sh/setup-uv@fac544c07dec837d0ccb6301d7b5580bf5edae39 # v8.2.0
         if: ${{ hashFiles(format('{0}/uv.lock', inputs.working-directory)) != '' }}
         with:
           enable-cache: true
       - id: cache-deps
-        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: |
             ${{ inputs.working-directory }}/.venv
@@ -109,17 +109,17 @@ jobs:
         if: ${{ steps.cache-deps.outputs.cache-hit != 'true' && hashFiles(format('{0}/poetry.lock', inputs.working-directory)) != '' }}
       - run: uv sync --locked --all-extras --dev
         if: ${{ steps.cache-deps.outputs.cache-hit != 'true' && hashFiles(format('{0}/uv.lock', inputs.working-directory)) != '' }}
-      - uses: pulumi/auth-actions@1c89817aab0c66407723cdef72b05266e7376640 # v1.0.1
+      - uses: pulumi/auth-actions@141415910c3beb54e03b48e9057c204c97b956f2 # v2.1.0
         with:
           organization: notdodo
           # kics-scan ignore-line
           requested-token-type: urn:pulumi:token-type:access_token:personal
           scope: user:notdodo
-      - uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: ${{ env.PULUMI_HOME }}/plugins
           key: python-${{ inputs.python-version }}-venv-${{ hashFiles(format('{0}/poetry.lock', inputs.working-directory), format('{0}/uv.lock', inputs.working-directory)) }}
-      - uses: aws-actions/configure-aws-credentials@acca2b1b2070338fb9fd1ca27ecee81d687e58e5 # v6.1.2
+      - uses: aws-actions/configure-aws-credentials@e7f100cf4c008499ea8adda475de1042d6975c7b # v6.2.0
         if: ${{ inputs.aws-role != '' }}
         with:
           role-to-assume: ${{ inputs.aws-role }}
