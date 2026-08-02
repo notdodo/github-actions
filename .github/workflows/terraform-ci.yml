@@ -51,7 +51,7 @@ jobs:
       run:
         working-directory: ${{ inputs.working-directory }}
     steps:
-      - uses: step-security/harden-runner@9af89fc71515a100421586dfdb3dc9c984fbf411 # v2.19.4
+      - uses: step-security/harden-runner@bf7454d06d71f1098171f2acdf0cd4708d7b5920 # v2.20.0
         with:
           disable-sudo: ${{ inputs.disable-sudo }}
           egress-policy: audit
@@ -60,10 +60,10 @@ jobs:
             raw.githubusercontent.com:443
             release-assets.githubusercontent.com:443
             ${{ inputs.egress-policy-allowlist }}
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - uses: aws-actions/configure-aws-credentials@e7f100cf4c008499ea8adda475de1042d6975c7b # v6.2.0
+      - uses: aws-actions/configure-aws-credentials@e6de054238d6b7531b4efff3b6587d9aade6a06c # v6.2.3
         if: ${{ inputs.aws-role != '' }}
         with:
           role-to-assume: ${{ inputs.aws-role }}
@@ -79,7 +79,7 @@ jobs:
           restore-keys: terraform-providers-
       - uses: hashicorp/setup-terraform@dfe3c3f87815947d99a8997f908cb6525fc44e9e # v4.0.1
       - name: Sops Binary Installer
-        uses: mdgreenwald/mozilla-sops-action@bb2d96a13ef438ad122e5827a57ebd75d6ff118d
+        uses: mdgreenwald/mozilla-sops-action@55177c1ff20a2b396280e4c5f53c32b69f0c1e40
       - name: Decrypt Secrets
         env:
           SOPS_AGE_KEY: ${{ secrets.sops-age-key }}
@@ -123,7 +123,7 @@ jobs:
         run: |
           echo -n "$(cat ./trivy_results.sarif)" | reviewdog -reporter=github-check -f=sarif -level=error -diff="git diff FETCH_HEAD"
       - name: Upload results
-        uses: github/codeql-action/upload-sarif@8aad20d150bbac5944a9f9d289da16a4b0d87c1e #  v4.36.2
+        uses: github/codeql-action/upload-sarif@e4fba868fa4b1b91e1fdab776edc8cfbe6e9fb81 #  v4.37.3
         with:
           sarif_file: ${{ inputs.working-directory }}/trivy_results.sarif
           category: devops
@@ -142,16 +142,16 @@ jobs:
       run:
         working-directory: ${{ inputs.working-directory }}
     steps:
-      - uses: step-security/harden-runner@9af89fc71515a100421586dfdb3dc9c984fbf411 # v2.19.4
+      - uses: step-security/harden-runner@bf7454d06d71f1098171f2acdf0cd4708d7b5920 # v2.20.0
         with:
           disable-sudo-and-containers: ${{ inputs.disable-sudo }}
           egress-policy: audit
           allowed-endpoints: >
             ${{ inputs.egress-policy-allowlist }}
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - uses: aws-actions/configure-aws-credentials@e7f100cf4c008499ea8adda475de1042d6975c7b # v6.2.0
+      - uses: aws-actions/configure-aws-credentials@e6de054238d6b7531b4efff3b6587d9aade6a06c # v6.2.3
         if: ${{ inputs.aws-role != '' }}
         with:
           role-to-assume: ${{ inputs.aws-role }}
@@ -167,7 +167,7 @@ jobs:
           restore-keys: terraform-providers-
       - uses: hashicorp/setup-terraform@dfe3c3f87815947d99a8997f908cb6525fc44e9e # v4.0.1
       - name: Sops Binary Installer
-        uses: mdgreenwald/mozilla-sops-action@bb2d96a13ef438ad122e5827a57ebd75d6ff118d
+        uses: mdgreenwald/mozilla-sops-action@55177c1ff20a2b396280e4c5f53c32b69f0c1e40
       - name: Decrypt Secrets
         env:
           SOPS_AGE_KEY: ${{ secrets.sops-age-key }}
