@@ -102,7 +102,7 @@ jobs:
       run:
         working-directory: ${{ inputs.working-directory }}
     steps:
-      - uses: step-security/harden-runner@bf7454d06d71f1098171f2acdf0cd4708d7b5920 # v2.20.0
+      - uses: step-security/harden-runner@b09bb98e06d4d774595224525879c09bc6e98c40 # v2.20.1
         with:
           disable-sudo: ${{ inputs.disable-sudo }}
           egress-policy: block
@@ -129,7 +129,7 @@ jobs:
         with:
           cache-binary: false
       - name: Log in to the Container registry
-        uses: docker/login-action@abd2ef45e78c5afb21d64d4ca52ee8550d9572c7 # v4.5.1
+        uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
         if: inputs.push
         with:
           registry: ${{ inputs.registry }}
@@ -206,7 +206,7 @@ jobs:
           github-pat: ${{ secrets.GITHUB_TOKEN }}
       - name: Generate artifact and SBOM attestation
         if: inputs.push
-        uses: actions/attest@f7c74d28b9d84cb8768d0b8ca14a4bac6ef463e6 # v4.2.0
+        uses: actions/attest@1e69f48acb82d1966a394da916b4c1698aa569d6 # v4.2.2
         with:
           subject-name: ${{ inputs.registry }}/${{ inputs.image }}
           subject-digest: ${{ steps.build.outputs.digest }}
@@ -238,7 +238,7 @@ jobs:
           echo -n "$(cat ./trivy_results.sarif)" | reviewdog -reporter=github-check -f=sarif -level=warning -diff="git diff FETCH_HEAD"
       - name: Upload results
         if: ${{ inputs.scan-image && inputs.upload-sarif }}
-        uses: github/codeql-action/upload-sarif@e4fba868fa4b1b91e1fdab776edc8cfbe6e9fb81 #  v4.37.3
+        uses: github/codeql-action/upload-sarif@5595ccaf912efad79be6eef63a5619ff05969be3 #  v4.37.6
         with:
           sarif_file: ${{ inputs.working-directory }}/trivy_results.sarif
           category: container-security
