@@ -34,7 +34,7 @@ jobs:
       run:
         working-directory: ${{ inputs.working-directory }}
     steps:
-      - uses: step-security/harden-runner@05e31511f85b41b11d1cf0ef85d0992719546e2c # v2.21.0
+      - uses: step-security/harden-runner@e14015d583714f6e62063499dc959a02595150a1 # v2.21.1
         with:
           disable-sudo: ${{ inputs.disable-sudo }}
           egress-policy: block
@@ -64,7 +64,7 @@ jobs:
           enable_jobs_summary: true
           comments_with_queries: true
       - name: Upload SARIF file
-        uses: github/codeql-action/upload-sarif@db488ddef3bf6cb639b32c2e9a7c0a7ea8271d28 #  v4.37.8
+        uses: github/codeql-action/upload-sarif@2892aa5e19bbd11bc0cff5427e3b750a04d9e3c2 #  v4.38.2
         with:
           sarif_file: ${{ inputs.working-directory }}/kics_results.sarif
           category: devops
@@ -78,7 +78,7 @@ jobs:
       pull-requests: write
       security-events: write
     steps:
-      - uses: step-security/harden-runner@05e31511f85b41b11d1cf0ef85d0992719546e2c # v2.21.0
+      - uses: step-security/harden-runner@e14015d583714f6e62063499dc959a02595150a1 # v2.21.1
         with:
           disable-sudo: ${{ inputs.disable-sudo }}
           egress-policy: block
@@ -94,14 +94,14 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - uses: reviewdog/action-actionlint@dbe5299849118fd6f099ba563d263d770955a64a # v1.73.2
+      - uses: reviewdog/action-actionlint@2085657ab2c7f48c58edcc767fba576f63bea76b # v1.77.0
         continue-on-error: true
         with:
           fail_level: any
           filter_mode: nofilter
           tool_name: actionlint
       - name: Install uv
-        uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d # v10.0.1
+        uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
         with:
           enable-cache: true
       - name: Run zizmor
@@ -118,7 +118,7 @@ jobs:
         run: |
           echo -n "$(cat ./zizmor_results.sarif)" | reviewdog -reporter=github-check -f=sarif -level=warning -diff="git diff FETCH_HEAD"
       - name: Upload SARIF file
-        uses: github/codeql-action/upload-sarif@db488ddef3bf6cb639b32c2e9a7c0a7ea8271d28 #  v4.37.8
+        uses: github/codeql-action/upload-sarif@2892aa5e19bbd11bc0cff5427e3b750a04d9e3c2 #  v4.38.2
         with:
           sarif_file: zizmor_results.sarif
           category: github-actions

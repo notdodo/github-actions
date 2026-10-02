@@ -51,7 +51,7 @@ jobs:
       run:
         working-directory: ${{ inputs.working-directory }}
     steps:
-      - uses: step-security/harden-runner@05e31511f85b41b11d1cf0ef85d0992719546e2c # v2.21.0
+      - uses: step-security/harden-runner@e14015d583714f6e62063499dc959a02595150a1 # v2.21.1
         with:
           disable-sudo: ${{ inputs.disable-sudo }}
           egress-policy: audit
@@ -63,7 +63,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - uses: aws-actions/configure-aws-credentials@e6de054238d6b7531b4efff3b6587d9aade6a06c # v6.2.3
+      - uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd # v6.3.0
         if: ${{ inputs.aws-role != '' }}
         with:
           role-to-assume: ${{ inputs.aws-role }}
@@ -100,7 +100,7 @@ jobs:
         run: terraform validate -no-color
 
       - name: tflint
-        uses: reviewdog/action-tflint@54a5e5aed57dcfbb4662ec548de876df33d6288d # v1.25.0
+        uses: reviewdog/action-tflint@2c3945df0a1eca41825ede1ba6b7f1b3fc95acd8 # v1.27.0
         with:
           working_directory: ${{ inputs.working-directory }}
           fail_level: any
@@ -123,7 +123,7 @@ jobs:
         run: |
           echo -n "$(cat ./trivy_results.sarif)" | reviewdog -reporter=github-check -f=sarif -level=error -diff="git diff FETCH_HEAD"
       - name: Upload results
-        uses: github/codeql-action/upload-sarif@db488ddef3bf6cb639b32c2e9a7c0a7ea8271d28 #  v4.37.8
+        uses: github/codeql-action/upload-sarif@2892aa5e19bbd11bc0cff5427e3b750a04d9e3c2 #  v4.38.2
         with:
           sarif_file: ${{ inputs.working-directory }}/trivy_results.sarif
           category: devops
@@ -142,7 +142,7 @@ jobs:
       run:
         working-directory: ${{ inputs.working-directory }}
     steps:
-      - uses: step-security/harden-runner@05e31511f85b41b11d1cf0ef85d0992719546e2c # v2.21.0
+      - uses: step-security/harden-runner@e14015d583714f6e62063499dc959a02595150a1 # v2.21.1
         with:
           disable-sudo-and-containers: ${{ inputs.disable-sudo }}
           egress-policy: audit
@@ -151,7 +151,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - uses: aws-actions/configure-aws-credentials@e6de054238d6b7531b4efff3b6587d9aade6a06c # v6.2.3
+      - uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd # v6.3.0
         if: ${{ inputs.aws-role != '' }}
         with:
           role-to-assume: ${{ inputs.aws-role }}
