@@ -59,6 +59,7 @@ jobs:
         with:
           disable-sudo-and-containers: ${{ inputs.disable-sudo }}
           egress-policy: block
+          # get.pulumi.com serves the Pulumi CLI download used by pulumi/actions.
           allowed-endpoints: >
             *.amazonaws.com:443
             api.github.com:443
