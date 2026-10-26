@@ -188,7 +188,7 @@ jobs:
             sts.eu-west-1.amazonaws.com:443
             zig-mirror.tsimnet.eu:443
             zig.chainsafe.dev:443
-            zig.karearl.com:443, 
+            zig.karearl.com:443,
             zig.linus.dev:443
             zig.mirror.mschae23.de:443
             zig.nekos.space:443
@@ -199,6 +199,7 @@ jobs:
             ziglang.org:443
             zigmirror.com:443
             zigmirror.hryx.net:443
+            zigmirror.nesovic.dev
             zigmirror.nesovic.dev:443
             ${{ inputs.egress-policy-allowlist }}
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
