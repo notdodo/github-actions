@@ -221,16 +221,33 @@ jobs:
           cache-workspaces: |-
             ${{ inputs.working-directory }}
       - run: cargo install cargo-lambda
+      # Cargo Lambda currently embeds cargo-zigbuild 0.23.x. Version 0.24.0
+      # removes Zig's deprecated -Wl,-O1 flag without suppressing warnings.
+      - run: cargo install --locked cargo-zigbuild --version 0.24.0
       - name: Build Lambda
         if: ${{ inputs.build-lambda || inputs.deploy-lambda }}
+        shell: bash
         env:
           ARCH: ${{ inputs.lambda-arch }}
         run: |
           if [ "${ARCH}" = "arm64" ]; then
-            cargo lambda build --verbose --release --arm64
+            target=aarch64-unknown-linux-gnu
+            target_cpu=neoverse-n1
           else
-            cargo lambda build --verbose --release
+            target=x86_64-unknown-linux-gnu
+            target_cpu=haswell
           fi
+          rustup target add "${target}"
+          target_dir=$(cargo metadata --no-deps --format-version 1 | jq -r '.target_directory')
+          RUSTFLAGS="${RUSTFLAGS:-} -C target-cpu=${target_cpu}" \
+            cargo zigbuild --verbose --release --target "${target}" \
+              --message-format=json-render-diagnostics \
+            | jq -er 'select(.reason == "compiler-artifact" and .executable != null and (.target.kind | index("bin"))) | [.target.name, .executable] | @tsv' \
+            | while IFS=$'\t' read -r binary_name executable; do
+                lambda_dir="${target_dir}/lambda/${binary_name}"
+                mkdir -p "${lambda_dir}"
+                cp "${executable}" "${lambda_dir}/bootstrap"
+              done
       - name: Deploy Lambda
         env:
           BINARY_NAME: ${{ inputs.binary-name }}
